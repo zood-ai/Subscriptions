@@ -4,4 +4,4 @@ export default function Businesses() {
       <h1>Businesses</h1>
     </div>
   )
-}
+} 
