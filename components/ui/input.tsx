@@ -37,11 +37,11 @@ function Input({
         <label
           htmlFor={props.id}
           className={cn(
-            'absolute left-[25px] text-[13px]  font-medium pointer-events-none transition-all duration-300',
+            'absolute left-[25px] text-[13px] pointer-events-none transition-all duration-300',
             animateLabel
               ? focused || value
-                ? '-top-3 text-[11px] text-primary bg-white px-1'
-                : 'top-[15px] text-gray-400'
+                ? '-top-3 text-[11px] text-primary bg-white px-1 font-extrabold'
+                : 'top-[15px] text-gray-400 font-medium'
               : 'static mb-1',
             labelClassName
           )}
