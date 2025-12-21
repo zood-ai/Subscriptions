@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import Logo from "@/assets/Logo"
 import { Monitor, Package, Briefcase, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import ButtonComponent from "../Button"
 
 interface MenuItemProps {
   label: string
@@ -43,10 +44,10 @@ export default function Sidebar({
       <div className={`flex items-center px-6 ${isMobileView ? "h-16 justify-between border-b" : "h-20 justify-center my-4"}`}>
         {
           isMobileView ? (
-            <div className="w-9 flex items-center justify-center">
+            <Link href="/" className="w-9 flex items-center justify-center">
               <Logo />
-            </div>
-          ) : <Logo />
+            </Link>
+          ) : <Link href="/"> <Logo /> </Link>
         }
         {isMobileView && (
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -54,36 +55,43 @@ export default function Sidebar({
           </Button>
         )}
       </div>
-      <nav
-        aria-label={isMobileView ? "Mobile Sidebar Navigation" : "Dashboard Sidebar Navigation"}
-        className={`space-y-1 pr-2 ${isMobileView ? "py-4" : ""}`}
-      >
-        <ul className={isMobileView ? "space-y-4" : "space-y-2"}>
-          {menuItems.map((item) => {
-            const Icon = item.icon
-            const isActive = pathname === item.path
+      <main className="flex flex-col justify-between overflow-y-auto h-[calc(100vh-10rem)]">
+        <nav
+          aria-label={isMobileView ? "Mobile Sidebar Navigation" : "Dashboard Sidebar Navigation"}
+          className={`space-y-1 pr-2 ${isMobileView ? "py-4" : ""}`}
+        >
+          <ul className={isMobileView ? "space-y-4" : "space-y-2"}>
+            {menuItems.map((item) => {
+              const Icon = item.icon
+              const isActive = pathname === item.path
 
-            return (
-              <li key={item.label}>
-                <Link
-                  href={item.path}
-                  onClick={isMobileView ? onClose : undefined}
-                  className={`
+              return (
+                <li key={item.label}>
+                  <Link
+                    href={item.path}
+                    onClick={isMobileView ? onClose : undefined}
+                    className={`
                     flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors
                     rounded-tr-lg rounded-br-lg
                     ${isActive
-                      ? "bg-indigo-50 text-indigo-600"
-                      : "text-gray-700 hover:bg-gray-100"}
+                        ? "bg-indigo-50 text-indigo-600"
+                        : "text-gray-700 hover:bg-gray-100"}
                   `}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
-      </nav>
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </nav>
+        <div className="bottom-16 mx-auto flex justify-center">
+          <ButtonComponent onClick={() => { }}>
+            Log out
+          </ButtonComponent>
+        </div>
+      </main>
     </aside>
   )
 }

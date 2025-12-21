@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import Sidebar from "./Sidbar";
 
-
 export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -18,12 +17,12 @@ export default function NavBar() {
         <div className="flex w-full items-center justify-between">
           <div className="flex items-center gap-4 md:hidden">
             <Button variant="ghost" size="icon" onClick={toggleMobileMenu} className="cursor-pointer">
-              <Menu className="h-6 w-6 text-muted-foreground" />
+              <Menu className="h-9 w-9 text-muted-foreground" />
             </Button>
           </div>
 
           <div className="w-full flex justify-end">
-            <Button variant="ghost" className="cursor-pointer">
+            <Button variant="ghost" className="cursor-pointer ">
               <User className="text-muted-foreground" />
             </Button>
           </div>
@@ -42,4 +41,4 @@ export default function NavBar() {
       />
     </>
   )
-}
+} 
