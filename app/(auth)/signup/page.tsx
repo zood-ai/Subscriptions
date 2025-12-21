@@ -5,17 +5,6 @@ import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { useState } from 'react';
 
-type accountDataFeilds =
-  | 'businessName'
-  | 'businessType'
-  | 'businessLocation'
-  | 'accountName'
-  | 'phone'
-  | 'email'
-  | 'password'
-  | 'numberOfBranches'
-  | 'isFirstTime';
-
 interface accountDataInterface {
   businessName: string;
   businessType: string;
@@ -42,9 +31,9 @@ export default function Signup() {
   });
   const [step, setStep] = useState<number>(1);
 
-  const handleChange = (
-    field: accountDataFeilds,
-    value: string | number | boolean
+  const handleChange = <k extends keyof accountDataInterface>(
+    field: k,
+    value: accountDataInterface[k]
   ) => {
     setAccountData((prev) => ({
       ...prev,
@@ -126,7 +115,7 @@ export default function Signup() {
             Label="Have you used POS system before ?"
             animateLabel
             value={String(accountData.isFirstTime)}
-            onChange={(e) => handleChange('isFirstTime', e.target.value)}
+            onChange={() => handleChange('isFirstTime', true)}
           />
         </>
       )}
