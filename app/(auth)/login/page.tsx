@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -38,12 +39,9 @@ export default function Login() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="flex justify-end pt-5">
-        <button
-          type="submit"
-          className="cursor-pointer text-white bg-primary rounded-full px-4 py-[6px] text-base text-center min-w-[100px] disabled:cursor-not-allowed disabled:bg-primary/50"
-        >
+        <Button type="submit" variant="primary">
           Login
-        </button>
+        </Button>
       </div>
     </form>
   );

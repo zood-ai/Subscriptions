@@ -1,4 +1,5 @@
 'use client';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
@@ -136,31 +137,27 @@ export default function Signup() {
         )}
       >
         {step !== 1 && (
-          <button
+          <Button
             onClick={() => setStep((prev) => prev - 1)}
             type="button"
-            className="cursor-pointer text-primary bg-[#F2F2F2] rounded-full px-4 py-[6px] text-base text-center min-w-[100px] disabled:cursor-not-allowed disabled:bg-[#F2F2F2]/50 disabled:text-primary/50"
+            variant="secondary"
           >
             Previous
-          </button>
+          </Button>
         )}
         {step === 3 ? (
-          <button
-            key={1}
-            type="submit"
-            className="cursor-pointer text-[#F2F2F2] bg-primary rounded-full px-4 py-[6px] text-base text-center min-w-[100px] disabled:cursor-not-allowed disabled:bg-primary/50 disabled:text-[#F2F2F2]/50"
-          >
+          <Button key={1} type="submit" variant="primary">
             Sign Up
-          </button>
+          </Button>
         ) : (
-          <button
+          <Button
             key={2}
             onClick={() => setStep((prev) => prev + 1)}
             type="button"
-            className="cursor-pointer text-[#F2F2F2] bg-primary rounded-full px-4 py-[6px] text-base text-center min-w-[100px] disabled:cursor-not-allowed disabled:bg-primary/50"
+            variant="primary"
           >
             Next
-          </button>
+          </Button>
         )}
       </div>
     </form>
