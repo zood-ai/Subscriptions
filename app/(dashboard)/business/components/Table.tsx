@@ -93,17 +93,19 @@ const actions: ActionOption[] = [
 export default function Table() {
   const router = useRouter();
   return (
-    <CustomTable
-      data={sampleData}
-      columns={columns}
-      filters={filters}
-      actions={actions}
-      onClickRow={(data) => {
-        console.log(data);
-        router.push(`/business/{data.id}`);
-      }}
-      onFilterChange={(filter) => console.log('Filter changed to:', filter)}
-      onSelectionChange={(ids) => console.log('Selection changed:', ids)}
-    />
+    <div className="pt-[40px] px-[60px]">
+      <CustomTable
+        data={sampleData}
+        columns={columns}
+        filters={filters}
+        actions={actions}
+        onClickRow={(data) => {
+          console.log(data);
+          router.push(`/business/{data.id}`);
+        }}
+        onFilterChange={(filter) => console.log('Filter changed to:', filter)}
+        onSelectionChange={(ids) => console.log('Selection changed:', ids)}
+      />
+    </div>
   );
 }

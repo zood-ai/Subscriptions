@@ -30,10 +30,10 @@ export interface ActionOption {
 interface CustomTableProps<T extends { id: string }> {
   data: T[];
   columns: Column<T>[];
-  filters: FilterTab[];
-  actions: ActionOption[];
+  filters?: FilterTab[];
+  actions?: ActionOption[];
   title?: string;
-  onClickRow: (data: T) => void;
+  onClickRow?: (data: T) => void;
   onFilterChange?: (filter: string) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
 }
@@ -50,7 +50,7 @@ export function CustomTable<T extends { id: string }>({
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
   const [activeFilter, setActiveFilter] = React.useState(
-    filters[0]?.value || 'all'
+    filters?.[0]?.value || 'all'
   );
 
   const allSelected = data.length > 0 && selectedIds.length === data.length;
@@ -85,7 +85,7 @@ export function CustomTable<T extends { id: string }>({
   };
 
   return (
-    <div className="py-[40px] px-[60px]">
+    <div>
       {title && (
         <h2 className="py-[25px] text-gray-500 text-xl font-medium">{title}</h2>
       )}
@@ -94,7 +94,7 @@ export function CustomTable<T extends { id: string }>({
           {/* Filter Tabs Row */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">
             <div className="flex items-center gap-2">
-              {filters.map((filter) => (
+              {filters?.map((filter) => (
                 <button
                   key={filter.value}
                   onClick={() => handleFilterChange(filter.value)}
@@ -127,7 +127,7 @@ export function CustomTable<T extends { id: string }>({
                   <ChevronDown className="h-4 w-4" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                  {actions.map((action) => (
+                  {actions?.map((action) => (
                     <DropdownMenuItem
                       key={action.label}
                       onClick={() => action.onClick(selectedIds)}
@@ -198,7 +198,7 @@ export function CustomTable<T extends { id: string }>({
                       <td
                         key={String(column.key)}
                         className="px-4 py-4 text-sm text-foreground"
-                        onClick={() => onClickRow(item)}
+                        onClick={() => onClickRow?.(item)}
                       >
                         {column.render
                           ? column.render(item[column.key], item)
