@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Login() {
@@ -12,12 +11,6 @@ export default function Login() {
   return (
     <form className="space-y-[25px]">
       <h1 className="text-[25px] font-semibold">Sign in</h1>
-      <p>
-        New to Zood ?{' '}
-        <Link href="/signup" className="text-primary font-semibold">
-          Sign Up
-        </Link>
-      </p>
       <Input
         Label="Business reference"
         animateLabel

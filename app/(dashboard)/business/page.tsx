@@ -4,7 +4,7 @@ import TableHeader from '@/components/TableHeader';
 export default function Businesses() {
   return (
     <div>
-      <TableHeader title="Branch" />
+      <TableHeader title="Business" />
       <Table />
     </div>
   );
