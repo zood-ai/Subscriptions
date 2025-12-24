@@ -1,12 +1,85 @@
-interface BusinessPageProps {
-  params: Promise<{ id: string }>
+import { CustomTable } from '@/components/CustomTable';
+import { ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
+import { DetailCard } from '@/components/DetailCard';
+import { Suspense } from 'react';
+import TableLoading from '@/components/TableLoading';
+
+interface Columns {
+  key: string;
+  header: string;
 }
+
+interface BusinessPageProps {
+  params: Promise<{ id: string }>;
+}
+interface TableFetchProps {
+  title: string;
+  endPoint: string;
+  columns: Columns[];
+}
+
+const columns: Columns[] = [
+  { key: 'name', header: 'Name' },
+  { key: 'reference', header: 'Reference' },
+  { key: 'taxGroup', header: 'Tax Group' },
+  { key: 'createdAt', header: 'Created at' },
+];
 
 export default async function Business({ params }: BusinessPageProps) {
   const { id } = await params;
+  const items = [
+    { title: 'Name', value: 'Abdelrahman' },
+    { title: 'Name Localized', value: 'Abdelrahman' },
+    { title: 'Reference', value: '52251' },
+    { title: 'Opening From', value: '03:00' },
+    { title: 'Opening To', value: '03:00' },
+    { title: 'Inventory End of Day', value: '03:00' },
+    { title: 'Tax Group', value: 'VAT' },
+  ];
+  const tables = [
+    { id: 1, title: 'Tags', endPoint: 'v1/asdasd', columns },
+    { id: 2, title: 'Delivery Zones', endPoint: 'v1/asdasd', columns },
+    { id: 3, title: 'Users', endPoint: 'v1/asdasd', columns },
+    { id: 4, title: 'Sections', endPoint: 'v1/asdasd', columns },
+    { id: 5, title: 'Assigned Device', endPoint: 'v1/asdasd', columns },
+    { id: 6, title: 'Assigned Discounts', endPoint: 'v1/asdasd', columns },
+    { id: 7, title: 'Assigned Timed Events', endPoint: 'v1/asdasd', columns },
+    { id: 8, title: 'Assigned Promotions', endPoint: 'v1/asdasd', columns },
+  ];
+
   return (
     <div>
-      <h1>Business  - {id}</h1>
+      <div className="py-[15px] px-[60px] bg-white">
+        <Link
+          href="/business"
+          className="text-gray-500 flex items-center gap-1 text-xs"
+        >
+          <ChevronLeft size={15} />
+          Back
+        </Link>
+        <h1 className="text-gray-500 text-[24px] font-normal">{id}</h1>
+      </div>
+      <div className="py-[40px] px-[60px]">
+        <DetailCard items={items} />
+        {tables.map((el) => (
+          <Suspense key={el.id} fallback={<TableLoading title={el.title} />}>
+            <TableFetch
+              title={el.title}
+              columns={el.columns}
+              endPoint={el.endPoint}
+            />
+          </Suspense>
+        ))}
+      </div>
     </div>
-  )
-} 
+  );
+}
+
+const TableFetch: React.FC<TableFetchProps> = async ({
+  title,
+  columns,
+  endPoint,
+}) => {
+  return <CustomTable data={[]} title={title} columns={columns} />;
+};

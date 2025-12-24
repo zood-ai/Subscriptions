@@ -1,7 +1,15 @@
+import { Suspense } from 'react';
+import Table from './components/Table';
+import TableHeader from '@/components/TableHeader';
+import TableLoading from '@/components/TableLoading';
+
 export default function Businesses() {
   return (
     <div>
-      <h1>Businesses</h1>
+      <TableHeader title="Business" />
+      <Suspense fallback={<TableLoading title="" />}>
+        <Table />
+      </Suspense>
     </div>
-  )
-} 
+  );
+}
