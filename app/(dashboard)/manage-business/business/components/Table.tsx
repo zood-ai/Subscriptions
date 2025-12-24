@@ -101,7 +101,7 @@ export default function Table() {
         actions={actions}
         onClickRow={(data) => {
           console.log(data);
-          router.push(`/business/{data.id}`);
+          router.push(`/manage-business/business/${data.name}`);
         }}
         onFilterChange={(filter) => console.log('Filter changed to:', filter)}
         onSelectionChange={(ids) => console.log('Selection changed:', ids)}

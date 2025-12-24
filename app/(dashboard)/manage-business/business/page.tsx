@@ -5,11 +5,11 @@ import TableLoading from '@/components/TableLoading';
 
 export default function Businesses() {
   return (
-    <div>
+    <>
       <TableHeader title="Business" />
-      <Suspense fallback={<TableLoading title="" />}>
+      <Suspense fallback={<TableLoading title="Business" />}>
         <Table />
       </Suspense>
-    </div>
+    </>
   );
 }
