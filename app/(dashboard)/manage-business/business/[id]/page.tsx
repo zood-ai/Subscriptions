@@ -52,7 +52,7 @@ export default async function Business({ params }: BusinessPageProps) {
     <div>
       <div className="py-[15px] px-[60px] bg-white">
         <Link
-          href="/business"
+          href="/manage-business/business"
           className="text-gray-500 flex items-center gap-1 text-xs"
         >
           <ChevronLeft size={15} />

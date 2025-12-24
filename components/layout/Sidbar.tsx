@@ -2,14 +2,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/assets/logo.svg';
-import { Monitor, Package, Briefcase, X } from 'lucide-react';
+import { Monitor, Package, Briefcase, X, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface MenuItemProps {
+  id: string;
   label: string;
   path: string;
   icon: React.ElementType;
+  children?: {
+    id: string;
+    label: string;
+    path: string;
+  }[];
 }
 
 interface SidebarProps {
@@ -19,9 +26,26 @@ interface SidebarProps {
 }
 
 const menuItems: MenuItemProps[] = [
-  { label: 'Dashboard', path: '/dashboard', icon: Monitor },
-  { label: 'Business', path: '/business', icon: Briefcase },
-  { label: 'Packages', path: '/packages', icon: Package },
+  { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: Monitor },
+  {
+    id: 'manage-business',
+    label: 'Manage Business',
+    path: '/manage-business',
+    icon: Briefcase,
+    children: [
+      {
+        id: 'businesses',
+        label: 'Businesses',
+        path: '/manage-business/business',
+      },
+      {
+        id: 'type',
+        label: 'Business Types',
+        path: '/manage-business/type',
+      },
+    ],
+  },
+  { id: 'packages', label: 'Packages', path: '/packages', icon: Package },
 ];
 
 export default function Sidebar({
@@ -30,6 +54,15 @@ export default function Sidebar({
   onClose,
 }: SidebarProps) {
   const pathname = usePathname();
+  const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  const toggleExpand = (id: string) => {
+    setExpandedItems((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
+  const isItemExpanded = (id: string) => expandedItems.includes(id);
 
   return (
     <aside
@@ -78,25 +111,72 @@ export default function Sidebar({
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname.includes(item.path);
+            const isExpanded = isItemExpanded(item.id);
+            const hasChildren = item.children && item.children.length > 0;
 
             return (
-              <li key={item.label}>
-                <Link
-                  href={item.path}
-                  onClick={isMobileView ? onClose : undefined}
-                  className={`
-                    flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors
-                    rounded-tr-lg rounded-br-lg
-                    ${
+              <li key={item.id}>
+                {hasChildren ? (
+                  <button
+                    onClick={() => toggleExpand(item.id)}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors ${
                       isActive
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-gray-700 hover:bg-gray-100'
-                    }
-                  `}
-                >
-                  <Icon className="h-5 w-5" />
-                  <span>{item.label}</span>
-                </Link>
+                    }`}
+                    aria-expanded={isExpanded}
+                  >
+                    <div className="flex items-center gap-3 text-sm font-medium">
+                      <Icon className="h-5 w-5" />
+                      <span>{item.label}</span>
+                    </div>
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        isExpanded ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    href={item.path}
+                    onClick={isMobileView ? onClose : undefined}
+                    className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors rounded-lg ${
+                      isActive
+                        ? 'bg-indigo-50 text-indigo-600'
+                        : 'text-gray-700 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{item.label}</span>
+                  </Link>
+                )}
+
+                {hasChildren && isExpanded && (
+                  <ul className="mt-1 ml-6 space-y-1 border-l border-gray-200 pl-3">
+                    {item?.children?.map((child) => {
+                      const isChildActive = pathname.includes(child.path);
+                      return (
+                        <li key={child.id}>
+                          <Link
+                            href={child.path}
+                            onClick={isMobileView ? onClose : undefined}
+                            className={`
+                              flex items-center gap-3 px-3 py-2 text-sm transition-colors
+                              rounded
+                              ${
+                                isChildActive
+                                  ? 'bg-indigo-50 text-indigo-600 font-medium'
+                                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                              }
+                            `}
+                          >
+                            {child.label}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
               </li>
             );
           })}
