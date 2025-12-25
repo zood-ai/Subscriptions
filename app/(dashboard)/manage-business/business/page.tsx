@@ -6,7 +6,7 @@ import TableLoading from '@/components/TableLoading';
 export default function Businesses() {
   return (
     <>
-      <TableHeader title="Business" />
+      <TableHeader title="Business" createBtnTitle="Add Customer" />
       <Suspense fallback={<TableLoading title="Business" />}>
         <Table />
       </Suspense>
