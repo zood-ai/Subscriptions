@@ -93,7 +93,7 @@ const actions: ActionOption[] = [
 export default function Table() {
   const router = useRouter();
   return (
-    <div className="pt-[40px] px-[60px]">
+    <div className="pt-[40px] mainPaddingX">
       <CustomTable
         data={sampleData}
         columns={columns}

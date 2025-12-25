@@ -50,7 +50,7 @@ export default async function Business({ params }: BusinessPageProps) {
 
   return (
     <div>
-      <div className="py-[15px] px-[60px] bg-white">
+      <div className="py-[15px] mainPaddingX bg-white">
         <Link
           href="/manage-business/business"
           className="text-gray-500 flex items-center gap-1 text-xs"
@@ -60,7 +60,7 @@ export default async function Business({ params }: BusinessPageProps) {
         </Link>
         <h1 className="text-gray-500 text-[24px] font-normal">{id}</h1>
       </div>
-      <div className="py-[40px] px-[60px]">
+      <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         {tables.map((el) => (
           <Suspense key={el.id} fallback={<TableLoading title={el.title} />}>

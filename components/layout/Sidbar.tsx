@@ -94,9 +94,9 @@ export default function Sidebar({
           </Link>
         )}
         {isMobileView && (
-          <Button size="icon" onClick={onClose}>
+          <button className="cursor-pointer" onClick={onClose}>
             <X className="h-5 w-5" />
-          </Button>
+          </button>
         )}
       </div>
       <nav
