@@ -3,7 +3,7 @@ import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import { Suspense } from 'react';
-import TableLoading from '@/components/TableLoading';
+import TableSkeleton from '@/components/TableSkeleton';
 
 interface Columns {
   key: string;
@@ -63,7 +63,7 @@ export default async function Business({ params }: BusinessPageProps) {
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         {tables.map((el) => (
-          <Suspense key={el.id} fallback={<TableLoading title={el.title} />}>
+          <Suspense key={el.id} fallback={<TableSkeleton title={el.title} />}>
             <TableFetch
               title={el.title}
               columns={el.columns}
