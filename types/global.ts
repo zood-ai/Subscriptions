@@ -1,16 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type MetaData = {
   total: number;
   limit: number;
 };
 
-export interface MutationProps {
+export interface MutationProps<T = unknown> {
   method: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
   api: string;
-  body?: any;
+  body?: T;
 }
 
 export interface QueryProps {
+  api: string;
+  revalidate?: number;
+}
+
+export interface BackendError {
   api: string;
   revalidate?: number;
 }

@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cookies } from 'next/headers';
 import axios, { AxiosRequestConfig } from 'axios';
 import { redirect } from 'next/navigation';
 import { MutationProps } from '@/types/global';
 
-const Mutation = async ({
+const Mutation = async <Body, Response>({
   method,
   api,
   body,
-}: MutationProps): Promise<{
-  data: any | null;
-  error: any | null;
+}: MutationProps<Body>): Promise<{
+  data: Response | null;
+  error: string | null;
   status: number;
 }> => {
   try {
@@ -33,28 +32,42 @@ const Mutation = async ({
       config.headers!['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await axios.request(config);
+    const res = await axios.request<Response>(config);
 
     return { data: res.data, error: null, status: res.status };
-  } catch (err: any) {
-    console.log({ err });
-    if (err?.response?.status === 401) {
-      const cookieStore = await cookies();
-      cookieStore.delete('token');
-      redirect('/login');
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status === 401) {
+        const cookieStore = await cookies();
+        cookieStore.delete('token');
+        redirect('/login');
+      }
+
+      const errorMsg =
+        err.response?.data?.message ||
+        err.response?.data ||
+        err.message ||
+        'Network error';
+
+      return {
+        data: null,
+        error: String(errorMsg),
+        status: err.response?.status ?? 400,
+      };
     }
 
-    const errorMsg =
-      err?.response?.data?.message ||
-      err?.response?.data ||
-      err?.response ||
-      err?.message ||
-      'Network error';
+    if (err instanceof Error) {
+      return {
+        data: null,
+        error: err.message,
+        status: 500,
+      };
+    }
 
     return {
       data: null,
-      error: errorMsg,
-      status: err.response?.status || 400,
+      error: 'Unknown error',
+      status: 500,
     };
   }
 };

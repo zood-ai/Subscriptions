@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
@@ -8,10 +7,17 @@ interface ExtendedQueryProps extends QueryProps {
   filters?: Record<string, string | string[]>;
 }
 
-export const Query = async ({
+interface ApiError {
+  message?: string;
+}
+
+export const Query = async <R,>({
   api,
   filters = {},
-}: ExtendedQueryProps): Promise<{ data: any | null; error: any | null }> => {
+}: ExtendedQueryProps): Promise<{
+  data: R | null;
+  error: string | null;
+}> => {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('token')?.value;
@@ -24,7 +30,7 @@ export const Query = async ({
       const value = filters[key];
       if (Array.isArray(value)) {
         value.forEach((v) => queryParams.append(key, v));
-      } else if (value !== undefined && value !== null) {
+      } else if (value != null) {
         queryParams.append(key, value);
       }
     }
@@ -33,24 +39,30 @@ export const Query = async ({
       queryParams.toString() ? `?${queryParams.toString()}` : ''
     }`;
 
-    const response = await axios.get(url, { headers });
+    const response = await axios.get<R>(url, { headers });
 
     return { data: response.data, error: null };
-  } catch (err: any) {
-    if (err?.response?.status === 401) {
-      const cookieStore = await cookies();
-      cookieStore.delete('token');
-      redirect('/login');
+  } catch (err: unknown) {
+    if (axios.isAxiosError(err)) {
+      if (err.response?.status === 401) {
+        const cookieStore = await cookies();
+        cookieStore.delete('token');
+        redirect('/login');
+      }
+
+      const errorMsg =
+        (err.response?.data as ApiError)?.message ||
+        err.message ||
+        'Network error';
+
+      return { data: null, error: errorMsg };
     }
 
-    const errorMsg =
-      err?.response?.data?.message ||
-      err?.response?.data ||
-      err?.response ||
-      err?.message ||
-      'Network error';
+    if (err instanceof Error) {
+      return { data: null, error: err.message };
+    }
 
-    return { data: null, error: errorMsg };
+    return { data: null, error: 'Unknown error' };
   }
 };
 

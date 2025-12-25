@@ -9,6 +9,14 @@ const formSchema = z.object({
   password: z.string().min(6, 'Password is required and at least 6 characters'),
 });
 
+interface LoginResponse {
+  token: string;
+}
+interface LoginBody {
+  email: string;
+  password: string;
+}
+
 export const LoginAction = async (
   prevState: { errors?: Record<string, string>; success?: boolean },
   formData: FormData
@@ -31,7 +39,7 @@ export const LoginAction = async (
     return { errors };
   }
 
-  const { data, error } = await Mutation({
+  const { data, error } = await Mutation<LoginBody, LoginResponse>({
     api: 'v1/super-admin/login',
     method: 'POST',
     body: {
@@ -44,6 +52,10 @@ export const LoginAction = async (
       errors: { form: error },
     };
   } else {
+    if (!data)
+      return {
+        errors: { form: 'Something went wrong' },
+      };
     const days = 1;
     const cookieStore = await cookies();
     cookieStore.set('token', data.token, {
