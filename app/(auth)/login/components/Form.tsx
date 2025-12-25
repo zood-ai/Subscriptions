@@ -31,11 +31,7 @@ export default function Form() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="flex justify-end pt-5">
-        <Button
-          loading={loading || state?.success}
-          type="submit"
-          variant="primary"
-        >
+        <Button loading={loading} type="submit" variant="primary">
           {loading ? 'Loading...' : 'Login'}
         </Button>
       </div>
