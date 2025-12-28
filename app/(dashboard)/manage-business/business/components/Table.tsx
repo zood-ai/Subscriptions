@@ -57,7 +57,7 @@ const actions: ActionOption[] = [
 export default function Table() {
   const router = useRouter();
   return (
-    <div className="pt-[40px] mainPaddingX">
+    <div className="py-[40px] mainPaddingX">
       <CustomTable
         endPoint="/api/business"
         columns={columns}
