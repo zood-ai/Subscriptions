@@ -1,29 +1,35 @@
-import { CustomTable } from '@/components/CustomTable';
+import { CustomTable, type Column } from '@/components/CustomTable';
 import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import { Suspense } from 'react';
 import TableSkeleton from '@/components/TableSkeleton';
 
-interface Columns {
-  key: string;
-  header: string;
-}
-
 interface BusinessPageProps {
   params: Promise<{ id: string }>;
 }
+
+interface BranchData {
+  id: string;
+  name: string;
+  reference: string;
+  owner_email: string;
+  created_at: string;
+  end_at: string;
+}
+
 interface TableFetchProps {
   title: string;
   endPoint: string;
-  columns: Columns[];
+  columns: Column<BranchData>[];
 }
 
-const columns: Columns[] = [
+const columns: Column<BranchData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'reference', header: 'Reference' },
-  { key: 'taxGroup', header: 'Tax Group' },
-  { key: 'createdAt', header: 'Created at' },
+  { key: 'owner_email', header: 'Owner email' },
+  { key: 'created_at', header: 'Created at' },
+  { key: 'end_at', header: 'End at' },
 ];
 
 export default async function Business({ params }: BusinessPageProps) {
@@ -81,5 +87,5 @@ const TableFetch: React.FC<TableFetchProps> = async ({
   columns,
   endPoint,
 }) => {
-  return <CustomTable data={[]} title={title} columns={columns} />;
+  return <CustomTable endPoint={endPoint} title={title} columns={columns} />;
 };

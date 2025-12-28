@@ -1,6 +1,6 @@
 'use client';
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -10,6 +10,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
+import Query from '@/lib/Query';
+import axios from 'axios';
+import TableSkeleton from './TableSkeleton';
 
 export interface Column<T> {
   key: keyof T;
@@ -28,44 +31,49 @@ export interface ActionOption {
 }
 
 interface CustomTableProps<T extends { id: string }> {
-  data: T[];
+  data?: T[];
+  endPoint?: string;
   columns: Column<T>[];
+  filterKey?: string;
   filters?: FilterTab[];
   actions?: ActionOption[];
   title?: string;
   onClickRow?: (data: T) => void;
-  onFilterChange?: (filter: string) => void;
-  onSelectionChange?: (selectedIds: string[]) => void;
 }
 
 export function CustomTable<T extends { id: string }>({
-  data,
+  data = [],
+  endPoint = '',
+  filterKey = 'status',
   columns,
   filters,
   actions,
   onClickRow,
   title,
-  onFilterChange,
-  onSelectionChange,
 }: CustomTableProps<T>) {
-  const [selectedIds, setSelectedIds] = React.useState<string[]>([]);
-  const [activeFilter, setActiveFilter] = React.useState(
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [activeFilter, setActiveFilter] = useState(
     filters?.[0]?.value || 'all'
   );
+  const [allData, setAllData] = useState<T[]>(data ?? []);
+  const [Loading, setLoading] = useState<boolean>(true);
 
-  const allSelected = data.length > 0 && selectedIds.length === data.length;
+  const [allFilters, setAllFilters] = useState<
+    Record<string, number | string | boolean>
+  >({ page: 1 });
+
+  const allSelected =
+    allData.length > 0 && selectedIds.length === allData.length;
   const someSelected =
-    selectedIds.length > 0 && selectedIds.length < data.length;
+    selectedIds.length > 0 && selectedIds.length < allData.length;
   const hasSelection = selectedIds.length > 0;
 
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedIds([]);
-      onSelectionChange?.([]);
     } else {
-      const allIds = data.map((item) => item.id);
+      const allIds = allData.map((item) => item.id);
       setSelectedIds(allIds);
-      onSelectionChange?.(allIds);
     }
   };
 
@@ -74,22 +82,52 @@ export function CustomTable<T extends { id: string }>({
       const newSelection = prev.includes(id)
         ? prev.filter((selectedId) => selectedId !== id)
         : [...prev, id];
-      onSelectionChange?.(newSelection);
       return newSelection;
     });
   };
 
   const handleFilterChange = (value: string) => {
     setActiveFilter(value);
-    onFilterChange?.(value);
+    setAllFilters((prev) => ({
+      ...prev,
+      [filterKey]: value,
+    }));
   };
+
+  useEffect(() => {
+    if (!(endPoint && data.length === 0)) return;
+    const fn = async () => {
+      setLoading(true);
+      const queryParams = new URLSearchParams();
+      Object.entries(allFilters).forEach(([key, value]) => {
+        if (value != null) {
+          queryParams.append(key, String(value));
+        }
+      });
+      try {
+        const res: { data: T[] } = await axios.get(
+          `${endPoint}${
+            queryParams.toString() ? `?${queryParams.toString()}` : ''
+          }`
+        );
+        setAllData(res?.data);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fn();
+  }, [allFilters, data.length, endPoint]);
+
+  if (Loading) {
+    return <TableSkeleton title={title} />;
+  }
 
   return (
     <div>
       {title && (
         <h2 className="py-[25px] text-gray-500 text-xl font-medium">{title}</h2>
       )}
-      {data.length > 0 ? (
+      {allData.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
           {/* Filter Tabs Row */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border">
@@ -182,7 +220,7 @@ export function CustomTable<T extends { id: string }>({
                 </tr>
               </thead>
               <tbody>
-                {data.map((item) => (
+                {allData.map((item) => (
                   <tr
                     key={item.id}
                     className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"

@@ -11,53 +11,17 @@ interface BranchData {
   id: string;
   name: string;
   reference: string;
-  taxGroup: string;
-  createdAt: string;
+  owner_email: string;
+  created_at: string;
+  end_at: string;
 }
-
-const sampleData: BranchData[] = [
-  {
-    id: '1',
-    name: 'Abdelrahman',
-    reference: '52251',
-    taxGroup: 'VAT',
-    createdAt: 'November 30, 03:17am',
-  },
-  {
-    id: '2',
-    name: 'فرع الشفا',
-    reference: '88442',
-    taxGroup: 'VAT',
-    createdAt: 'July 24, 04:29am',
-  },
-  {
-    id: '3',
-    name: 'فرع السويدي',
-    reference: '16640',
-    taxGroup: 'VAT',
-    createdAt: 'July 24, 04:29am',
-  },
-  {
-    id: '4',
-    name: 'فرع لين',
-    reference: '92326',
-    taxGroup: 'VAT',
-    createdAt: 'July 24, 04:29am',
-  },
-  {
-    id: '5',
-    name: 'فرع الهفهوف',
-    reference: '76449',
-    taxGroup: 'VAT',
-    createdAt: 'July 24, 04:27am',
-  },
-];
 
 const columns: Column<BranchData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'reference', header: 'Reference' },
-  { key: 'taxGroup', header: 'Tax Group' },
-  { key: 'createdAt', header: 'Created at' },
+  { key: 'owner_email', header: 'Owner email' },
+  { key: 'created_at', header: 'Created at' },
+  { key: 'end_at', header: 'End at' },
 ];
 
 const filters: FilterTab[] = [
@@ -95,16 +59,14 @@ export default function Table() {
   return (
     <div className="pt-[40px] mainPaddingX">
       <CustomTable
-        data={sampleData}
+        endPoint="/api/business"
         columns={columns}
         filters={filters}
         actions={actions}
         onClickRow={(data) => {
-          console.log(data);
-          router.push(`/manage-business/business/${data.name}`);
+          router.push(`/manage-business/business/${data.id}`);
         }}
-        onFilterChange={(filter) => console.log('Filter changed to:', filter)}
-        onSelectionChange={(ids) => console.log('Selection changed:', ids)}
+        filterKey="status"
       />
     </div>
   );
