@@ -10,7 +10,13 @@ import {
   suppliersColumns,
   usersColumns,
 } from './constants';
-import { BusinessResponse } from '@/types/business';
+import {
+  businessCustomersData,
+  businessDevicesData,
+  BusinessResponse,
+  businessSuppliersData,
+  businessUsersData,
+} from '@/types/business';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
 
@@ -58,25 +64,25 @@ const BusinessFetch = async ({ id }: { id: string }) => {
 
   const tables = [
     {
-      id: 1,
+      id: 'suppliers',
       title: 'Suppliers',
       endPoint: `/api/business/${id}/suppliers`,
       columns: suppliersColumns,
     },
     {
-      id: 2,
+      id: 'devices',
       title: 'Devices',
       endPoint: `/api/business/${id}/devices`,
       columns: devicesColumns,
     },
     {
-      id: 3,
+      id: 'users',
       title: 'Users',
       endPoint: `/api/business/${id}/users`,
       columns: usersColumns,
     },
     {
-      id: 4,
+      id: 'customers',
       title: 'Customers',
       endPoint: `/api/business/${id}/customers`,
       columns: customersColumns,
