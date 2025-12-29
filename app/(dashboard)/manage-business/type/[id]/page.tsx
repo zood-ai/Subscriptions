@@ -11,7 +11,7 @@ interface BusinessPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default async function Business({ params }: BusinessPageProps) {
+export default async function Type({ params }: BusinessPageProps) {
   const { id } = await params;
 
   return (
