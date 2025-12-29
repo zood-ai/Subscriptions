@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/assets/logo.svg';
 import { Monitor, Package, Briefcase, X, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useState } from 'react';
 

@@ -10,13 +10,7 @@ import {
   suppliersColumns,
   usersColumns,
 } from './constants';
-import {
-  businessCustomersData,
-  businessDevicesData,
-  BusinessResponse,
-  businessSuppliersData,
-  businessUsersData,
-} from '@/types/business';
+import { BusinessResponse } from '@/types/business';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
 

@@ -1,6 +1,5 @@
 'use client';
 import { User, Menu } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import Sidebar from './Sidbar';
 
