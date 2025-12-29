@@ -1,18 +1,10 @@
 import Query from '@/lib/Query';
+import { BusinessData } from '@/types/business';
 import dayjs from 'dayjs';
 import { NextResponse } from 'next/server';
 
-interface GetResponse {
-  id: string;
-  reference: number;
-  owner_email: string;
-  end_at: string;
-  created_at: string;
-  name: string;
-}
-
 export async function GET() {
-  const res = await Query<GetResponse[]>({
+  const res = await Query<BusinessData[]>({
     api: 'v1/super-admin/business',
   });
 
@@ -30,5 +22,8 @@ export async function GET() {
   }));
 
   if (res.error) response = [];
-  return NextResponse.json(response);
+  return NextResponse.json({
+    meta: {},
+    data: response,
+  });
 }

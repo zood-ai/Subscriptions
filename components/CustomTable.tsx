@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import type React from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronDown, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -10,9 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
-import Query from '@/lib/Query';
 import axios from 'axios';
 import TableSkeleton from './TableSkeleton';
+import type { MetaData } from '@/types/global';
 
 export interface Column<T> {
   key: keyof T;
@@ -39,6 +40,7 @@ interface CustomTableProps<T extends { id: string }> {
   actions?: ActionOption[];
   title?: string;
   onClickRow?: (data: T) => void;
+  pagination?: boolean;
 }
 
 export function CustomTable<T extends { id: string }>({
@@ -50,6 +52,7 @@ export function CustomTable<T extends { id: string }>({
   actions,
   onClickRow,
   title,
+  pagination = true,
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeFilter, setActiveFilter] = useState(
@@ -57,6 +60,8 @@ export function CustomTable<T extends { id: string }>({
   );
   const [allData, setAllData] = useState<T[]>(data ?? []);
   const [Loading, setLoading] = useState<boolean>(true);
+  const [paginationData, setPaginationData] = useState<MetaData | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
@@ -91,6 +96,17 @@ export function CustomTable<T extends { id: string }>({
     setAllFilters((prev) => ({
       ...prev,
       [filterKey]: value,
+      page: 1,
+    }));
+    setCurrentPage(1);
+  };
+
+  const goToPage = (pageNumber: number) => {
+    if (currentPage === pageNumber) return;
+    setCurrentPage(pageNumber);
+    setAllFilters((prev) => ({
+      ...prev,
+      page: pageNumber,
     }));
   };
 
@@ -105,12 +121,19 @@ export function CustomTable<T extends { id: string }>({
         }
       });
       try {
-        const res: { data: T[] } = await axios.get(
+        const res: {
+          data: {
+            data: T[];
+            meta: MetaData;
+          };
+        } = await axios.get(
           `${endPoint}${
             queryParams.toString() ? `?${queryParams.toString()}` : ''
           }`
         );
-        setAllData(res?.data);
+
+        setAllData(res?.data?.data);
+        setPaginationData(res?.data?.meta);
       } finally {
         setLoading(false);
       }
@@ -152,38 +175,38 @@ export function CustomTable<T extends { id: string }>({
               Filter
             </button>
           </div>
-
           {/* Selection Info Row */}
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
-            <span className="text-sm font-semibold text-foreground">
-              {selectedIds.length} Selected
-            </span>
-            {hasSelection && (
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground bg-muted rounded-md hover:bg-muted/80 transition-colors">
+          {actions && actions?.length > 0 && (
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+              <span className="text-sm font-semibold text-foreground">
+                {selectedIds.length} Selected
+              </span>
+              {hasSelection && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground bg-muted rounded-md hover:bg-muted/80 transition-colors">
+                    Actions
+                    <ChevronDown className="h-4 w-4" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start">
+                    {actions?.map((action) => (
+                      <DropdownMenuItem
+                        key={action.label}
+                        onClick={() => action.onClick(selectedIds)}
+                      >
+                        {action.label}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
+              {!hasSelection && (
+                <div className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground/50 bg-muted/50 rounded-md cursor-not-allowed">
                   Actions
                   <ChevronDown className="h-4 w-4" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start">
-                  {actions?.map((action) => (
-                    <DropdownMenuItem
-                      key={action.label}
-                      onClick={() => action.onClick(selectedIds)}
-                    >
-                      {action.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            )}
-            {!hasSelection && (
-              <div className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground/50 bg-muted/50 rounded-md cursor-not-allowed">
-                Actions
-                <ChevronDown className="h-4 w-4" />
-              </div>
-            )}
-          </div>
-
+                </div>
+              )}
+            </div>
+          )}
           {/* Table */}
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -191,15 +214,17 @@ export function CustomTable<T extends { id: string }>({
                 <tr className="border-b border-border">
                   <th className="w-12 px-4 py-3 text-left">
                     <div className="relative flex items-center justify-center">
-                      <Checkbox
-                        checked={allSelected}
-                        onCheckedChange={handleSelectAll}
-                        className={cn(
-                          'h-4 w-4',
-                          someSelected && 'data-[state=checked]:bg-primary'
-                        )}
-                        {...(someSelected && { 'data-state': 'checked' })}
-                      />
+                      {actions && actions?.length && (
+                        <Checkbox
+                          checked={allSelected}
+                          onCheckedChange={handleSelectAll}
+                          className={cn(
+                            'h-4 w-4',
+                            someSelected && 'data-[state=checked]:bg-primary'
+                          )}
+                          {...(someSelected && { 'data-state': 'checked' })}
+                        />
+                      )}
                       {someSelected && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                           <div className="h-4 w-4 rounded-sm bg-primary flex items-center justify-center">
@@ -226,11 +251,13 @@ export function CustomTable<T extends { id: string }>({
                     className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
                   >
                     <td className="w-12 px-4 py-4">
-                      <Checkbox
-                        checked={selectedIds.includes(item.id)}
-                        onCheckedChange={() => handleSelectRow(item.id)}
-                        className="h-4 w-4"
-                      />
+                      {actions && actions?.length && (
+                        <Checkbox
+                          checked={selectedIds.includes(item.id)}
+                          onCheckedChange={() => handleSelectRow(item.id)}
+                          className="h-4 w-4"
+                        />
+                      )}
                     </td>
                     {columns.map((column) => (
                       <td
@@ -240,7 +267,7 @@ export function CustomTable<T extends { id: string }>({
                       >
                         {column.render
                           ? column.render(item[column.key], item)
-                          : String(item[column.key])}
+                          : String(item[column.key] ?? '-')}
                       </td>
                     ))}
                   </tr>
@@ -248,6 +275,64 @@ export function CustomTable<T extends { id: string }>({
               </tbody>
             </table>
           </div>
+          {pagination && paginationData && (
+            <div className="flex justify-end items-center space-x-[19px] mx-[20px] mt-[30px] mb-[20px]">
+              <div className="flex items-center justify-center text-gray-500 font-[12px]">
+                {paginationData?.from} - {paginationData?.to} of{' '}
+                {paginationData?.total}
+              </div>
+              <div className="flex justify-center items-center space-x-2 mx-3">
+                {currentPage > 3 && (
+                  <>
+                    <button
+                      onClick={() => goToPage(1)}
+                      className="cursor-pointer px-3 py-1 rounded bg-gray-100"
+                    >
+                      1
+                    </button>
+                    {currentPage > 3 && <span>...</span>}
+                  </>
+                )}
+
+                {Array.from({ length: 5 }, (_, i) => {
+                  const pageNumber = currentPage - 2 + i;
+                  if (
+                    pageNumber > 0 &&
+                    pageNumber <= paginationData?.last_page
+                  ) {
+                    return (
+                      <button
+                        key={pageNumber}
+                        onClick={() => goToPage(pageNumber)}
+                        className={`cursor-pointer px-3 py-1 rounded ${
+                          currentPage === pageNumber
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
+                        }`}
+                      >
+                        {pageNumber}
+                      </button>
+                    );
+                  }
+                  return null;
+                })}
+
+                {currentPage < paginationData?.last_page - 2 && (
+                  <>
+                    {currentPage < paginationData?.last_page - 3 && (
+                      <span>...</span>
+                    )}
+                    <button
+                      onClick={() => goToPage(paginationData?.last_page)}
+                      className="cursor-pointer px-3 py-1 rounded bg-gray-100"
+                    >
+                      {paginationData?.last_page}
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div className="text-gray-500 font-medium flex justify-center items-center p-[50px] w-full rounded-2xl border border-border bg-card">

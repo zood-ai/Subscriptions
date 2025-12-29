@@ -5,18 +5,10 @@ import {
   type FilterTab,
   type ActionOption,
 } from '@/components/CustomTable';
+import { BusinessData } from '@/types/business';
 import { useRouter } from 'next/navigation';
 
-interface BranchData {
-  id: string;
-  name: string;
-  reference: string;
-  owner_email: string;
-  created_at: string;
-  end_at: string;
-}
-
-const columns: Column<BranchData>[] = [
+const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'reference', header: 'Reference' },
   { key: 'owner_email', header: 'Owner email' },
@@ -64,7 +56,7 @@ export default function Table() {
         filters={filters}
         actions={actions}
         onClickRow={(data) => {
-          router.push(`/manage-business/business/${data.id}`);
+          router.push(`/manage-business/business/${data.reference}`);
         }}
         filterKey="status"
       />
