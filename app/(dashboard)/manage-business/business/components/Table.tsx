@@ -31,17 +31,17 @@ const actions: ActionOption[] = [
     },
   },
   {
-    label: 'Export',
+    label: 'Active',
     onClick: (selectedIds) => {
-      console.log('Exporting items:', selectedIds);
-      alert(`Exporting ${selectedIds.length} items`);
+      console.log('Activing items:', selectedIds);
+      alert(`Activing ${selectedIds.length} items`);
     },
   },
   {
-    label: 'Archive',
+    label: 'DeActive',
     onClick: (selectedIds) => {
-      console.log('Archiving items:', selectedIds);
-      alert(`Archiving ${selectedIds.length} items`);
+      console.log('DeActiveing items:', selectedIds);
+      alert(`DeActiveing ${selectedIds.length} items`);
     },
   },
 ];
