@@ -44,7 +44,7 @@ const BusinessFetch = async ({ id }: { id: string }) => {
     <div>
       <div className="py-[15px] mainPaddingX bg-white">
         <Link
-          href="/manage-business/business"
+          href="/manage-business/type"
           className="text-gray-500 flex items-center gap-1 text-xs"
         >
           <ChevronLeft size={15} />
