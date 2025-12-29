@@ -24,20 +24,25 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     handleClose();
   };
   return (
-    <div className="py-[15px] px-[60px] bg-white flex justify-between">
+    <div className="py-[15px] mainPaddingX bg-white flex justify-between">
       <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
-      <Button onClick={() => { onAction?.(); handleOpen?.() }}>{createBtnTitle}</Button>
+      <Button
+        onClick={() => {
+          onAction?.();
+          handleOpen?.();
+        }}
+      >
+        {createBtnTitle}
+      </Button>
       <CreateModal
         isOpen={isModalOpen}
         onClose={handleClose}
-        title="Add Customer"
+        title={createBtnTitle}
         onConfirm={handleCreate}
         confirmText="Apply"
         cancelText="Close"
       >
-        <div className="flex flex-col gap-6">
-          form here
-        </div>
+        <div className="flex flex-col gap-6">form here</div>
       </CreateModal>
     </div>
   );
