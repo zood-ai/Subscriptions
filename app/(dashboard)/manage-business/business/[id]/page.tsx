@@ -14,7 +14,7 @@ import { BusinessResponse } from '@/types/business';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
 
-interface BusinessPageProps {
+interface Props {
   params: Promise<{ id: string }>;
 }
 
@@ -24,7 +24,7 @@ interface TableFetchProps<T> {
   columns: Column<T>[];
 }
 
-export default async function Business({ params }: BusinessPageProps) {
+export default async function Business({ params }: Props) {
   const { id } = await params;
 
   return (

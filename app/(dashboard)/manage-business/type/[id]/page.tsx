@@ -7,11 +7,11 @@ import { BusinessType } from '@/types/business';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
 
-interface BusinessPageProps {
+interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default async function Type({ params }: BusinessPageProps) {
+export default async function Type({ params }: Props) {
   const { id } = await params;
 
   return (
