@@ -43,3 +43,9 @@ export interface BusinessResponse {
   users: businessUsersData;
   customers: businessCustomersData;
 }
+
+export interface BusinessType {
+  id: string;
+  name: string;
+  created_at: string;
+}
