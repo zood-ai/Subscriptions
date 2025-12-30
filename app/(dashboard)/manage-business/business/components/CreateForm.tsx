@@ -7,8 +7,6 @@ import { Button } from '@/components/ui/button';
 import { RegisterCustomerAction } from '@/actions/CustomerActions';
 
 interface CreateFormProps {
-  // onSubmit: (formData: FormData) => Promise<void>;
-  // loading?: boolean;
   countries: any;
   businessTypes: any;
 }
@@ -26,8 +24,6 @@ interface FormState {
 }
 
 export default function CreateForm({
-  // onSubmit,
-  // loading = false,  
   countries,
   businessTypes,
 }: CreateFormProps) {
@@ -49,26 +45,7 @@ export default function CreateForm({
       [field]: value,
     }));
   };
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
 
-  //   const myFormData = new FormData();
-  //   myFormData.append('name', formState.name);
-  //   myFormData.append('email', formState.email);
-  //   myFormData.append('password', formState.password);
-  //   myFormData.append('business_name', formState.business_name);
-  //   myFormData.append('business_type_id', formState.business_type_id);
-  //   myFormData.append(
-  //     'business_location_id',
-  //     formState.business_location_id ?? 'a2968fb8-28e8-4818-9bf6-33671265c09d'
-  //   );
-  //   myFormData.append('phone', formState.phone);
-
-  //   if (formState.tradeRegister) {
-  //     myFormData.append('tradeRegister', formState.tradeRegister);
-  //   }
-  //   await onSubmit(myFormData);
-  // };
   return (
     <form action={action} className="w-full">
       <div className="space-y-6">
