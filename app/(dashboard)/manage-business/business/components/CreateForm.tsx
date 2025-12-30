@@ -51,7 +51,7 @@ export default function CreateForm({
       <div className="space-y-6">
         {/* Full Name */}
         <Input
-          className=" border-gray-300 focus:border-[#7272F6] focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          className=" border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           id="name"
           Label="Full Name"
@@ -64,10 +64,11 @@ export default function CreateForm({
 
         {/* Email */}
         <Input
-          className="  border-gray-300 focus:border-[#7272F6] focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          className="  border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="email"
           Label="Email"
           id="email"
+          error={state?.errors?.email}
           name='email'
           value={formState.email}
           onChange={(e) => handleChange('email', e.target.value)}
@@ -76,10 +77,11 @@ export default function CreateForm({
 
         {/* Phone */}
         <Input
-          className="  border-gray-300 focus:border-[#7272F6] focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          className="  border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Phone"
           id="phone"
+          error={state?.errors?.phone}
           name='phone'
           value={formState.phone}
           onChange={(e) => handleChange('phone', e.target.value)}
@@ -89,10 +91,11 @@ export default function CreateForm({
         {/* Password */}
         <Input
           Label="Password"
-          className="border-gray-300 focus:border-[#7272F6] focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="password"
           name='password'
           id="password"
+          error={state?.errors?.password}
           value={formState.password}
           onChange={(e) => handleChange('password', e.target.value)}
           required
@@ -104,10 +107,11 @@ export default function CreateForm({
 
         {/* Business Name */}
         <Input
-          className="  border-gray-300 focus:border-[#7272F6] focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          className="  border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           id="business_name"
           Label="Business Name"
+          error={state?.errors?.business_name}
           name='business_name'
           value={formState.business_name}
           onChange={(e) => handleChange('business_name', e.target.value)}
@@ -118,7 +122,9 @@ export default function CreateForm({
         <SingleSelect
           label="Business Type"
           name='business_type_id'
+          className='placeholder:text-opacity-50'
           placeholder="Select business type"
+          errorText={state?.errors?.business_type_id}
           value={formState.business_type_id}
           onChange={(value) => handleChange('business_type_id', value)}
           options={businessTypes?.data?.data?.map((business: { id: string, name: string }) => ({
@@ -134,7 +140,9 @@ export default function CreateForm({
         <SingleSelect
           label="Country"
           name='business_location_id'
+          className='placeholder:text-opacity-50'
           placeholder="Select country"
+          errorText={state?.errors?.business_location_id}
           value={formState.business_location_id}
           onChange={(value) => handleChange('business_location_id', value)}
           options={countries?.data?.data?.map((country: { id: string, name_en: string }) => ({
