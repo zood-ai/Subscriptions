@@ -121,7 +121,7 @@ export default function CreateForm({
           placeholder="Select business type"
           value={formState.business_type_id}
           onChange={(value) => handleChange('business_type_id', value)}
-          options={businessTypes?.data?.data?.map((business) => ({
+          options={businessTypes?.data?.data?.map((business: { id: string, name: string }) => ({
             label: business.name,
             value: business.id
           }))}
@@ -137,7 +137,7 @@ export default function CreateForm({
           placeholder="Select country"
           value={formState.business_location_id}
           onChange={(value) => handleChange('business_location_id', value)}
-          options={countries?.data?.data?.map((country) => ({
+          options={countries?.data?.data?.map((country: { id: string, name_en: string }) => ({
             label: country.name_en,
             value: country.id
           }))}
