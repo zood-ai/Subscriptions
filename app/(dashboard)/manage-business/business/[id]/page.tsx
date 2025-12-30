@@ -35,10 +35,15 @@ export default async function Business({ params }: Props) {
         </div>
       }
     >
-      <BusinessFetch id={id} />
+      <Holder id={id} />
+      {/* <BusinessFetch id={id} /> */}
     </Suspense>
   );
 }
+
+const Holder = ({ id }: { id: string }) => {
+  return <BusinessFetch id={id} />;
+};
 
 const BusinessFetch = async ({ id }: { id: string }) => {
   const data = await Query<BusinessResponse>({

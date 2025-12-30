@@ -9,6 +9,7 @@ export async function GET(
   request: NextRequest,
   context: { params: Promise<{ id: string; type: string }> }
 ) {
+  const { searchParams } = new URL(request.url);
   const { id, type } = await context.params;
 
   if (!allowedTypes.includes(type as AllowedType)) {
@@ -17,6 +18,7 @@ export async function GET(
 
   const res = await Query<{ data: BusinessResponse[AllowedType][] }>({
     api: `v1/super-admin/business/${id}/${type}`,
+    filters: Object.fromEntries(searchParams.entries()),
   });
 
   if (res.error) {
