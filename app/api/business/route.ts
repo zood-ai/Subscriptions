@@ -3,12 +3,15 @@ import { BusinessData } from '@/types/business';
 import dayjs from 'dayjs';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
-  const res = await Query<BusinessData[]>({
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const res = await Query<{ data: BusinessData[] }>({
     api: 'v1/super-admin/business',
+    filters: Object.fromEntries(searchParams.entries()),
   });
+  console.log({ res });
 
-  let response = res?.data?.map((el) => ({
+  let response = res?.data?.data?.map((el) => ({
     id: el.id,
     reference: el.reference,
     owner_email: el.owner_email,
