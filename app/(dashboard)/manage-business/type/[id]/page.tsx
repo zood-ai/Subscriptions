@@ -35,7 +35,6 @@ const TypeFetch = async ({ id }: { id: string }) => {
   if (data.error) {
     redirect('/manage-business/type');
   }
-  console.log({ data });
 
   const items = [
     { title: 'Name', value: data?.data?.businessType?.name },
