@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const res = await Query<{ data: BusinessType[] }>({
+  const res = await Query<{ data: BusinessType['businessType'][] }>({
     api: 'v1/super-admin/businessTypes',
   });
 

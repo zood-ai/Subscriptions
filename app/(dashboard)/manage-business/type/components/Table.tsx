@@ -7,7 +7,7 @@ import {
 import { BusinessType } from '@/types/business';
 import { useRouter } from 'next/navigation';
 
-const columns: Column<BusinessType>[] = [
+const columns: Column<BusinessType['businessType']>[] = [
   { key: 'name', header: 'Name' },
   { key: 'created_at', header: 'Created at' },
 ];

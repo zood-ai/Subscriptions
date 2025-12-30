@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import Query from '@/lib/Query';
 import { redirect } from 'next/navigation';
-import { BusinessType } from '@/types/business';
+import { BusinessData, BusinessType } from '@/types/business';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
+import { Column, CustomTable } from '@/components/CustomTable';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -22,22 +23,31 @@ export default async function Type({ params }: Props) {
         </div>
       }
     >
-      <BusinessFetch id={id} />
+      <TypeFetch id={id} />
     </Suspense>
   );
 }
 
-const BusinessFetch = async ({ id }: { id: string }) => {
+const TypeFetch = async ({ id }: { id: string }) => {
   const data = await Query<BusinessType>({
     api: `v1/super-admin/businessTypes/${id}`,
   });
   if (data.error) {
     redirect('/manage-business/type');
   }
+  console.log({ data });
 
   const items = [
-    { title: 'Name', value: data?.data?.name },
-    { title: 'Created at', value: data?.data?.created_at },
+    { title: 'Name', value: data?.data?.businessType?.name },
+    { title: 'Created at', value: data?.data?.businessType?.created_at },
+  ];
+
+  const columns: Column<BusinessData>[] = [
+    { key: 'name', header: 'Name' },
+    { key: 'reference', header: 'Reference' },
+    { key: 'owner_email', header: 'Owner email' },
+    { key: 'created_at', header: 'Created at' },
+    { key: 'end_at', header: 'End at' },
   ];
 
   return (
@@ -51,11 +61,16 @@ const BusinessFetch = async ({ id }: { id: string }) => {
           Back
         </Link>
         <h1 className="text-gray-500 text-[24px] font-normal">
-          {data?.data?.name}
+          {data?.data?.businessType?.name}
         </h1>
       </div>
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
+        <CustomTable
+          data={data?.data?.businesses ?? []}
+          title={'Business'}
+          columns={columns}
+        />
       </div>
     </div>
   );

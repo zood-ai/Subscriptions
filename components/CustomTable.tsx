@@ -59,7 +59,7 @@ export function CustomTable<T extends { id: string }>({
     filters?.[0]?.value || 'all'
   );
   const [allData, setAllData] = useState<T[]>(data ?? []);
-  const [Loading, setLoading] = useState<boolean>(true);
+  const [Loading, setLoading] = useState<boolean>(data ? false : true);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
