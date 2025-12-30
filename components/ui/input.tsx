@@ -37,11 +37,11 @@ function Input({
         <label
           htmlFor={props.id}
           className={cn(
-            'absolute left-[25px]  text-[13px] pointer-events-none transition-all duration-300',
+            'absolute left-[25px] text-[13px] pointer-events-none transition-all duration-300',
             animateLabel
               ? focused || value
-                ? '-top-3 text-[11px] text-primary bg-white px-1 font-extrabold '
-                : 'top-[23px]  text-gray-400 font-medium '
+                ? 'top-0 text-[11px] text-primary z-1 bg-white px-1 font-extrabold '
+                : 'top-[23px] text-gray-400 font-medium '
               : 'static',
             labelClassName
           )}
@@ -50,7 +50,7 @@ function Input({
           {required && <span className="text-red-500 pl-1">*</span>}
         </label>
       )}
-      <div className='relative'>
+      <div className="relative">
         <input
           ref={inputRef}
           required={required}
@@ -88,7 +88,6 @@ function Input({
 
         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
       </div>
-
     </div>
   );
 }

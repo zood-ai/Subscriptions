@@ -45,7 +45,10 @@ export interface BusinessResponse {
 }
 
 export interface BusinessType {
-  id: string;
-  name: string;
-  created_at: string;
+  businessType: {
+    id: string;
+    name: string;
+    created_at: string;
+  };
+  businesses: BusinessData[];
 }

@@ -33,6 +33,7 @@ export interface ActionOption {
 
 interface CustomTableProps<T extends { id: string }> {
   data?: T[];
+  showFilters?: boolean;
   endPoint?: string;
   columns: Column<T>[];
   filterKey?: string;
@@ -45,6 +46,7 @@ interface CustomTableProps<T extends { id: string }> {
 
 export function CustomTable<T extends { id: string }>({
   data = [],
+  showFilters = true,
   endPoint = '',
   filterKey = 'status',
   columns,
@@ -59,7 +61,7 @@ export function CustomTable<T extends { id: string }>({
     filters?.[0]?.value || 'all'
   );
   const [allData, setAllData] = useState<T[]>(data ?? []);
-  const [Loading, setLoading] = useState<boolean>(true);
+  const [Loading, setLoading] = useState<boolean>(data ? false : true);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -152,28 +154,32 @@ export function CustomTable<T extends { id: string }>({
       {allData.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
           {/* Filter Tabs Row */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-            <div className="flex items-center gap-2">
-              {filters?.map((filter) => (
-                <button
-                  key={filter.value}
-                  onClick={() => handleFilterChange(filter.value)}
-                  className={cn(
-                    'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
-                    activeFilter === filter.value
-                      ? 'text-blue-600 bg-blue-50 border border-blue-200'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                  )}
-                >
-                  {filter.label}
+          {(showFilters || (filters && filters?.length > 0)) && (
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+              <div className="flex items-center gap-2">
+                {filters?.map((filter) => (
+                  <button
+                    key={filter.value}
+                    onClick={() => handleFilterChange(filter.value)}
+                    className={cn(
+                      'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
+                      activeFilter === filter.value
+                        ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    )}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
+              {showFilters && (
+                <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
+                  <Filter className="h-4 w-4" />
+                  Filter
                 </button>
-              ))}
+              )}
             </div>
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
-              <Filter className="h-4 w-4" />
-              Filter
-            </button>
-          </div>
+          )}
           {/* Selection Info Row */}
           {actions && actions?.length > 0 && (
             <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
