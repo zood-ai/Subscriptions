@@ -6,9 +6,20 @@ import SingleSelect from '@/components/SingleSelect';
 import { Button } from '@/components/ui/button';
 import { RegisterCustomerAction } from '@/actions/CustomerActions';
 
+
+interface businessTypesResponce {
+  id: string;
+  name: string;
+}
+
+interface countriesResponce {
+  id: string;
+  name_en: string;
+}
+
 interface CreateFormProps {
-  countries: any;
-  businessTypes: any;
+  countries: countriesResponce[];
+  businessTypes: businessTypesResponce[];
 }
 
 interface FormState {
@@ -127,7 +138,7 @@ export default function CreateForm({
           errorText={state?.errors?.business_type_id}
           value={formState.business_type_id}
           onChange={(value) => handleChange('business_type_id', value)}
-          options={businessTypes?.data?.data?.map((business: { id: string, name: string }) => ({
+          options={businessTypes?.map((business: { id: string, name: string }) => ({
             label: business.name,
             value: business.id
           }))}
@@ -145,7 +156,7 @@ export default function CreateForm({
           errorText={state?.errors?.business_location_id}
           value={formState.business_location_id}
           onChange={(value) => handleChange('business_location_id', value)}
-          options={countries?.data?.data?.map((country: { id: string, name_en: string }) => ({
+          options={countries?.map((country: { id: string, name_en: string }) => ({
             label: country.name_en,
             value: country.id
           }))}
