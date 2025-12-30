@@ -3,9 +3,11 @@ import { BusinessType } from '@/types/business';
 import dayjs from 'dayjs';
 import { NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
   const res = await Query<{ data: BusinessType['businessType'][] }>({
     api: 'v1/super-admin/businessTypes',
+    filters: Object.fromEntries(searchParams.entries()),
   });
 
   let response = res?.data?.data?.map((el) => ({

@@ -9,7 +9,6 @@ export async function GET(request: Request) {
     api: 'v1/super-admin/business',
     filters: Object.fromEntries(searchParams.entries()),
   });
-  console.log({ res });
 
   let response = res?.data?.data?.map((el) => ({
     id: el.id,
