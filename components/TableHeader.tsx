@@ -25,7 +25,7 @@ const TableHeader: React.FC<TableHeaderProps> = ({
   const handleCreate = () => {
   };
   return (
-    <div className="py-[15px] px-[60px] bg-white flex justify-between">
+    <div className="py-[15px] mainPaddingX bg-white flex justify-between">
       <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
       <Button
         onClick={() => {

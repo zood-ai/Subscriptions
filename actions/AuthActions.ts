@@ -42,10 +42,7 @@ export const LoginAction = async (
   const { data, error } = await Mutation<LoginBody, LoginResponse>({
     api: 'v1/super-admin/login',
     method: 'POST',
-    body: {
-      email: parsed.data.email,
-      password: parsed.data.password,
-    },
+    body: parsed.data,
   });
   if (error) {
     return {

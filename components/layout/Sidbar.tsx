@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/assets/logo.svg';
 import { Monitor, Package, Briefcase, X, ChevronDown } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -94,9 +93,9 @@ export default function Sidebar({
           </Link>
         )}
         {isMobileView && (
-          <Button size="icon" onClick={onClose}>
+          <button className="cursor-pointer" onClick={onClose}>
             <X className="h-5 w-5" />
-          </Button>
+          </button>
         )}
       </div>
       <nav
