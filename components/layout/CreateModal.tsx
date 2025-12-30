@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useRef } from 'react';
-import { Button } from './ui/button';
+import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 
@@ -55,7 +55,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 transition-opacity"
       onClick={handleBackdropClick}
     >
       <div
@@ -78,24 +78,8 @@ const CreateModal: React.FC<CreateModalProps> = ({
           </button>
         </div>
         {/* Content */}
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-6 overflow-y-auto flex-1 bg-[#FAFAFA]">
           {children}
-        </div>
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50/50 rounded-b-lg">
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            className="bg-gray-100 hover:bg-gray-200 text-gray-700 border-none rounded-full px-6"
-          >
-            {cancelText}
-          </Button>
-          <Button
-            onClick={onConfirm}
-            className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
-          >
-            {confirmText}
-          </Button>
         </div>
       </div>
     </div>
@@ -103,3 +87,5 @@ const CreateModal: React.FC<CreateModalProps> = ({
 };
 
 export default CreateModal;
+
+

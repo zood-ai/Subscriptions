@@ -1,44 +1,56 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button';
-import CreateModal from './CreateModal';
+import CreateModal from './layout/CreateModal';
 
 interface TableHeaderProps {
   title: string;
   createBtnTitle?: string;
   onAction?: () => void;
+  CreateForm?: React.ReactNode;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
   title = '',
   createBtnTitle = `Create ${title}`,
   onAction,
+  CreateForm,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => setIsModalOpen(false);
+  const handleClose = () => {
+    setIsModalOpen(false);
+  };
 
   const handleCreate = () => {
-    console.log('Create Logic Here');
-    handleClose();
   };
   return (
     <div className="py-[15px] px-[60px] bg-white flex justify-between">
       <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
-      <Button onClick={() => { onAction?.(); handleOpen?.() }}>{createBtnTitle}</Button>
-      <CreateModal
-        isOpen={isModalOpen}
-        onClose={handleClose}
-        title="Add Customer"
-        onConfirm={handleCreate}
-        confirmText="Apply"
-        cancelText="Close"
+      <Button
+        onClick={() => {
+          onAction?.();
+          handleOpen?.();
+        }}
       >
-        <div className="flex flex-col gap-6">
-          form here
-        </div>
-      </CreateModal>
+        {createBtnTitle}
+      </Button>
+      {CreateForm &&
+        <CreateModal
+          isOpen={isModalOpen}
+          onClose={handleClose}
+          title="Add New Business"
+          onConfirm={handleCreate}
+          confirmText="Apply"
+          cancelText="Cancel"
+          className="max-w-xl"
+        >
+          <div className="flex flex-col gap-4">
+            {CreateForm}
+          </div>
+        </CreateModal>
+      }
+
     </div>
   );
 };

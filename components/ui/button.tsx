@@ -9,6 +9,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        create: "bg-primary hover:bg-primary/80 text-white rounded-full px-8 cursor-pointer",
         primary:
           'cursor-pointer text-white bg-primary rounded-full px-4 py-[6px] text-base text-center min-w-[100px] disabled:cursor-not-allowed disabled:bg-primary/50',
         secondary:
