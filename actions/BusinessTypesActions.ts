@@ -44,7 +44,7 @@ export const CreateBusinessType = async (
     method: 'POST',
     body: parsed.data,
   });
-  if (error) {  
+  if (error) {
     return {
       errors: { form: error },
     };

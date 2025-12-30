@@ -67,6 +67,7 @@ const TypeFetch = async ({ id }: { id: string }) => {
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
+          showFilters={false}
           data={data?.data?.businesses ?? []}
           title={'Business'}
           columns={columns}
