@@ -37,12 +37,12 @@ function Input({
         <label
           htmlFor={props.id}
           className={cn(
-            'absolute left-[25px] text-[13px] pointer-events-none transition-all duration-300',
+            'absolute left-[25px]  text-[13px] pointer-events-none transition-all duration-300',
             animateLabel
               ? focused || value
-                ? '-top-3 text-[11px] text-primary bg-white px-1 font-extrabold'
-                : 'top-[15px] text-gray-400 font-medium'
-              : 'static mb-1',
+                ? '-top-3 text-[11px] text-primary bg-white px-1 font-extrabold '
+                : 'top-[23px]  text-gray-400 font-medium '
+              : 'static',
             labelClassName
           )}
         >
@@ -50,43 +50,45 @@ function Input({
           {required && <span className="text-red-500 pl-1">*</span>}
         </label>
       )}
-
-      <input
-        ref={inputRef}
-        required={required}
-        type={inputType}
-        disabled={disabled}
-        value={value}
-        placeholder={animateLabel ? '' : props.placeholder ?? Label ?? ''}
-        className={cn(
-          'border border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
-          'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/50 duration-300',
-          'disabled:opacity-50 disabled:cursor-not-allowed',
-          className
-        )}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-        {...props}
-      />
-
-      {type === 'password' && (
-        <button
-          type="button"
-          aria-label="View password"
-          onClick={() =>
-            setInputType(inputType === 'password' ? 'text' : 'password')
-          }
-          className="absolute top-1/2 -translate-y-1/2 right-3 flex items-center justify-center cursor-pointer"
-        >
-          {inputType === 'password' ? (
-            <EyeClosed className="text-gray-600" />
-          ) : (
-            <Eye className="text-gray-600" />
+      <div className='relative'>
+        <input
+          ref={inputRef}
+          required={required}
+          type={inputType}
+          disabled={disabled}
+          value={value}
+          placeholder={animateLabel ? '' : props.placeholder ?? Label ?? ''}
+          className={cn(
+            'mt-2 border border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
+            'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/50 duration-300',
+            'disabled:opacity-50 disabled:cursor-not-allowed',
+            className
           )}
-        </button>
-      )}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          {...props}
+        />
 
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        {type === 'password' && (
+          <button
+            type="button"
+            aria-label="View password"
+            onClick={() =>
+              setInputType(inputType === 'password' ? 'text' : 'password')
+            }
+            className="absolute top-1/2 -translate-y-1/2 right-3 flex items-center justify-center cursor-pointer"
+          >
+            {inputType === 'password' ? (
+              <EyeClosed className="text-gray-600" />
+            ) : (
+              <Eye className="text-gray-600" />
+            )}
+          </button>
+        )}
+
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      </div>
+
     </div>
   );
 }
