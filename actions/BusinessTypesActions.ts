@@ -1,11 +1,10 @@
 'use server';
 import { z } from 'zod';
-import { cookies } from 'next/headers';
 import Mutation from '@/lib/Mutation';
 import { redirect } from 'next/navigation';
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Password is required'),
+  name: z.string().min(1, 'Name is required'),
 });
 
 interface CreateBusinessTypeResponse {
