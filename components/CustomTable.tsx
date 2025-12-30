@@ -127,8 +127,7 @@ export function CustomTable<T extends { id: string }>({
             meta: MetaData;
           };
         } = await axios.get(
-          `${endPoint}${
-            queryParams.toString() ? `?${queryParams.toString()}` : ''
+          `${endPoint}${queryParams.toString() ? `?${queryParams.toString()}` : ''
           }`
         );
 
@@ -262,7 +261,7 @@ export function CustomTable<T extends { id: string }>({
                     {columns.map((column) => (
                       <td
                         key={String(column.key)}
-                        className="px-4 py-4 text-sm text-foreground"
+                        className="px-4 py-4 text-sm text-foreground cursor-pointer"
                         onClick={() => onClickRow?.(item)}
                       >
                         {column.render
@@ -304,11 +303,10 @@ export function CustomTable<T extends { id: string }>({
                       <button
                         key={pageNumber}
                         onClick={() => goToPage(pageNumber)}
-                        className={`cursor-pointer px-3 py-1 rounded ${
-                          currentPage === pageNumber
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-100'
-                        }`}
+                        className={`cursor-pointer px-3 py-1 rounded ${currentPage === pageNumber
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100'
+                          }`}
                       >
                         {pageNumber}
                       </button>
