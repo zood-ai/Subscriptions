@@ -65,10 +65,12 @@ export function CustomTable<T extends { id: string }>({
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
   >({ page: 1 });
-
   const { data: allData = { data }, isLoading } = useCustomQuery<{
     data: T[];
-    meta: MetaData;
+    from: MetaData['from'];
+    last_page: MetaData['last_page'];
+    to: MetaData['to'];
+    total: MetaData['total'];
   }>({
     api: endPoint || '',
     enabled: endPoint && data.length === 0 ? true : false,
@@ -76,8 +78,12 @@ export function CustomTable<T extends { id: string }>({
     queryKey: [endPoint, allFilters],
     options: {
       onSuccess: (data) => {
-        console.log({ data });
-        setPaginationData(data?.meta);
+        setPaginationData({
+          from: data.from,
+          last_page: data.last_page,
+          to: data.to,
+          total: data.total,
+        });
       },
     },
   });

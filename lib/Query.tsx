@@ -28,12 +28,21 @@ const useCustomQuery = <R,>({
     enabled,
 
     queryFn: async ({ signal }) => {
-      const response = await axiosInstance.get<R>(api, {
-        params: filters,
-        signal,
-      });
+      const response = await axiosInstance
+        .get<R>(api, {
+          params: filters,
+          signal,
+        })
+        .then((res) => {
+          options?.onSuccess?.(res.data);
+          return res.data;
+        })
+        .catch((error) => {
+          options?.onError?.(error);
+          throw error;
+        });
 
-      return response.data;
+      return response;
     },
 
     ...options,
