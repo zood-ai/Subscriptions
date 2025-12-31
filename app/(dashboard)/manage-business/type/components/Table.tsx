@@ -30,9 +30,7 @@ export default function Table() {
         endPoint="/api/business-types"
         columns={columns}
         actions={actions}
-        onClickRow={(data) => {
-          router.push(`/manage-business/type/${data.id}`);
-        }}
+        onClickRow={(data) => `/manage-business/type/${data.id}`}
       />
     </div>
   );

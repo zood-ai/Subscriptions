@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import axios from 'axios';
 import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
+import Link from 'next/link';
 
 export interface Column<T> {
   key: keyof T;
@@ -252,31 +253,36 @@ export function CustomTable<T extends { id: string }>({
               </thead>
               <tbody>
                 {allData.map((item) => (
-                  <tr
+                  <Link
+                    style={{
+                      display: 'table-row',
+                    }}
+                    href={onClickRow?.(item) ?? ''}
                     key={item.id}
-                    className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
                   >
-                    <td className="w-12 px-4 py-4">
-                      {actions && actions?.length && (
-                        <Checkbox
-                          checked={selectedIds.includes(item.id)}
-                          onCheckedChange={() => handleSelectRow(item.id)}
-                          className="h-4 w-4"
-                        />
-                      )}
-                    </td>
-                    {columns.map((column) => (
-                      <td
-                        key={String(column.key)}
-                        className="px-4 py-4 text-sm text-foreground cursor-pointer"
-                        onClick={() => onClickRow?.(item)}
-                      >
-                        {column.render
-                          ? column.render(item[column.key], item)
-                          : String(item[column.key] ?? '-')}
+                    <tr className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors">
+                      <td className="w-12 px-4 py-4">
+                        {actions && actions?.length && (
+                          <Checkbox
+                            checked={selectedIds.includes(item.id)}
+                            onCheckedChange={() => handleSelectRow(item.id)}
+                            className="h-4 w-4"
+                          />
+                        )}
                       </td>
-                    ))}
-                  </tr>
+                      {columns.map((column) => (
+                        <td
+                          key={String(column.key)}
+                          className="px-4 py-4 text-sm text-foreground cursor-pointer"
+                          // onClick={() => onClickRow?.(item)}
+                        >
+                          {column.render
+                            ? column.render(item[column.key], item)
+                            : String(item[column.key] ?? '-')}
+                        </td>
+                      ))}
+                    </tr>
+                  </Link>
                 ))}
               </tbody>
             </table>
