@@ -12,13 +12,14 @@ const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data, isLoading } = useCustomQuery<BusinessType>({
     api: `v1/super-admin/businessTypes/${id}`,
-    queryKey: ['businessTypes'],
+    queryKey: ['businessTypes', id],
     options: {
       onError: () => {
         router.push('/manage-business/type');
       },
     },
   });
+  console.log({ data });
 
   const items = [
     { title: 'Name', value: data?.businessType?.name },

@@ -66,7 +66,7 @@ export function CustomTable<T extends { id: string }>({
     Record<string, number | string | boolean>
   >({ page: 1 });
 
-  const { data: allData = { data: [] }, isLoading } = useCustomQuery<{
+  const { data: allData = { data }, isLoading } = useCustomQuery<{
     data: T[];
     meta: MetaData;
   }>({
