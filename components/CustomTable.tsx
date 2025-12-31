@@ -14,7 +14,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import axios from 'axios';
 import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
-import Link from 'next/link';
 
 export interface Column<T> {
   key: keyof T;
@@ -130,8 +129,7 @@ export function CustomTable<T extends { id: string }>({
             meta: MetaData;
           };
         } = await axios.get(
-          `${endPoint}${
-            queryParams.toString() ? `?${queryParams.toString()}` : ''
+          `${endPoint}${queryParams.toString() ? `?${queryParams.toString()}` : ''
           }`
         );
 
@@ -253,36 +251,31 @@ export function CustomTable<T extends { id: string }>({
               </thead>
               <tbody>
                 {allData.map((item) => (
-                  <Link
-                    style={{
-                      display: 'table-row',
-                    }}
-                    href={onClickRow?.(item) ?? ''}
+                  <tr
                     key={item.id}
+                    className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
                   >
-                    <tr className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors">
-                      <td className="w-12 px-4 py-4">
-                        {actions && actions?.length && (
-                          <Checkbox
-                            checked={selectedIds.includes(item.id)}
-                            onCheckedChange={() => handleSelectRow(item.id)}
-                            className="h-4 w-4"
-                          />
-                        )}
+                    <td className="w-12 px-4 py-4">
+                      {actions && actions?.length && (
+                        <Checkbox
+                          checked={selectedIds.includes(item.id)}
+                          onCheckedChange={() => handleSelectRow(item.id)}
+                          className="h-4 w-4"
+                        />
+                      )}
+                    </td>
+                    {columns.map((column) => (
+                      <td
+                        key={String(column.key)}
+                        className="px-4 py-4 text-sm text-foreground cursor-pointer"
+                        onClick={() => onClickRow?.(item)}
+                      >
+                        {column.render
+                          ? column.render(item[column.key], item)
+                          : String(item[column.key] ?? '-')}
                       </td>
-                      {columns.map((column) => (
-                        <td
-                          key={String(column.key)}
-                          className="px-4 py-4 text-sm text-foreground cursor-pointer"
-                          // onClick={() => onClickRow?.(item)}
-                        >
-                          {column.render
-                            ? column.render(item[column.key], item)
-                            : String(item[column.key] ?? '-')}
-                        </td>
-                      ))}
-                    </tr>
-                  </Link>
+                    ))}
+                  </tr>
                 ))}
               </tbody>
             </table>
@@ -316,11 +309,10 @@ export function CustomTable<T extends { id: string }>({
                       <button
                         key={pageNumber}
                         onClick={() => goToPage(pageNumber)}
-                        className={`cursor-pointer px-3 py-1 rounded ${
-                          currentPage === pageNumber
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-100'
-                        }`}
+                        className={`cursor-pointer px-3 py-1 rounded ${currentPage === pageNumber
+                          ? 'bg-primary text-white'
+                          : 'bg-gray-100'
+                          }`}
                       >
                         {pageNumber}
                       </button>
