@@ -129,7 +129,8 @@ export function CustomTable<T extends { id: string }>({
             meta: MetaData;
           };
         } = await axios.get(
-          `${endPoint}${queryParams.toString() ? `?${queryParams.toString()}` : ''
+          `${endPoint}${
+            queryParams.toString() ? `?${queryParams.toString()}` : ''
           }`
         );
 
@@ -309,10 +310,11 @@ export function CustomTable<T extends { id: string }>({
                       <button
                         key={pageNumber}
                         onClick={() => goToPage(pageNumber)}
-                        className={`cursor-pointer px-3 py-1 rounded ${currentPage === pageNumber
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100'
-                          }`}
+                        className={`cursor-pointer px-3 py-1 rounded ${
+                          currentPage === pageNumber
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
+                        }`}
                       >
                         {pageNumber}
                       </button>

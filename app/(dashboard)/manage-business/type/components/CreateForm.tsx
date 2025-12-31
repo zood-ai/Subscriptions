@@ -2,16 +2,30 @@
 import { useActionState, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { CreateBusinessType } from '@/actions/BusinessTypesActions';
+import {
+  CreateBusinessType,
+  UpdateBusinessType,
+} from '@/actions/BusinessTypesActions';
 
 interface FormState {
   name: string;
 }
 
-export default function CreateForm() {
-  const [state, action, loading] = useActionState(CreateBusinessType, {});
+export default function CreateForm({
+  id = '',
+  type = 'create',
+  data,
+}: {
+  id?: string;
+  type?: 'create' | 'update';
+  data?: FormState;
+}) {
+  const [state, action, loading] = useActionState(
+    type === 'create' ? CreateBusinessType : UpdateBusinessType,
+    {}
+  );
   const [formState, setFormState] = useState<FormState>({
-    name: '',
+    name: data?.name || '',
   });
   const handleChange = <K extends keyof FormState>(
     field: K,
@@ -45,7 +59,7 @@ export default function CreateForm() {
             disabled={loading}
             className="bg-primary  hover:bg-primary/80 text-white rounded-full px-8"
           >
-            {loading ? 'Applying...' : 'Apply'}
+            {loading ? type + 'ing...' : type}
           </Button>
         </div>
         <p className="text-red-600 font-bold">{state?.errors?.form}</p>

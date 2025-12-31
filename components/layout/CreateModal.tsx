@@ -1,6 +1,5 @@
-'use client'
+'use client';
 import React, { useEffect, useRef } from 'react';
-import { Button } from '../ui/button';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 
@@ -9,9 +8,6 @@ interface CreateModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
-  onConfirm?: () => void;
-  confirmText?: string;
-  cancelText?: string;
   className?: string;
 }
 
@@ -20,9 +16,6 @@ const CreateModal: React.FC<CreateModalProps> = ({
   onClose,
   title,
   children,
-  onConfirm,
-  confirmText = 'Apply',
-  cancelText = 'Close',
   className,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -61,7 +54,7 @@ const CreateModal: React.FC<CreateModalProps> = ({
       <div
         ref={modalRef}
         className={cn(
-          "bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 flex flex-col max-h-[90vh]",
+          'bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 flex flex-col max-h-[90vh]',
           className
         )}
         onClick={(e) => e.stopPropagation()}
@@ -71,10 +64,10 @@ const CreateModal: React.FC<CreateModalProps> = ({
           <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
           <button
             onClick={onClose}
-            title='Close'
+            title="Close"
             className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
           >
-            <X size={24} className='cursor-pointer' />
+            <X size={24} className="cursor-pointer" />
           </button>
         </div>
         {/* Content */}
@@ -87,5 +80,3 @@ const CreateModal: React.FC<CreateModalProps> = ({
 };
 
 export default CreateModal;
-
-

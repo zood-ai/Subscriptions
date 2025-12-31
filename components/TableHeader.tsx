@@ -22,8 +22,6 @@ const TableHeader: React.FC<TableHeaderProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleCreate = () => {
-  };
   return (
     <div className="py-[15px] mainPaddingX bg-white flex justify-between">
       <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
@@ -35,22 +33,16 @@ const TableHeader: React.FC<TableHeaderProps> = ({
       >
         {createBtnTitle}
       </Button>
-      {CreateForm &&
+      {CreateForm && (
         <CreateModal
           isOpen={isModalOpen}
           onClose={handleClose}
           title="Add New Business"
-          onConfirm={handleCreate}
-          confirmText="Apply"
-          cancelText="Cancel"
           className="max-w-xl"
         >
-          <div className="flex flex-col gap-4">
-            {CreateForm}
-          </div>
+          <div className="flex flex-col gap-4">{CreateForm}</div>
         </CreateModal>
-      }
-
+      )}
     </div>
   );
 };

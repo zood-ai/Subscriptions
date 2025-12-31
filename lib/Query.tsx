@@ -39,9 +39,14 @@ export const Query = async <R,>({
       queryParams.toString() ? `?${queryParams.toString()}` : ''
     }`;
 
-    const response = await axios.get<R>(url, { headers });
-
-    return { data: response.data, error: null };
+    // const response = await axios.get<R>(url, { headers });
+    const holder = await fetch(url, {
+      method: 'GET',
+      headers,
+    });
+    const res = await holder.json();
+    // return { data: response.data, error: null };
+    return { data: res, error: null };
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
       if (err.response?.status === 401) {

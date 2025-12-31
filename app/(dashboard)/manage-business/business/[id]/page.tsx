@@ -1,6 +1,4 @@
 import { CustomTable, type Column } from '@/components/CustomTable';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import Query from '@/lib/Query';
 import { redirect } from 'next/navigation';

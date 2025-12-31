@@ -1,5 +1,3 @@
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import Query from '@/lib/Query';
 import { redirect } from 'next/navigation';
@@ -8,6 +6,7 @@ import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
 import { Column, CustomTable } from '@/components/CustomTable';
 import PageHeader from '@/components/PageHeader';
+import CreateForm from '../components/CreateForm';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -55,6 +54,13 @@ const TypeFetch = async ({ id }: { id: string }) => {
       <PageHeader
         title={data?.data?.businessType?.name}
         backUrl="/manage-business/type"
+        Form={
+          <CreateForm
+            id={data?.data?.businessType?.id || ''}
+            data={{ name: data?.data?.businessType?.name || '' }}
+            type="update"
+          />
+        }
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
