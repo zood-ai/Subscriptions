@@ -1,6 +1,6 @@
 import Spinner from '@/components/ui/spinner';
 
-const loading = () => {
+const LoadingComponent = () => {
   return (
     <div className="w-full h-[calc(100vh-64px)] flex justify-center items-center">
       <Spinner />
@@ -8,4 +8,4 @@ const loading = () => {
   );
 };
 
-export default loading;
+export default LoadingComponent;

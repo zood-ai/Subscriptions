@@ -1,23 +1,50 @@
 'use client';
-import { useActionState } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
-import { LoginAction } from '@/actions/AuthActions';
+import useCustomMutation from '@/lib/Mutation';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+
+interface LoginResponse {
+  token: string;
+}
+interface LoginBody {
+  email: string;
+  password: string;
+}
 
 export default function Form() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [state, action, loading] = useActionState(LoginAction, {});
+
+  const { mutate, isPending, error } = useCustomMutation<
+    LoginBody,
+    LoginResponse
+  >({
+    api: 'v1/super-admin/login',
+    method: 'POST',
+    options: {
+      onSuccess: (data) => {
+        Cookies.set('token', data.token);
+        router.push('/dashboard');
+      },
+    },
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate({ email, password });
+  };
 
   return (
-    <form action={action} className="space-y-[25px]">
+    <form onSubmit={handleSubmit} className="space-y-[25px]">
       <Input
         Label="Email"
         name="email"
         animateLabel
         type="email"
-        error={state?.errors?.email}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -25,14 +52,14 @@ export default function Form() {
         Label="Password"
         name="password"
         type="password"
-        error={state?.errors?.password}
         animateLabel
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {error && <div className="text-red-500 text-sm">{error.message}</div>}
       <div className="flex justify-end pt-5">
-        <Button loading={loading} type="submit" variant="primary">
-          {loading ? 'Loading...' : 'Login'}
+        <Button loading={isPending} type="submit" variant="primary">
+          {isPending ? 'Loading...' : 'Login'}
         </Button>
       </div>
     </form>

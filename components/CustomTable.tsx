@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronDown, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -11,9 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
-import axios from 'axios';
 import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
+import useCustomQuery from '@/lib/Query';
 
 export interface Column<T> {
   key: keyof T;
@@ -60,14 +60,28 @@ export function CustomTable<T extends { id: string }>({
   const [activeFilter, setActiveFilter] = useState(
     filters?.[0]?.value || 'all'
   );
-  const [allData, setAllData] = useState<T[]>(data ?? []);
-  const [Loading, setLoading] = useState<boolean>(data ? false : true);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
   >({ page: 1 });
+
+  const { data: allData, isLoading } = useCustomQuery<{
+    data: T[];
+    meta: MetaData;
+  }>({
+    api: endPoint || '',
+    enabled: endPoint && data.length === 0 ? true : false,
+    filters: allFilters,
+    queryKey: [endPoint, allFilters],
+    options: {
+      onSuccess: (data) => {
+        console.log({ data });
+        setPaginationData(data?.meta);
+      },
+    },
+  });
+  console.log({ allData });
 
   const allSelected =
     allData.length > 0 && selectedIds.length === allData.length;
@@ -112,37 +126,38 @@ export function CustomTable<T extends { id: string }>({
     }));
   };
 
-  useEffect(() => {
-    if (!(endPoint && data.length === 0)) return;
-    const fn = async () => {
-      setLoading(true);
-      const queryParams = new URLSearchParams();
-      Object.entries(allFilters).forEach(([key, value]) => {
-        if (value != null) {
-          queryParams.append(key, String(value));
-        }
-      });
-      try {
-        const res: {
-          data: {
-            data: T[];
-            meta: MetaData;
-          };
-        } = await axios.get(
-          `${endPoint}${queryParams.toString() ? `?${queryParams.toString()}` : ''
-          }`
-        );
+  // useEffect(() => {
+  //   if (!(endPoint && data.length === 0)) return;
+  //   const fn = async () => {
+  //     setLoading(true);
+  //     const queryParams = new URLSearchParams();
+  //     Object.entries(allFilters).forEach(([key, value]) => {
+  //       if (value != null) {
+  //         queryParams.append(key, String(value));
+  //       }
+  //     });
+  //     try {
+  //       const res: {
+  //         data: {
+  //           data: T[];
+  //           meta: MetaData;
+  //         };
+  //       } = await axios.get(
+  //         `${endPoint}${
+  //           queryParams.toString() ? `?${queryParams.toString()}` : ''
+  //         }`
+  //       );
 
-        setAllData(res?.data?.data);
-        setPaginationData(res?.data?.meta);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fn();
-  }, [allFilters, data.length, endPoint]);
+  //       setAllData(res?.data?.data);
+  //       setPaginationData(res?.data?.meta);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fn();
+  // }, [allFilters, data.length, endPoint]);
 
-  if (Loading) {
+  if (isLoading) {
     return <TableSkeleton title={title} />;
   }
 
@@ -309,10 +324,11 @@ export function CustomTable<T extends { id: string }>({
                       <button
                         key={pageNumber}
                         onClick={() => goToPage(pageNumber)}
-                        className={`cursor-pointer px-3 py-1 rounded ${currentPage === pageNumber
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100'
-                          }`}
+                        className={`cursor-pointer px-3 py-1 rounded ${
+                          currentPage === pageNumber
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
+                        }`}
                       >
                         {pageNumber}
                       </button>

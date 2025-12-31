@@ -1,69 +1,43 @@
-import axios from 'axios';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { QueryProps } from '@/types/global';
+import { useQuery, QueryKey } from '@tanstack/react-query';
+import axiosInstance from '@/lib/axiosInstance';
 
-interface ExtendedQueryProps extends QueryProps {
-  filters?: Record<string, string | string[]>;
+export type QueryFilters = Record<string, number | string | boolean>;
+
+interface QueryOptions<R, Error> {
+  onSuccess?: (data: R) => void;
+  onError?: (error: Error) => void;
 }
 
-interface ApiError {
-  message?: string;
+interface Props<R> {
+  queryKey: QueryKey;
+  api: string;
+  filters?: QueryFilters;
+  enabled?: boolean;
+  options?: QueryOptions<R, Error>;
 }
 
-export const Query = async <R,>({
+const useCustomQuery = <R,>({
+  queryKey,
   api,
   filters = {},
-}: ExtendedQueryProps): Promise<{
-  data: R | null;
-  error: string | null;
-}> => {
-  try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
+  enabled = true,
+  options,
+}: Props<R>) => {
+  return useQuery<R, Error>({
+    queryKey,
+    enabled,
 
-    const headers: Record<string, string> = {};
-    if (token) headers['Authorization'] = `Bearer ${token}`;
+    queryFn: async ({ signal }) => {
+      const response = await axiosInstance.get<R>(api, {
+        params: filters,
+        signal,
+      });
 
-    const queryParams = new URLSearchParams();
-    for (const key in filters) {
-      const value = filters[key];
-      if (Array.isArray(value)) {
-        value.forEach((v) => queryParams.append(key, v));
-      } else if (value != null) {
-        queryParams.append(key, value);
-      }
-    }
+      return response.data;
+    },
 
-    const url = `${process.env.BE_BASE_URL}/${api}${
-      queryParams.toString() ? `?${queryParams.toString()}` : ''
-    }`;
-
-    const response = await axios.get<R>(url, { headers });
-
-    return { data: response.data, error: null };
-  } catch (err: unknown) {
-    if (axios.isAxiosError(err)) {
-      if (err.response?.status === 401) {
-        const cookieStore = await cookies();
-        cookieStore.delete('token');
-        redirect('/login');
-      }
-
-      const errorMsg =
-        (err.response?.data as ApiError)?.message ||
-        err.message ||
-        'Network error';
-
-      return { data: null, error: errorMsg };
-    }
-
-    if (err instanceof Error) {
-      return { data: null, error: err.message };
-    }
-
-    return { data: null, error: 'Unknown error' };
-  }
+    ...options,
+  });
 };
 
-export default Query;
+export default useCustomQuery;
