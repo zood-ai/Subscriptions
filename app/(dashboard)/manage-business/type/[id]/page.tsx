@@ -23,7 +23,8 @@ export default async function Type({ params }: Props) {
         </div>
       }
     >
-      <TypeFetch id={id} />
+      asdasd
+      {/* <TypeFetch id={id} /> */}
     </Suspense>
   );
 }
