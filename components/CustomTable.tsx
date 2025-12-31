@@ -66,7 +66,7 @@ export function CustomTable<T extends { id: string }>({
     Record<string, number | string | boolean>
   >({ page: 1 });
 
-  const { data: allData, isLoading } = useCustomQuery<{
+  const { data: allData = { data: [] }, isLoading } = useCustomQuery<{
     data: T[];
     meta: MetaData;
   }>({
@@ -81,19 +81,18 @@ export function CustomTable<T extends { id: string }>({
       },
     },
   });
-  console.log({ allData });
 
   const allSelected =
-    allData.length > 0 && selectedIds.length === allData.length;
+    allData?.data?.length > 0 && selectedIds.length === allData?.data?.length;
   const someSelected =
-    selectedIds.length > 0 && selectedIds.length < allData.length;
+    selectedIds.length > 0 && selectedIds.length < allData?.data?.length;
   const hasSelection = selectedIds.length > 0;
 
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedIds([]);
     } else {
-      const allIds = allData.map((item) => item.id);
+      const allIds = allData?.data?.map((item) => item.id);
       setSelectedIds(allIds);
     }
   };
@@ -126,37 +125,6 @@ export function CustomTable<T extends { id: string }>({
     }));
   };
 
-  // useEffect(() => {
-  //   if (!(endPoint && data.length === 0)) return;
-  //   const fn = async () => {
-  //     setLoading(true);
-  //     const queryParams = new URLSearchParams();
-  //     Object.entries(allFilters).forEach(([key, value]) => {
-  //       if (value != null) {
-  //         queryParams.append(key, String(value));
-  //       }
-  //     });
-  //     try {
-  //       const res: {
-  //         data: {
-  //           data: T[];
-  //           meta: MetaData;
-  //         };
-  //       } = await axios.get(
-  //         `${endPoint}${
-  //           queryParams.toString() ? `?${queryParams.toString()}` : ''
-  //         }`
-  //       );
-
-  //       setAllData(res?.data?.data);
-  //       setPaginationData(res?.data?.meta);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fn();
-  // }, [allFilters, data.length, endPoint]);
-
   if (isLoading) {
     return <TableSkeleton title={title} />;
   }
@@ -166,7 +134,7 @@ export function CustomTable<T extends { id: string }>({
       {title && (
         <h2 className="py-[25px] text-gray-500 text-xl font-medium">{title}</h2>
       )}
-      {allData.length > 0 ? (
+      {allData?.data?.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
           {/* Filter Tabs Row */}
           {(showFilters || (filters && filters?.length > 0)) && (
@@ -265,7 +233,7 @@ export function CustomTable<T extends { id: string }>({
                 </tr>
               </thead>
               <tbody>
-                {allData.map((item) => (
+                {allData?.data?.map((item) => (
                   <tr
                     key={item.id}
                     className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"

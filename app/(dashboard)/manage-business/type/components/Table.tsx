@@ -27,7 +27,7 @@ export default function Table() {
   return (
     <div className="py-[40px] mainPaddingX">
       <CustomTable
-        endPoint="api/v1/super-admin/businessTypes"
+        endPoint="v1/super-admin/businessTypes"
         columns={columns}
         actions={actions}
         onClickRow={(data) => {
