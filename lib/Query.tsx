@@ -1,5 +1,5 @@
 import { useQuery, QueryKey } from '@tanstack/react-query';
-import axiosInstance from '@/lib/axiosInstance';
+import axiosInstance from '@/guards/axiosInstance';
 
 export type QueryFilters = Record<string, number | string | boolean>;
 

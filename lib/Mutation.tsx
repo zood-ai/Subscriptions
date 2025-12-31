@@ -1,5 +1,5 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
-import axiosInstance from '@/lib/axiosInstance';
+import axiosInstance from '@/guards/axiosInstance';
 
 export type HttpMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -9,7 +9,7 @@ interface UseCustomMutationProps<TBody, R> {
   options?: UseMutationOptions<R, Error, TBody>;
 }
 
-const useCustomMutation = <TBody=void, TResponse=void>({
+const useCustomMutation = <TBody = void, TResponse = void>({
   api,
   method = 'POST',
   options,
