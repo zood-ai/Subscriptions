@@ -83,7 +83,7 @@ const BusinessFetch = async ({ id }: { id: string }) => {
     },
   ];
   return (
-    <div>
+    <>
       <div className="py-[15px] mainPaddingX bg-white">
         <Link
           href="/manage-business/business"
@@ -108,7 +108,7 @@ const BusinessFetch = async ({ id }: { id: string }) => {
           />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

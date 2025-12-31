@@ -50,7 +50,7 @@ const TypeFetch = async ({ id }: { id: string }) => {
   ];
 
   return (
-    <div>
+    <>
       <div className="py-[15px] mainPaddingX bg-white">
         <Link
           href="/manage-business/type"
@@ -72,6 +72,6 @@ const TypeFetch = async ({ id }: { id: string }) => {
           columns={columns}
         />
       </div>
-    </div>
+    </>
   );
 };
