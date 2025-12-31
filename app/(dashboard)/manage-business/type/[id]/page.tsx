@@ -1,4 +1,4 @@
-import TypeData from './components/TypeData';
+import TypeData from './TypeData';
 
 interface Props {
   params: Promise<{ id: string }>;

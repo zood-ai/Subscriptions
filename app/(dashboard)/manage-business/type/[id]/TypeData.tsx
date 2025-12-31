@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { BusinessData, BusinessType } from '@/types/business';
 import { Column, CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
-import LoadingComponent from '@/app/loading';
+import LoadingComponent from '@/components/layout/loading';
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -19,7 +19,6 @@ const TypeData = ({ id }: { id: string }) => {
       },
     },
   });
-  console.log({ data });
 
   const items = [
     { title: 'Name', value: data?.businessType?.name },

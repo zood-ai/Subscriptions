@@ -1,23 +1,18 @@
-"use client";
-import { useActionState, useState } from "react";
-import { Input } from "@/components/ui/input";
-import SingleSelect from "@/components/SingleSelect";
-import { Button } from "@/components/ui/button";
-import { RegisterCustomerAction } from "@/actions/CustomerActions";
+'use client';
+import { useActionState, useState } from 'react';
+import { Input } from '@/components/ui/input';
+import SingleSelect from '@/components/SingleSelect';
+import { Button } from '@/components/ui/button';
+import { RegisterCustomerAction } from '@/actions/CustomerActions';
 
-interface businessTypesResponce {
+interface BusinessTypes {
   id: string;
   name: string;
 }
 
-interface countriesResponce {
+interface Countries {
   id: string;
   name_en: string;
-}
-
-interface CreateFormProps {
-  countries: countriesResponce[];
-  businessTypes: businessTypesResponce[];
 }
 
 interface FormState {
@@ -32,19 +27,18 @@ interface FormState {
   emailAlert: boolean;
 }
 
-export default function CreateForm({
-  countries,
-  businessTypes,
-}: CreateFormProps) {
+export default function CreateForm() {
+  const countries: Countries[] = [];
+  const businessTypes: BusinessTypes[] = [];
   const [state, action, loading] = useActionState(RegisterCustomerAction, {});
   const [formState, setFormState] = useState<FormState>({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    business_name: "",
-    business_type_id: "",
-    business_location_id: "70c4bc20-1fe4-48b2-87c5-26407fe09cde",
+    name: '',
+    email: '',
+    phone: '',
+    password: '',
+    business_name: '',
+    business_type_id: '',
+    business_location_id: '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
     tradeRegister: null,
     emailAlert: false,
   });
@@ -70,7 +64,7 @@ export default function CreateForm({
           error={state?.errors?.name}
           value={formState.name}
           name="name"
-          onChange={(e) => handleChange("name", e.target.value)}
+          onChange={(e) => handleChange('name', e.target.value)}
           required
         />
 
@@ -83,7 +77,7 @@ export default function CreateForm({
           error={state?.errors?.email}
           name="email"
           value={formState.email}
-          onChange={(e) => handleChange("email", e.target.value)}
+          onChange={(e) => handleChange('email', e.target.value)}
           required
         />
 
@@ -96,7 +90,7 @@ export default function CreateForm({
           error={state?.errors?.phone}
           name="phone"
           value={formState.phone}
-          onChange={(e) => handleChange("phone", e.target.value)}
+          onChange={(e) => handleChange('phone', e.target.value)}
           required
         />
 
@@ -109,7 +103,7 @@ export default function CreateForm({
           id="password"
           error={state?.errors?.password}
           value={formState.password}
-          onChange={(e) => handleChange("password", e.target.value)}
+          onChange={(e) => handleChange('password', e.target.value)}
           required
         />
 
@@ -125,7 +119,7 @@ export default function CreateForm({
           error={state?.errors?.business_name}
           name="business_name"
           value={formState.business_name}
-          onChange={(e) => handleChange("business_name", e.target.value)}
+          onChange={(e) => handleChange('business_name', e.target.value)}
           required
         />
 
@@ -137,7 +131,7 @@ export default function CreateForm({
           placeholder="Select business type"
           errorText={state?.errors?.business_type_id}
           value={formState.business_type_id}
-          onChange={(value) => handleChange("business_type_id", value)}
+          onChange={(value) => handleChange('business_type_id', value)}
           options={businessTypes?.map(
             (business: { id: string; name: string }) => ({
               label: business.name,
@@ -157,7 +151,7 @@ export default function CreateForm({
           placeholder="Select country"
           errorText={state?.errors?.business_location_id}
           value={formState.business_location_id}
-          onChange={(value) => handleChange("business_location_id", value)}
+          onChange={(value) => handleChange('business_location_id', value)}
           options={countries?.map(
             (country: { id: string; name_en: string }) => ({
               label: country.name_en,
@@ -199,7 +193,7 @@ export default function CreateForm({
                 name="tradeRegister"
                 className="hidden"
                 onChange={(e) =>
-                  handleChange("tradeRegister", e.target.files?.[0] || null)
+                  handleChange('tradeRegister', e.target.files?.[0] || null)
                 }
               />
             </label>
@@ -233,7 +227,7 @@ export default function CreateForm({
             disabled={loading}
             className="bg-primary  hover:bg-primary/80 text-white rounded-full px-8"
           >
-            {loading ? "Applying..." : "Apply"}
+            {loading ? 'Applying...' : 'Apply'}
           </Button>
         </div>
         <p className="text-red-600 font-bold">{state?.errors?.form}</p>

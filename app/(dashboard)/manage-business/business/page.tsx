@@ -1,7 +1,6 @@
-import Table from "./components/Table";
-import TableHeader from "@/components/TableHeader";
-import Query from "@/lib/Query";
-import CreateForm from "./components/CreateForm";
+import Table from './Table';
+import TableHeader from '@/components/TableHeader';
+import CreateForm from './CreateForm';
 
 export interface BusinessTypesResponce {
   status: boolean;
@@ -28,21 +27,16 @@ export interface Country {
 }
 
 export default async function Businesses() {
-  const countries = await Query<CountriesResponce>({
-    api: "v1/manage/countries",
-  });
-  const businessTypes = await Query<BusinessTypesResponce>({
-    api: "v1/manage/business-types",
-  });
+  // const countries = await Query<CountriesResponce>({
+  //   api: 'v1/manage/countries',
+  // });
+  // const businessTypes = await Query<BusinessTypesResponce>({
+  //   api: 'v1/manage/business-types',
+  // });
   return (
     <>
       <TableHeader
-        CreateForm={
-          <CreateForm
-            countries={countries.data?.data || []}
-            businessTypes={businessTypes?.data?.data || []}
-          />
-        }
+        CreateForm={<CreateForm />}
         title="Business"
         createBtnTitle="Add Business"
       />
