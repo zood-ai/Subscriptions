@@ -7,6 +7,7 @@ import { BusinessData, BusinessType } from '@/types/business';
 import { Suspense } from 'react';
 import Spinner from '@/components/ui/spinner';
 import { Column, CustomTable } from '@/components/CustomTable';
+import PageHeader from '@/components/PageHeader';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -51,18 +52,10 @@ const TypeFetch = async ({ id }: { id: string }) => {
 
   return (
     <div>
-      <div className="py-[15px] mainPaddingX bg-white">
-        <Link
-          href="/manage-business/type"
-          className="text-gray-500 flex items-center gap-1 text-xs"
-        >
-          <ChevronLeft size={15} />
-          Back
-        </Link>
-        <h1 className="text-gray-500 text-[24px] font-normal">
-          {data?.data?.businessType?.name}
-        </h1>
-      </div>
+      <PageHeader
+        title={data?.data?.businessType?.name}
+        backUrl="/manage-business/type"
+      />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
