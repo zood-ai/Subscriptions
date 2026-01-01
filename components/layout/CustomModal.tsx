@@ -58,7 +58,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
           <div
             ref={modalRef}
             className={cn(
-              'bg-white rounded-lg shadow-lg w-full mx-4 flex flex-col max-h-[90vh] max-w-xl',
+              'bg-white shadow-lg w-full mx-4 flex flex-col max-h-[90vh] max-w-xl',
               className
             )}
             onClick={(e) => e.stopPropagation()}

@@ -45,10 +45,10 @@ const TypeData = ({ id }: { id: string }) => {
     <>
       <PageHeader
         isEdit
-        deleteEndPoint="123"
+        deleteEndPoint={`v1/super-admin/businessTypes/${id}`}
         title={data?.businessType?.name}
         backUrl="/manage-business/type"
-        Form={<CreateForm id={data?.businessType?.id} isEdit data={formData} />}
+        Form={<CreateForm id={id} isEdit data={formData} />}
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />

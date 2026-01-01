@@ -260,16 +260,14 @@ export default function CreateForm() {
           )}
         </div>
       </div>
-      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 py-4 border-t border-gray-200 bg-gray-50/50 rounded-b-lg">
-        <div className="ml-4">
-          <Button
-            type="submit"
-            disabled={isPending}
-            className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
-          >
-            {isPending ? 'Applying...' : 'Apply'}
-          </Button>
-        </div>
+      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
+        >
+          {isPending ? 'Applying...' : 'Apply'}
+        </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>
         )}
