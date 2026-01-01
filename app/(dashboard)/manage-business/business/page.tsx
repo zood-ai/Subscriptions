@@ -30,7 +30,7 @@ export default function Businesses() {
   return (
     <>
       <TableHeader
-        CreateForm={<CreateForm />}
+        Form={<CreateForm />}
         title="Business"
         createBtnTitle="Add Business"
       />

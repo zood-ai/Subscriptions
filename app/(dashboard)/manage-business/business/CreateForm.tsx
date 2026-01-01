@@ -68,7 +68,7 @@ export default function CreateForm() {
       phone: '',
       password: '',
       business_name: '',
-      business_type_id: '',
+      business_type_id: 'asd',
       business_location_id: '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
     },
   });
@@ -270,7 +270,9 @@ export default function CreateForm() {
             {isPending ? 'Applying...' : 'Apply'}
           </Button>
         </div>
-        {error && <p className="text-red-600 font-bold">{error.message}</p>}
+        {error && (
+          <p className="text-red-600 font-bold">{error.data?.message}</p>
+        )}
       </div>
     </form>
   );

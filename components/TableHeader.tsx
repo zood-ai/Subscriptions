@@ -1,47 +1,29 @@
 'use client';
-import { useState } from 'react';
 import { Button } from './ui/button';
-import CreateModal from './layout/CreateModal';
+import CustomModal from './layout/CustomModal';
 
 interface TableHeaderProps {
   title: string;
   createBtnTitle?: string;
-  onAction?: () => void;
-  CreateForm?: React.ReactNode;
+  Form?: React.ReactNode;
 }
 
 const TableHeader: React.FC<TableHeaderProps> = ({
   title = '',
   createBtnTitle = `Create ${title}`,
-  onAction,
-  CreateForm,
+  Form,
 }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpen = () => setIsModalOpen(true);
-  const handleClose = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <div className="py-[15px] mainPaddingX bg-white flex justify-between">
       <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
-      <Button
-        onClick={() => {
-          onAction?.();
-          handleOpen?.();
-        }}
-      >
-        {createBtnTitle}
-      </Button>
-      {CreateForm && (
-        <CreateModal
-          isOpen={isModalOpen}
-          onClose={handleClose}
+
+      {Form && (
+        <CustomModal
           title="Add New Business"
-          className="max-w-xl"
+          btnTrigger={<Button>{createBtnTitle}</Button>}
         >
-          <div className="flex flex-col gap-4">{CreateForm}</div>
-        </CreateModal>
+          <div className="flex flex-col gap-4">{Form}</div>
+        </CustomModal>
       )}
     </div>
   );

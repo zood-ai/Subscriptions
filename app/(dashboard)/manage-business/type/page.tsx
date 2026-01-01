@@ -6,7 +6,7 @@ export default function BusinessTypes() {
   return (
     <>
       <TableHeader
-        CreateForm={<CreateForm />}
+        Form={<CreateForm />}
         title="Business Types"
         createBtnTitle="Add Business Type"
       />

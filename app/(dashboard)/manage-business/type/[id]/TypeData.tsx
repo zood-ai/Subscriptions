@@ -7,10 +7,12 @@ import { BusinessData, BusinessType } from '@/types/business';
 import { Column, CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
+import PageHeader from '@/components/PageHeader';
+import CreateForm from '../CreateForm';
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
-  const { data, isLoading } = useCustomQuery<BusinessType>({
+  const { data, isFetching } = useCustomQuery<BusinessType>({
     api: `v1/super-admin/businessTypes/${id}`,
     queryKey: ['businessTypes', id],
     options: {
@@ -32,23 +34,27 @@ const TypeData = ({ id }: { id: string }) => {
     { key: 'created_at', header: 'Created at' },
     { key: 'end_at', header: 'End at' },
   ];
-  if (isLoading) {
+  if (isFetching) {
     return <LoadingComponent />;
   }
+
+  const formData = {
+    name: data?.businessType?.name || '',
+  };
   return (
     <>
-      <div className="py-[15px] mainPaddingX bg-white">
-        <Link
-          href="/manage-business/type"
-          className="text-gray-500 flex items-center gap-1 text-xs"
-        >
-          <ChevronLeft size={15} />
-          Back
-        </Link>
-        <h1 className="text-gray-500 text-[24px] font-normal">
-          {data?.businessType?.name}
-        </h1>
-      </div>
+      <PageHeader
+        deleteEndPoint="123"
+        title={data?.businessType?.name}
+        Form={
+          <CreateForm
+            id={data?.businessType?.id}
+            type="update"
+            data={formData}
+          />
+        }
+        backUrl="/manage-business/type"
+      />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
