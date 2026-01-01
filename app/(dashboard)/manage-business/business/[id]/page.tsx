@@ -1,4 +1,4 @@
-import BusinessFetch from './BusinessFetch';
+import BusinessDetails from './BusinessDetails';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -7,5 +7,5 @@ interface Props {
 export default async function Business({ params }: Props) {
   const { id } = await params;
 
-  return <BusinessFetch id={id} />;
+  return <BusinessDetails id={id} />;
 }

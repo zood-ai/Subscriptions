@@ -64,7 +64,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onChange={onChange}
             placeholder={animateLabel ? '' : props.placeholder ?? Label ?? ''}
             className={cn(
-              'mt-2 border border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
+              'mt-2 border bg-white border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
               'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/50 duration-300',
               'disabled:opacity-50 disabled:cursor-not-allowed',
               className

@@ -30,7 +30,7 @@ export interface businessCustomersData {
 export interface BusinessData {
   id: string;
   name: string;
-  reference: string;
+  reference: number;
   owner_email: string;
   created_at: string;
   end_at: string;

@@ -1,15 +1,17 @@
 'use client';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, Trash, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';
-import DeletePopUp from './DeletePopUp';
+import ActionPopUp from './ActionPopUp';
 interface Props {
   title?: string;
   isEdit?: boolean;
   deleteEndPoint?: string;
   Form?: React.ReactNode;
+  businessActiveForm?: React.ReactNode;
+  businessDeActiveEndPoint?: string;
   backUrl?: string;
 }
 
@@ -18,10 +20,12 @@ const PageHeader: React.FC<Props> = ({
   isEdit = false,
   deleteEndPoint = '',
   Form,
+  businessActiveForm,
+  businessDeActiveEndPoint,
   backUrl = '',
 }) => {
   return (
-    <div className="flex justify-between items-center py-[15px] mainPaddingX bg-white">
+    <div className="flex flex-wrap justify-between items-center gap-4 py-[15px] mainPaddingX bg-white">
       <div>
         {backUrl && (
           <Link
@@ -36,20 +40,55 @@ const PageHeader: React.FC<Props> = ({
       </div>
       <div className="flex gap-2">
         {/* in Edit Only */}
-        {isEdit && deleteEndPoint && (
-          <CustomModal
-            title={`Delete ${title}`}
-            btnTrigger={<Button variant="danger">Delete</Button>}
-          >
-            <DeletePopUp
-              message="Are you sure you want to delete this?"
-              endPoint={deleteEndPoint}
-              backUrl={backUrl}
-            />
-          </CustomModal>
+        {isEdit && (
+          <>
+            {businessDeActiveEndPoint && (
+              <CustomModal
+                title={`DeActive ${title}`}
+                btnTrigger={<Button variant="secondary">Deactive</Button>}
+              >
+                <ActionPopUp
+                  message="Are you sure you want to deActive this business?"
+                  endPoint={businessDeActiveEndPoint}
+                  btnTitle="DeActive"
+                  method="POST"
+                  backUrl={backUrl}
+                />
+              </CustomModal>
+            )}
+            {businessActiveForm && (
+              <CustomModal
+                title={`Active ${title}`}
+                btnTrigger={<Button variant="secondary">Active</Button>}
+              >
+                {businessActiveForm}
+              </CustomModal>
+            )}
+            {deleteEndPoint && (
+              <CustomModal
+                title={`Delete ${title}`}
+                btnTrigger={
+                  <Button variant="danger">
+                    <Trash2 />
+                    Delete
+                  </Button>
+                }
+              >
+                <ActionPopUp
+                  message="Are you sure you want to delete this?"
+                  endPoint={deleteEndPoint}
+                  btnTitle="Delete"
+                  method="DELETE"
+                  backUrl={backUrl}
+                />
+              </CustomModal>
+            )}
+          </>
         )}
+
         {/* in Create only */}
-        {!isEdit && null}
+        {!isEdit && <></>}
+
         {/* Both */}
         {Form && (
           <CustomModal

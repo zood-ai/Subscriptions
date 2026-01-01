@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import Select, { components, type StylesConfig } from 'react-select';
 import { Label } from '@/components/ui/label';
@@ -89,7 +89,9 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
       minHeight: 50,
       borderRadius: 9999, // rounded-full
       borderColor: state.isFocused ? '#7272F6' : '#d1d5db',
-      boxShadow: state.isFocused ? '0 0 0 2px rgba(114, 114, 246, 0.2)' : 'none',
+      boxShadow: state.isFocused
+        ? '0 0 0 2px rgba(114, 114, 246, 0.2)'
+        : 'none',
       paddingLeft: 16,
       paddingRight: 16,
       cursor: disabled ? 'not-allowed' : 'pointer',
@@ -112,9 +114,15 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
     }),
     menu: (base) => ({
       ...base,
-      zIndex: 50,
+      zIndex: 9999,
       borderRadius: 8,
       overflow: 'hidden',
+      boxShadow:
+        '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
     }),
     menuList: (base) => ({
       ...base,
@@ -136,9 +144,13 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
       backgroundColor: state.isSelected
         ? '#7272F6'
         : state.isFocused
-          ? '#f3f4f6'
-          : 'white',
-      color: state.isSelected ? 'white' : state.data.value === '' ? '#9ca3af' : '#000',
+        ? '#f3f4f6'
+        : 'white',
+      color: state.isSelected
+        ? 'white'
+        : state.data.value === ''
+        ? '#9ca3af'
+        : '#000',
       cursor: 'pointer',
       padding: '10px 12px',
       borderRadius: 4,
@@ -153,7 +165,9 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
     <div className={`flex flex-col w-full ${parentClassName}`}>
       {label && (
         <div className="flex items-center mb-2">
-          <Label className={`text-sm font-medium text-gray-700 ${labelClassName}`}>
+          <Label
+            className={`text-sm font-medium text-gray-700 ${labelClassName}`}
+          >
             {label}
           </Label>
           {required && <span className="text-red-500 ml-1">*</span>}
@@ -169,6 +183,10 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
           onChange={(opt) => handleChange(opt as Option)}
           placeholder={placeholder}
           isLoading={loading}
+          menuPortalTarget={
+            typeof document !== 'undefined' ? document.body : null
+          }
+          menuPosition="fixed"
           filterOption={(candidate, rawInput) => {
             if (!showSearch) return true;
             return candidate?.label
@@ -191,9 +209,7 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
         />
       </div>
 
-      {errorText && (
-        <p className="text-red-500 text-sm mt-1">{errorText}</p>
-      )}
+      {errorText && <p className="text-red-500 text-sm mt-1">{errorText}</p>}
     </div>
   );
 };

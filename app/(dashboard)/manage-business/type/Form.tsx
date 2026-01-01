@@ -56,9 +56,8 @@ export default function Form({
       : 'v1/super-admin/businessTypes',
     method: isEdit ? 'PUT' : 'POST',
     options: {
-      onSuccess: (data) => {
-        if (data?.id) {
-          router.push(`/manage-business/type/${data.id}`);
+      onSuccess: () => {
+        if (id) {
           queryClient.invalidateQueries({
             queryKey: ['businessTypes', id],
           });
