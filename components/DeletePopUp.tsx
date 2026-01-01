@@ -64,7 +64,7 @@ const DeletePopUp: React.FC<DeletePopUpProps> = ({
         <div className="space-y-4 p-6">
           <h2>{title}</h2>
           <p className="text-gray-600">{message}</p>
-          {error && <p className="text-red-500">{error.message}</p>}
+          {error && <p className="text-red-500">{error?.data.message}</p>}
         </div>
 
         {/* Action buttons */}
