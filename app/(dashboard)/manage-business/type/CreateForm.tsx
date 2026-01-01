@@ -63,7 +63,7 @@ export default function CreateForm({
       },
     },
   });
-
+  console.log({ error });
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
@@ -91,7 +91,9 @@ export default function CreateForm({
             {isPending ? `${type}ing...` : type}
           </Button>
         </div>
-        {error && <p className="text-red-600 font-bold">{error.message}</p>}
+        {error && (
+          <p className="text-red-600 font-bold">{error.data?.message}</p>
+        )}
       </div>
     </form>
   );
