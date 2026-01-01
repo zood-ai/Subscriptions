@@ -1,6 +1,4 @@
 'use client';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import { useRouter } from 'next/navigation';
 import { BusinessData, BusinessType } from '@/types/business';
@@ -8,7 +6,7 @@ import { Column, CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
 import PageHeader from '@/components/PageHeader';
-import CreateForm from '../CreateForm';
+import Form from '../Form';
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -48,7 +46,7 @@ const TypeData = ({ id }: { id: string }) => {
         deleteEndPoint={`v1/super-admin/businessTypes/${id}`}
         title={data?.businessType?.name}
         backUrl="/manage-business/type"
-        Form={<CreateForm id={id} isEdit data={formData} />}
+        Form={<Form id={id} isEdit data={formData} />}
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />

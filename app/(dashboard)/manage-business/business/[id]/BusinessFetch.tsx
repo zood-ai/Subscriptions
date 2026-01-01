@@ -1,6 +1,4 @@
 'use client';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import { useRouter } from 'next/navigation';
 import { BusinessResponse } from '@/types/business';
@@ -14,7 +12,6 @@ import {
   usersColumns,
 } from './constants';
 import PageHeader from '@/components/PageHeader';
-import CreateForm from '../CreateForm';
 
 interface TableFetchProps<T> {
   title: string;
@@ -76,7 +73,6 @@ const BusinessFetch = ({ id }: { id: string }) => {
     <>
       <PageHeader
         isEdit
-        deleteEndPoint="123"
         title={data?.business.name}
         backUrl="/manage-business/business"
       />

@@ -49,7 +49,7 @@ interface CustomerRegistrationResponse {
   };
 }
 
-export default function CreateForm() {
+export default function Form() {
   const router = useRouter();
   const countries: Countries[] = [];
   const businessTypes: BusinessTypes[] = [];
@@ -68,7 +68,7 @@ export default function CreateForm() {
       phone: '',
       password: '',
       business_name: '',
-      business_type_id: 'asd',
+      business_type_id: '',
       business_location_id: '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
     },
   });

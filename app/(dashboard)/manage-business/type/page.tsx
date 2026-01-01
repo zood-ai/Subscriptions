@@ -1,15 +1,11 @@
 import PageHeader from '@/components/PageHeader';
-import CreateForm from './CreateForm';
+import Form from './Form';
 import Table from './Table';
 
 export default function BusinessTypes() {
   return (
     <>
-      <PageHeader
-        deleteEndPoint="123"
-        title="Business Types"
-        Form={<CreateForm />}
-      />
+      <PageHeader title="Business Types" Form={<Form />} />
       <Table />
     </>
   );

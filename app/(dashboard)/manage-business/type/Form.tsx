@@ -22,7 +22,7 @@ interface FormState {
   name: string;
 }
 
-export default function CreateForm({
+export default function Form({
   id = '',
   isEdit = false,
   data,
