@@ -182,7 +182,7 @@ export function CustomTable<T extends { id: string }>({
                     </button>
                   }
                 >
-                  asd
+                  Filter Component Here
                 </CustomModal>
               )}
             </div>
