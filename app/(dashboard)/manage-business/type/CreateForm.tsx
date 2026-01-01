@@ -24,11 +24,11 @@ interface FormState {
 
 export default function CreateForm({
   id = '',
-  type = 'create',
+  isEdit = false,
   data,
 }: {
   id?: string;
-  type?: 'create' | 'update';
+  isEdit?: boolean;
   data?: FormState;
 }) {
   const router = useRouter();
@@ -51,11 +51,10 @@ export default function CreateForm({
     FormData,
     CreateBusinessTypeResponse
   >({
-    api:
-      type === 'create'
-        ? 'v1/super-admin/businessTypes'
-        : `v1/super-admin/businessTypes/${id}`,
-    method: type === 'create' ? 'POST' : 'PUT',
+    api: isEdit
+      ? `v1/super-admin/businessTypes/${id}`
+      : 'v1/super-admin/businessTypes',
+    method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: (data) => {
         if (data?.id) {
@@ -70,6 +69,8 @@ export default function CreateForm({
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
+
+  const btnText = isEdit ? 'Update' : 'Create';
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -91,7 +92,7 @@ export default function CreateForm({
             disabled={isPending}
             className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
           >
-            {isPending ? `${type}ing...` : type}
+            {isPending ? `${btnText}ing...` : btnText}
           </Button>
         </div>
         {error && (

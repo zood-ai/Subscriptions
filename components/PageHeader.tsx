@@ -7,13 +7,15 @@ import { Button } from './ui/button';
 
 interface Props {
   title?: string;
+  isEdit?: boolean;
   deleteEndPoint?: string;
   Form?: React.ReactNode;
-  backUrl: string;
+  backUrl?: string;
 }
 
 const PageHeader: React.FC<Props> = ({
   title,
+  isEdit = false,
   deleteEndPoint,
   Form,
   backUrl,
@@ -21,21 +23,25 @@ const PageHeader: React.FC<Props> = ({
   return (
     <div className="flex justify-between items-center py-[15px] mainPaddingX bg-white">
       <div>
-        <Link
-          href={backUrl}
-          className="text-gray-500 flex items-center gap-1 text-xs"
-        >
-          <ChevronLeft size={15} />
-          Back
-        </Link>
+        {backUrl && (
+          <Link
+            href={backUrl}
+            className="text-gray-500 flex items-center gap-1 text-xs"
+          >
+            <ChevronLeft size={15} />
+            Back
+          </Link>
+        )}
         <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
       </div>
-      <CustomModal
-        title={`Update ${title}`}
-        btnTrigger={<Button>Update</Button>}
-      >
-        {Form}
-      </CustomModal>
+      {Form && (
+        <CustomModal
+          title={`${isEdit ? 'Update' : 'Create'} ${title}`}
+          btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
+        >
+          {Form}
+        </CustomModal>
+      )}
     </div>
   );
 };
