@@ -1,11 +1,21 @@
 'use client';
-import { useActionState, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import {
-  CreateBusinessType,
-  UpdateBusinessType,
-} from '@/actions/BusinessTypesActions';
+import useCustomMutation from '@/lib/Mutation';
+import { useRouter } from 'next/navigation';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const formSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+});
+
+type FormData = z.infer<typeof formSchema>;
+
+interface CreateBusinessTypeResponse {
+  id: string;
+}
 
 interface FormState {
   name: string;
@@ -20,35 +30,54 @@ export default function CreateForm({
   type?: 'create' | 'update';
   data?: FormState;
 }) {
-  const [state, action, loading] = useActionState(
-    type === 'create' ? CreateBusinessType : UpdateBusinessType,
-    {}
-  );
-  const [formState, setFormState] = useState<FormState>({
-    name: data?.name || '',
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    control,
+  } = useForm<FormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: data?.name || '',
+    },
   });
-  const handleChange = <K extends keyof FormState>(
-    field: K,
-    value: FormState[K]
-  ) => {
-    setFormState((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+
+  const formValues = useWatch({ control });
+
+  const { mutate, isPending, error } = useCustomMutation<
+    FormData,
+    CreateBusinessTypeResponse
+  >({
+    api:
+      type === 'create'
+        ? 'v1/super-admin/businessTypes'
+        : `v1/super-admin/businessTypes/${id}`,
+    method: type === 'create' ? 'POST' : 'PUT',
+    options: {
+      onSuccess: (data) => {
+        if (data?.id) {
+          router.push(`/manage-business/type/${data.id}`);
+        }
+      },
+    },
+  });
+
+  const onSubmit = (data: FormData) => {
+    mutate(data);
   };
 
   return (
-    <form action={action} className="w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
         <Input
-          className=" border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
-          id="name"
           Label="Name"
-          error={state?.errors?.name}
-          value={formState.name}
-          name="name"
-          onChange={(e) => handleChange('name', e.target.value)}
+          error={errors?.name?.message}
+          value={formValues.name}
+          {...register('name')}
           required
         />
       </div>
@@ -56,13 +85,13 @@ export default function CreateForm({
         <div className="ml-4">
           <Button
             type="submit"
-            disabled={loading}
-            className="bg-primary  hover:bg-primary/80 text-white rounded-full px-8"
+            disabled={isPending}
+            className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
           >
-            {loading ? type + 'ing...' : type}
+            {isPending ? `${type}ing...` : type}
           </Button>
         </div>
-        <p className="text-red-600 font-bold">{state?.errors?.form}</p>
+        {error && <p className="text-red-600 font-bold">{error.message}</p>}
       </div>
     </form>
   );

@@ -35,9 +35,7 @@ export default function Form() {
     },
   });
 
-  const formValues = useWatch({
-    control,
-  });
+  const formValues = useWatch({ control });
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
