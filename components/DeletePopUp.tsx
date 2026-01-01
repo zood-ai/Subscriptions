@@ -1,9 +1,8 @@
-"use client";
-import { useState } from "react";
-import { Button } from "./ui/button";
-import axios from "axios";
-import { X } from "lucide-react";
-import { cn } from "@/lib/utils";
+'use client';
+import { Button } from './ui/button';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import useCustomMutation from '@/lib/Mutation';
 
 interface DeletePopUpProps {
   isOpen: boolean;
@@ -24,15 +23,27 @@ const DeletePopUp: React.FC<DeletePopUpProps> = ({
   message,
   onCancel,
 }) => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const { mutate, isPending, error } = useCustomMutation<void, void>({
+    api: endPoint,
+    method: 'DELETE',
+    options: {
+      onSuccess: () => {
+        onDelete();
+      },
+    },
+  });
+
+  const handleDelete = () => {
+    mutate();
+  };
+
   if (!isOpen) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 transition-opacity">
       <div
-        // ref={modalRef}
         className={cn(
-          "bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 flex flex-col max-h-[90vh]",
+          'bg-white rounded-lg shadow-lg w-full max-w-lg mx-4 flex flex-col max-h-[90vh]',
           className
         )}
         onClick={(e) => e.stopPropagation()}
@@ -48,43 +59,29 @@ const DeletePopUp: React.FC<DeletePopUpProps> = ({
             <X size={24} className="cursor-pointer" />
           </button>
         </div>
-        {/* content */}
+
+        {/* Content */}
         <div className="space-y-4 p-6">
-          <h2 className="">{title}</h2>
-          <p className=" text-gray-600">{message}</p>
-          {error && <p className="text-red-500">{error}</p>}
+          <h2>{title}</h2>
+          <p className="text-gray-600">{message}</p>
+          {error && <p className="text-red-500">{error.message}</p>}
         </div>
+
         {/* Action buttons */}
-        <div className="flex items-center justify-end px-6 py-4 border-t border-gray-200">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200">
           <Button
-            onClick={async () => {
-              try {
-                setLoading(true);
-                const res = await axios.delete(
-                  `${process.env.NEXT_PUBLIC_BE_BASE_URL}/${endPoint}`
-                );
-                if (res.status !== 200) {
-                  setError("Failed to delete the item.");
-                  setLoading(false);
-                  return;
-                }
-                setLoading(false);
-                onDelete();
-              } catch (err) {
-                setError("An error occurred while deleting the item.");
-                setLoading(false);
-              }
-            }}
-            title="Close"
+            onClick={handleDelete}
             variant="danger"
-            disabled={loading}
-            className={`${loading ? "cursor-not-allowed" : "cursor-pointer"}`}
+            disabled={isPending}
+            loading={isPending}
+            className={`${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
           >
-            Delete
+            {isPending ? 'Deleting...' : 'Delete'}
           </Button>
         </div>
       </div>
     </div>
   );
 };
+
 export default DeletePopUp;
