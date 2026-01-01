@@ -74,6 +74,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
         isEdit
         title={data?.business.name}
         businessActiveForm={<ActiveForm id={id} data={formData} />}
+        businessDeActiveEndPoint="v1/auth/deactiveBusiness"
         backUrl="/manage-business/business"
       />
       <div className="py-[40px] mainPaddingX">

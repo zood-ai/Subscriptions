@@ -46,7 +46,6 @@ export default function Form({
       months: data?.months || 12,
     },
   });
-  console.log({ errors });
 
   const { mutate, isPending, error } = useCustomMutation<FormData, Response>({
     api: 'v1/auth/extendBusiness',

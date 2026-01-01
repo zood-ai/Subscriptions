@@ -1,23 +1,27 @@
 'use client';
 import { Button } from './ui/button';
-import useCustomMutation from '@/lib/Mutation';
+import useCustomMutation, { HttpMethod } from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
 
-interface DeletePopUpProps {
+interface ActionPopUpProps {
   endPoint: string;
+  method: HttpMethod;
+  btnTitle: string;
   message: string;
   backUrl?: string;
 }
 
-const DeletePopUp: React.FC<DeletePopUpProps> = ({
+const ActionPopUp: React.FC<ActionPopUpProps> = ({
   endPoint,
+  method,
+  btnTitle,
   message,
   backUrl,
 }) => {
   const router = useRouter();
   const { mutate, isPending, error } = useCustomMutation<void, void>({
     api: endPoint,
-    method: 'DELETE',
+    method,
     options: {
       onSuccess: () => {
         if (backUrl) router.push(backUrl);
@@ -25,7 +29,7 @@ const DeletePopUp: React.FC<DeletePopUpProps> = ({
     },
   });
 
-  const handleDelete = () => {
+  const handleConfirm = () => {
     mutate();
   };
 
@@ -37,13 +41,13 @@ const DeletePopUp: React.FC<DeletePopUpProps> = ({
 
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
         <Button
-          onClick={handleDelete}
+          onClick={handleConfirm}
           variant="danger"
           disabled={isPending}
           loading={isPending}
           className={`${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
         >
-          {isPending ? 'Deleting...' : 'Delete'}
+          {isPending ? btnTitle + 'ing...' : btnTitle}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>
@@ -53,4 +57,4 @@ const DeletePopUp: React.FC<DeletePopUpProps> = ({
   );
 };
 
-export default DeletePopUp;
+export default ActionPopUp;
