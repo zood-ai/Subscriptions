@@ -1,16 +1,16 @@
 'use client';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import { useRouter } from 'next/navigation';
 import { BusinessData, BusinessType } from '@/types/business';
 import { Column, CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
+import PageHeader from '@/components/PageHeader';
+import Form from '../Form';
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
-  const { data, isLoading } = useCustomQuery<BusinessType>({
+  const { data, isFetching } = useCustomQuery<BusinessType>({
     api: `v1/super-admin/businessTypes/${id}`,
     queryKey: ['businessTypes', id],
     options: {
@@ -32,23 +32,22 @@ const TypeData = ({ id }: { id: string }) => {
     { key: 'created_at', header: 'Created at' },
     { key: 'end_at', header: 'End at' },
   ];
-  if (isLoading) {
+  if (isFetching) {
     return <LoadingComponent />;
   }
+
+  const formData = {
+    name: data?.businessType?.name || '',
+  };
   return (
     <>
-      <div className="py-[15px] mainPaddingX bg-white">
-        <Link
-          href="/manage-business/type"
-          className="text-gray-500 flex items-center gap-1 text-xs"
-        >
-          <ChevronLeft size={15} />
-          Back
-        </Link>
-        <h1 className="text-gray-500 text-[24px] font-normal">
-          {data?.businessType?.name}
-        </h1>
-      </div>
+      <PageHeader
+        isEdit
+        deleteEndPoint={`v1/super-admin/businessTypes/${id}`}
+        title={data?.businessType?.name}
+        backUrl="/manage-business/type"
+        Form={<Form id={id} isEdit data={formData} />}
+      />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
@@ -56,6 +55,9 @@ const TypeData = ({ id }: { id: string }) => {
           data={data?.businesses ?? []}
           title={'Business'}
           columns={columns}
+          onClickRow={(data) => {
+            router.push(`/manage-business/business/${data.reference}`);
+          }}
         />
       </div>
     </>

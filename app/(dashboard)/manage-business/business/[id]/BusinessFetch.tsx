@@ -1,6 +1,4 @@
 'use client';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
 import { DetailCard } from '@/components/DetailCard';
 import { useRouter } from 'next/navigation';
 import { BusinessResponse } from '@/types/business';
@@ -13,6 +11,7 @@ import {
   suppliersColumns,
   usersColumns,
 } from './constants';
+import PageHeader from '@/components/PageHeader';
 
 interface TableFetchProps<T> {
   title: string;
@@ -69,20 +68,14 @@ const BusinessFetch = ({ id }: { id: string }) => {
   if (isLoading) {
     return <LoadingComponent />;
   }
+
   return (
     <>
-      <div className="py-[15px] mainPaddingX bg-white">
-        <Link
-          href="/manage-business/business"
-          className="text-gray-500 flex items-center gap-1 text-xs"
-        >
-          <ChevronLeft size={15} />
-          Back
-        </Link>
-        <h1 className="text-gray-500 text-[24px] font-normal">
-          {data?.business.name}
-        </h1>
-      </div>
+      <PageHeader
+        isEdit
+        title={data?.business.name}
+        backUrl="/manage-business/business"
+      />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         {tables.map((el) => (
