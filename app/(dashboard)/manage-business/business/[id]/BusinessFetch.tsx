@@ -90,7 +90,7 @@ const BusinessFetch = ({ id }: { id: string }) => {
             key={el.id}
             title={el.title}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            columns={el.columns as any}
+            columns={el.columns as Column<any>[]}
             endPoint={el.endPoint}
           />
         ))}
