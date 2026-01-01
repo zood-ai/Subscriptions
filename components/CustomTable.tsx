@@ -31,10 +31,17 @@ export interface ActionOption {
   onClick: (selectedItems: string[]) => void;
 }
 
-interface CustomTableProps<T extends { id: string }> {
-  data?: T[];
+interface WithData<T> {
+  data: T[];
+  endPoint?: never;
+}
+
+interface WithEndPoint {
+  data?: never;
+  endPoint: string;
+}
+interface BaseProps<T extends { id: string }> {
   showFilters?: boolean;
-  endPoint?: string;
   columns: Column<T>[];
   filterKey?: string;
   filters?: FilterTab[];
@@ -44,10 +51,13 @@ interface CustomTableProps<T extends { id: string }> {
   pagination?: boolean;
 }
 
+type CustomTableProps<T extends { id: string }> = BaseProps<T> &
+  (WithData<T> | WithEndPoint);
+
 export function CustomTable<T extends { id: string }>({
   data = [],
-  showFilters = true,
   endPoint = '',
+  showFilters = true,
   filterKey = 'status',
   columns,
   filters,
