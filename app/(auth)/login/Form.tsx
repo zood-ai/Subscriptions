@@ -75,7 +75,9 @@ export default function Form() {
         {...register('password')}
       />
 
-      {error && <div className="text-red-500 text-sm">{error.message}</div>}
+      {error && (
+        <div className="text-red-500 text-sm">{error.data?.message}</div>
+      )}
 
       <div className="flex justify-end pt-5">
         <Button loading={isPending} type="submit" variant="primary">
