@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { ChevronDown, Filter } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -11,9 +11,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
-import axios from 'axios';
 import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
+import useCustomQuery from '@/lib/Query';
 
 export interface Column<T> {
   key: keyof T;
@@ -31,10 +31,17 @@ export interface ActionOption {
   onClick: (selectedItems: string[]) => void;
 }
 
-interface CustomTableProps<T extends { id: string }> {
-  data?: T[];
+interface WithData<T> {
+  data: T[];
+  endPoint?: never;
+}
+
+interface WithEndPoint {
+  data?: never;
+  endPoint: string;
+}
+interface BaseProps<T extends { id: string }> {
   showFilters?: boolean;
-  endPoint?: string;
   columns: Column<T>[];
   filterKey?: string;
   filters?: FilterTab[];
@@ -44,10 +51,13 @@ interface CustomTableProps<T extends { id: string }> {
   pagination?: boolean;
 }
 
+type CustomTableProps<T extends { id: string }> = BaseProps<T> &
+  (WithData<T> | WithEndPoint);
+
 export function CustomTable<T extends { id: string }>({
   data = [],
-  showFilters = true,
   endPoint = '',
+  showFilters = true,
   filterKey = 'status',
   columns,
   filters,
@@ -60,26 +70,45 @@ export function CustomTable<T extends { id: string }>({
   const [activeFilter, setActiveFilter] = useState(
     filters?.[0]?.value || 'all'
   );
-  const [allData, setAllData] = useState<T[]>(data ?? []);
-  const [Loading, setLoading] = useState<boolean>(data ? false : true);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
-
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
   >({ page: 1 });
+  const { data: allData = { data }, isLoading } = useCustomQuery<{
+    data: T[];
+    from: MetaData['from'];
+    last_page: MetaData['last_page'];
+    to: MetaData['to'];
+    total: MetaData['total'];
+  }>({
+    api: endPoint || '',
+    enabled: endPoint && data.length === 0 ? true : false,
+    filters: allFilters,
+    queryKey: [endPoint, allFilters],
+    options: {
+      onSuccess: (data) => {
+        setPaginationData({
+          from: data.from,
+          last_page: data.last_page,
+          to: data.to,
+          total: data.total,
+        });
+      },
+    },
+  });
 
   const allSelected =
-    allData.length > 0 && selectedIds.length === allData.length;
+    allData?.data?.length > 0 && selectedIds.length === allData?.data?.length;
   const someSelected =
-    selectedIds.length > 0 && selectedIds.length < allData.length;
+    selectedIds.length > 0 && selectedIds.length < allData?.data?.length;
   const hasSelection = selectedIds.length > 0;
 
   const handleSelectAll = () => {
     if (allSelected) {
       setSelectedIds([]);
     } else {
-      const allIds = allData.map((item) => item.id);
+      const allIds = allData?.data?.map((item) => item.id);
       setSelectedIds(allIds);
     }
   };
@@ -112,37 +141,7 @@ export function CustomTable<T extends { id: string }>({
     }));
   };
 
-  useEffect(() => {
-    if (!(endPoint && data.length === 0)) return;
-    const fn = async () => {
-      setLoading(true);
-      const queryParams = new URLSearchParams();
-      Object.entries(allFilters).forEach(([key, value]) => {
-        if (value != null) {
-          queryParams.append(key, String(value));
-        }
-      });
-      try {
-        const res: {
-          data: {
-            data: T[];
-            meta: MetaData;
-          };
-        } = await axios.get(
-          `${endPoint}${queryParams.toString() ? `?${queryParams.toString()}` : ''
-          }`
-        );
-
-        setAllData(res?.data?.data);
-        setPaginationData(res?.data?.meta);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fn();
-  }, [allFilters, data.length, endPoint]);
-
-  if (Loading) {
+  if (isLoading) {
     return <TableSkeleton title={title} />;
   }
 
@@ -151,7 +150,7 @@ export function CustomTable<T extends { id: string }>({
       {title && (
         <h2 className="py-[25px] text-gray-500 text-xl font-medium">{title}</h2>
       )}
-      {allData.length > 0 ? (
+      {allData?.data?.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
           {/* Filter Tabs Row */}
           {(showFilters || (filters && filters?.length > 0)) && (
@@ -250,7 +249,7 @@ export function CustomTable<T extends { id: string }>({
                 </tr>
               </thead>
               <tbody>
-                {allData.map((item) => (
+                {allData?.data?.map((item) => (
                   <tr
                     key={item.id}
                     className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
@@ -309,10 +308,11 @@ export function CustomTable<T extends { id: string }>({
                       <button
                         key={pageNumber}
                         onClick={() => goToPage(pageNumber)}
-                        className={`cursor-pointer px-3 py-1 rounded ${currentPage === pageNumber
-                          ? 'bg-primary text-white'
-                          : 'bg-gray-100'
-                          }`}
+                        className={`cursor-pointer px-3 py-1 rounded ${
+                          currentPage === pageNumber
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
+                        }`}
                       >
                         {pageNumber}
                       </button>

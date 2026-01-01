@@ -1,5 +1,5 @@
-import CreateForm from './components/CreateForm';
-import Table from './components/Table';
+import CreateForm from './CreateForm';
+import Table from './Table';
 import TableHeader from '@/components/TableHeader';
 
 export default function BusinessTypes() {
