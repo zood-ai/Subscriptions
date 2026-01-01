@@ -27,11 +27,10 @@ const useCustomQuery = <R,>({
     queryKey,
     enabled,
 
-    queryFn: async ({ signal }) => {
+    queryFn: async () => {
       const response = await axiosInstance
         .get<R>(api, {
           params: filters,
-          signal,
         })
         .then((res) => {
           options?.onSuccess?.(res.data);

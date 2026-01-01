@@ -18,7 +18,7 @@ const PageHeader: React.FC<Props> = ({
   isEdit = false,
   deleteEndPoint = '',
   Form,
-  backUrl,
+  backUrl = '',
 }) => {
   return (
     <div className="flex justify-between items-center py-[15px] mainPaddingX bg-white">
