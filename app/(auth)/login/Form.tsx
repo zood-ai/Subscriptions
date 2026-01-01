@@ -47,10 +47,7 @@ export default function Form() {
     method: 'POST',
     options: {
       onSuccess: (data) => {
-        Cookies.set('token', data.token, {
-          path: '/',
-          expires: 1,
-        });
+        Cookies.set('token', data.token);
         router.push('/dashboard');
       },
     },

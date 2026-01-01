@@ -1,3 +1,4 @@
+'use client';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -20,8 +21,10 @@ axiosInstance.interceptors.response.use(
   function (error) {
     if (error.response?.status === 401) {
       // toast.error("Your token has expired, please login again");
-      window.location.href = '/login';
       Cookies.remove('token');
+      if (typeof window !== 'undefined') {
+        window.location.replace('/login');
+      }
     } else {
       // toast.error(error?.response.data?.message);
     }
