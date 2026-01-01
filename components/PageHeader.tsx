@@ -10,6 +10,7 @@ interface Props {
   isEdit?: boolean;
   deleteEndPoint?: string;
   Form?: React.ReactNode;
+  businessActiveForm?: React.ReactNode;
   backUrl?: string;
 }
 
@@ -18,6 +19,7 @@ const PageHeader: React.FC<Props> = ({
   isEdit = false,
   deleteEndPoint = '',
   Form,
+  businessActiveForm,
   backUrl = '',
 }) => {
   return (
@@ -36,20 +38,34 @@ const PageHeader: React.FC<Props> = ({
       </div>
       <div className="flex gap-2">
         {/* in Edit Only */}
-        {isEdit && deleteEndPoint && (
-          <CustomModal
-            title={`Delete ${title}`}
-            btnTrigger={<Button variant="danger">Delete</Button>}
-          >
-            <DeletePopUp
-              message="Are you sure you want to delete this?"
-              endPoint={deleteEndPoint}
-              backUrl={backUrl}
-            />
-          </CustomModal>
+        {isEdit && (
+          <>
+            {businessActiveForm && (
+              <CustomModal
+                title={`Active ${title}`}
+                btnTrigger={<Button variant="secondary">Active</Button>}
+              >
+                {businessActiveForm}
+              </CustomModal>
+            )}
+            {deleteEndPoint && (
+              <CustomModal
+                title={`Delete ${title}`}
+                btnTrigger={<Button variant="danger">Delete</Button>}
+              >
+                <DeletePopUp
+                  message="Are you sure you want to delete this?"
+                  endPoint={deleteEndPoint}
+                  backUrl={backUrl}
+                />
+              </CustomModal>
+            )}
+          </>
         )}
+
         {/* in Create only */}
-        {!isEdit && null}
+        {!isEdit && <></>}
+
         {/* Both */}
         {Form && (
           <CustomModal

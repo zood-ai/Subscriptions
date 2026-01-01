@@ -12,16 +12,11 @@ import {
   usersColumns,
 } from './constants';
 import PageHeader from '@/components/PageHeader';
+import ActiveForm from './ActiveForm';
 
-interface TableFetchProps<T> {
-  title: string;
-  endPoint: string;
-  columns: Column<T>[];
-}
-
-const BusinessFetch = ({ id }: { id: string }) => {
+const BusinessDetails = ({ id }: { id: string }) => {
   const router = useRouter();
-  const { data, isLoading } = useCustomQuery<BusinessResponse>({
+  const { data, isFetching } = useCustomQuery<BusinessResponse>({
     api: `v1/super-admin/business/${id}`,
     queryKey: ['business', id],
     options: {
@@ -65,26 +60,31 @@ const BusinessFetch = ({ id }: { id: string }) => {
     },
   ];
 
-  if (isLoading) {
+  if (isFetching) {
     return <LoadingComponent />;
   }
 
+  const formData = {
+    business_reference: data?.business.reference ?? 1,
+    months: 12,
+  };
   return (
     <>
       <PageHeader
         isEdit
         title={data?.business.name}
+        businessActiveForm={<ActiveForm id={id} data={formData} />}
         backUrl="/manage-business/business"
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
         {tables.map((el) => (
-          <TableFetch
+          <CustomTable
             key={el.id}
             title={el.title}
+            endPoint={el.endPoint}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             columns={el.columns as Column<any>[]}
-            endPoint={el.endPoint}
           />
         ))}
       </div>
@@ -92,12 +92,4 @@ const BusinessFetch = ({ id }: { id: string }) => {
   );
 };
 
-const TableFetch = <T extends { id: string }>({
-  title,
-  columns,
-  endPoint,
-}: TableFetchProps<T>) => {
-  return <CustomTable endPoint={endPoint} title={title} columns={columns} />;
-};
-
-export default BusinessFetch;
+export default BusinessDetails;
