@@ -26,13 +26,7 @@ export interface Country {
   name_en: string;
 }
 
-export default async function Businesses() {
-  // const countries = await Query<CountriesResponce>({
-  //   api: 'v1/manage/countries',
-  // });
-  // const businessTypes = await Query<BusinessTypesResponce>({
-  //   api: 'v1/manage/business-types',
-  // });
+export default function Businesses() {
   return (
     <>
       <TableHeader
