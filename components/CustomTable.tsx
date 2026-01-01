@@ -14,6 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
+import CustomModal from './layout/CustomModal';
 
 export interface Column<T> {
   key: keyof T;
@@ -172,10 +173,17 @@ export function CustomTable<T extends { id: string }>({
                 ))}
               </div>
               {showFilters && (
-                <button className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
-                  <Filter className="h-4 w-4" />
-                  Filter
-                </button>
+                <CustomModal
+                  title={`Filters`}
+                  btnTrigger={
+                    <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
+                      <Filter className="h-4 w-4" />
+                      Filter
+                    </button>
+                  }
+                >
+                  asd
+                </CustomModal>
               )}
             </div>
           )}
