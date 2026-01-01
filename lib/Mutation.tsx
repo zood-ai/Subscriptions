@@ -1,16 +1,8 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import axiosInstance from '@/guards/axiosInstance';
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 
 export type HttpMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-
-// Define the error response structure from your backend
-interface ApiErrorResponse {
-  message: string;
-  errors?: Record<string, string[]>;
-}
-
-// Custom error type that extends AxiosError
 
 interface UseCustomMutationProps<TBody, R> {
   api: string;
