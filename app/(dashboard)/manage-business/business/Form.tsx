@@ -179,7 +179,6 @@ export default function Form() {
           )}
           loading={false}
           required
-          showSearch
         />
 
         {/* Country */}
@@ -204,7 +203,6 @@ export default function Form() {
           )}
           loading={false}
           required
-          showSearch
         />
 
         {/* Divider */}

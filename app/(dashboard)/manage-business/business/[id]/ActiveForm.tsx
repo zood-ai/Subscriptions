@@ -84,7 +84,6 @@ export default function Form({
                 { label: '12 Months', value: '12' },
               ]}
               required
-              showSearch
             />
           )}
         />

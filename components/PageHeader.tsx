@@ -44,21 +44,29 @@ const PageHeader: React.FC<Props> = ({
           <>
             {businessDeActiveEndPoint && (
               <CustomModal
-                title={`DeActive ${title}`}
                 btnTrigger={<Button variant="secondary">Deactive</Button>}
               >
                 <ActionPopUp
-                  message="Are you sure you want to deActive this business?"
                   endPoint={businessDeActiveEndPoint}
-                  btnTitle="DeActive"
                   method="POST"
+                  inputs={[
+                    {
+                      key: 'reason',
+                      label: 'Reason',
+                      value: 'done',
+                      options: [
+                        { label: 'Payment finished', value: 'done' },
+                        { label: 'other', value: 'other' },
+                      ],
+                    },
+                  ]}
+                  btnTitle="Deactive"
                   backUrl={backUrl}
                 />
               </CustomModal>
             )}
             {businessActiveForm && (
               <CustomModal
-                title={`Active ${title}`}
                 btnTrigger={<Button variant="secondary">Active</Button>}
               >
                 {businessActiveForm}
@@ -66,7 +74,6 @@ const PageHeader: React.FC<Props> = ({
             )}
             {deleteEndPoint && (
               <CustomModal
-                title={`Delete ${title}`}
                 btnTrigger={
                   <Button variant="danger">
                     <Trash2 />
