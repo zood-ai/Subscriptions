@@ -82,7 +82,7 @@ const SingleSelect: React.FC<SelectProps> = ({
     error: fetchError,
   } = useCustomQuery<ApiResponse<Option[]>>({
     queryKey: [endPoint || "select-options"],
-    api: endPoint ? process.env.NEXT_PUBLIC_BE_BASE_URL + endPoint : "",
+    api: endPoint ?? "",
     enabled: !!endPoint,
   });
   const fetchedOptions = useMemo(() => {
