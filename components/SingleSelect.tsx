@@ -237,7 +237,7 @@ const SingleSelect = <T, L = "name", V = "id">({
             ),
             IndicatorSeparator: () => null,
           }}
-          styles={customStyles}
+          styles={customStyles as any}
           className="custom-select-container"
           classNamePrefix="custom-select"
           name={name}
