@@ -1,8 +1,10 @@
 "use client";
 import React, { useMemo, useState, useEffect } from "react";
-import Select, { components, type StylesConfig } from "react-select";
+import Select, { components } from "react-select";
 import { Label } from "@/components/ui/label";
 import { ChevronDown } from "lucide-react";
+import type { StylesConfig, CSSObjectWithLabel } from "react-select";
+
 import useCustomQuery from "@/lib/Query";
 export type Option = { label: string; value: string; item?: unknown };
 
@@ -13,13 +15,13 @@ interface WithOptions {
   valueKey?: never;
 }
 
-interface WithEndPoint {
+interface WithEndPoint<L, V> {
   options?: never;
   endPoint: string;
   // to choice what the key you need to become a label for the select option
-  labelKey: string;
+  labelKey: L;
   // to choice what the key you need to become a value for the select option
-  valueKey: string;
+  valueKey: V;
 }
 
 interface SingleSelectProps {
@@ -42,13 +44,13 @@ interface SingleSelectProps {
   optionDefaultLabel?: string;
 }
 
-type SelectProps = SingleSelectProps & (WithOptions | WithEndPoint);
+type SelectProps<L, V> = SingleSelectProps & (WithOptions | WithEndPoint<L, V>);
 
 type ApiResponse<T> = {
-  data: T;
+  data: T[];
 };
 
-const SingleSelect: React.FC<SelectProps> = ({
+const SingleSelect = <T, L = "name", V = "id">({
   options = [],
   placeholder = "Select an option",
   label,
@@ -68,9 +70,9 @@ const SingleSelect: React.FC<SelectProps> = ({
   isDefault = false,
   optionDefaultLabel = "Choose one",
   endPoint,
-  labelKey = "name",
-  valueKey = "id",
-}) => {
+  labelKey = "name" as L,
+  valueKey = "id" as V,
+}: SelectProps<L, V>) => {
   const optionDefault: Option = {
     label: placeholder || optionDefaultLabel,
     value: "",
@@ -80,16 +82,16 @@ const SingleSelect: React.FC<SelectProps> = ({
     data: fetchedData,
     isLoading: isFetching,
     error: fetchError,
-  } = useCustomQuery<ApiResponse<Option[]>>({
+  } = useCustomQuery<ApiResponse<T>>({
     queryKey: [endPoint || "select-options"],
     api: endPoint ?? "",
     enabled: !!endPoint,
   });
   const fetchedOptions = useMemo(() => {
     if (!fetchedData?.data || !Array.isArray(fetchedData?.data)) return [];
-    return fetchedData?.data?.map((item: any) => ({
-      label: item[labelKey] ?? item.name ?? item.label ?? String(item),
-      value: String(item[valueKey] ?? item.id ?? item.value ?? item),
+    return fetchedData?.data?.map((item: T) => ({
+      label: item[labelKey as keyof T],
+      value: String(item[valueKey as keyof T]),
       item,
     }));
   }, [fetchedData, labelKey, valueKey, endPoint]);
@@ -128,7 +130,7 @@ const SingleSelect: React.FC<SelectProps> = ({
   };
 
   const customStyles: StylesConfig<Option, false> = {
-    control: (base, state) => ({
+    control: (base, state): CSSObjectWithLabel => ({
       ...base,
       minHeight: 50,
       borderRadius: 9999, // rounded-full
@@ -177,7 +179,7 @@ const SingleSelect: React.FC<SelectProps> = ({
         borderRadius: "3px",
       },
     }),
-    option: (base, state) => ({
+    option: (base, state): CSSObjectWithLabel => ({
       ...base,
       backgroundColor: state.isSelected
         ? "#7272F6"
@@ -245,9 +247,7 @@ const SingleSelect: React.FC<SelectProps> = ({
 
       {(errorText || fetchError) && (
         <p className="text-red-500 text-sm mt-1">
-          {errorText ||
-            (fetchError as any)?.data?.message ||
-            "Failed to load options"}
+          {errorText || fetchError?.data?.message || "Failed to load options"}
         </p>
       )}
     </div>

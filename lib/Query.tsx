@@ -1,11 +1,12 @@
-import { useQuery, QueryKey } from '@tanstack/react-query';
-import axiosInstance from '@/guards/axiosInstance';
+import { useQuery, QueryKey } from "@tanstack/react-query";
+import axiosInstance from "@/guards/axiosInstance";
+import { AxiosResponse } from "axios";
 
 export type QueryFilters = Record<string, number | string | boolean>;
 
-interface QueryOptions<R, Error> {
+interface QueryOptions<R, AxiosResponse> {
   onSuccess?: (data: R) => void;
-  onError?: (error: Error) => void;
+  onError?: (error: AxiosResponse) => void;
 }
 
 interface Props<R> {
@@ -13,7 +14,7 @@ interface Props<R> {
   api: string;
   filters?: QueryFilters;
   enabled?: boolean;
-  options?: QueryOptions<R, Error>;
+  options?: QueryOptions<R, AxiosResponse>;
 }
 
 const useCustomQuery = <R,>({
@@ -23,7 +24,7 @@ const useCustomQuery = <R,>({
   enabled = true,
   options,
 }: Props<R>) => {
-  return useQuery<R, Error>({
+  return useQuery<R, AxiosResponse>({
     queryKey,
     enabled,
 
