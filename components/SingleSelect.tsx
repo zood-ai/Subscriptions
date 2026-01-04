@@ -162,7 +162,9 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
   };
 
   return (
-    <div className={`flex flex-col w-full ${parentClassName}`}>
+    <div
+      className={`flex flex-col placeholder:text-opacity-50 w-full ${parentClassName}`}
+    >
       {label && (
         <div className="flex items-center mb-2">
           <Label

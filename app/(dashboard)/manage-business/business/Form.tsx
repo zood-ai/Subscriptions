@@ -4,7 +4,7 @@ import SingleSelect from '@/components/SingleSelect';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
-import { useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState } from 'react';
@@ -158,51 +158,47 @@ export default function Form() {
         />
 
         {/* Business Type */}
-        <SingleSelect
-          label="Business Type"
+        <Controller
           name="business_type_id"
-          className="placeholder:text-opacity-50"
-          placeholder="Select business type"
-          errorText={errors?.business_type_id?.message}
-          value={formValues.business_type_id}
-          onChange={(value) => {
-            const event = {
-              target: { name: 'business_type_id', value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register('business_type_id').onChange(event);
-          }}
-          options={businessTypes?.map(
-            (business: { id: string; name: string }) => ({
-              label: business.name,
-              value: business.id,
-            })
+          control={control}
+          render={({ field }) => (
+            <SingleSelect
+              label="Business Type"
+              placeholder="Select business type"
+              errorText={errors?.business_type_id?.message}
+              value={String(field.value)}
+              onChange={(value) => field.onChange(value)}
+              options={businessTypes?.map(
+                (business: { id: string; name: string }) => ({
+                  label: business.name,
+                  value: business.id,
+                })
+              )}
+              required
+            />
           )}
-          loading={false}
-          required
         />
 
         {/* Country */}
-        <SingleSelect
-          label="Country"
+        <Controller
           name="business_location_id"
-          className="placeholder:text-opacity-50"
-          placeholder="Select country"
-          errorText={errors?.business_location_id?.message}
-          value={formValues.business_location_id}
-          onChange={(value) => {
-            const event = {
-              target: { name: 'business_location_id', value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register('business_location_id').onChange(event);
-          }}
-          options={countries?.map(
-            (country: { id: string; name_en: string }) => ({
-              label: country.name_en,
-              value: country.id,
-            })
+          control={control}
+          render={({ field }) => (
+            <SingleSelect
+              label="Country"
+              placeholder="Select country"
+              errorText={errors?.business_location_id?.message}
+              value={formValues.business_location_id}
+              onChange={(value) => field.onChange(value)}
+              options={countries?.map(
+                (country: { id: string; name_en: string }) => ({
+                  label: country.name_en,
+                  value: country.id,
+                })
+              )}
+              required
+            />
           )}
-          loading={false}
-          required
         />
 
         {/* Divider */}
