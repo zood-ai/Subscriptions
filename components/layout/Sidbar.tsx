@@ -1,10 +1,12 @@
-'use client';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import Logo from '@/assets/logo.svg';
-import { Monitor, Package, Briefcase, X, ChevronDown } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Logo from "@/assets/logo.svg";
+import { Monitor, Package, Briefcase, X, ChevronDown } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
+import { CheckCircle } from "lucide-react";
+
 
 interface MenuItemProps {
   id: string;
@@ -25,26 +27,32 @@ interface SidebarProps {
 }
 
 const menuItems: MenuItemProps[] = [
-  { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: Monitor },
+  { id: "dashboard", label: "Dashboard", path: "/dashboard", icon: Monitor },
   {
-    id: 'manage-business',
-    label: 'Manage Business',
-    path: '/manage-business',
+    id: "manage-business",
+    label: "Manage Business",
+    path: "/manage-business",
     icon: Briefcase,
     children: [
       {
-        id: 'businesses',
-        label: 'Businesses',
-        path: '/manage-business/business',
+        id: "businesses",
+        label: "Businesses",
+        path: "/manage-business/business",
       },
       {
-        id: 'type',
-        label: 'Business Types',
-        path: '/manage-business/type',
+        id: "type",
+        label: "Business Types",
+        path: "/manage-business/type",
       },
     ],
   },
-  { id: 'packages', label: 'Packages', path: '/packages', icon: Package },
+  { id: "packages", label: "Packages", path: "/packages", icon: Package },
+  {
+    id: "activation",
+    label: "Activation Code",
+    path: "/activation-code",
+    icon: CheckCircle,
+  },
 ];
 
 export default function Sidebar({
@@ -70,16 +78,16 @@ export default function Sidebar({
         ${
           isMobileView
             ? `inset-y-0 z-50 shadow-lg transition-transform duration-300 md:hidden
-             ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`
-            : 'hidden md:block h-screen'
+             ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`
+            : "hidden md:block h-screen"
         }
       `}
     >
       <div
         className={`flex items-center px-6 ${
           isMobileView
-            ? 'h-16 justify-between border-b'
-            : 'h-20 justify-center my-4'
+            ? "h-16 justify-between border-b"
+            : "h-20 justify-center my-4"
         }`}
       >
         {isMobileView ? (
@@ -88,8 +96,8 @@ export default function Sidebar({
           </Link>
         ) : (
           <Link href="/">
-            {' '}
-            <Image src={Logo} alt="Logo" />{' '}
+            {" "}
+            <Image src={Logo} alt="Logo" />{" "}
           </Link>
         )}
         {isMobileView && (
@@ -101,12 +109,12 @@ export default function Sidebar({
       <nav
         aria-label={
           isMobileView
-            ? 'Mobile Sidebar Navigation'
-            : 'Dashboard Sidebar Navigation'
+            ? "Mobile Sidebar Navigation"
+            : "Dashboard Sidebar Navigation"
         }
-        className={`space-y-1 pr-2 ${isMobileView ? 'py-4' : ''}`}
+        className={`space-y-1 pr-2 ${isMobileView ? "py-4" : ""}`}
       >
-        <ul className={isMobileView ? 'space-y-4' : 'space-y-2'}>
+        <ul className={isMobileView ? "space-y-4" : "space-y-2"}>
           {menuItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname.includes(item.path);
@@ -120,8 +128,8 @@ export default function Sidebar({
                     onClick={() => toggleExpand(item.id)}
                     className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors ${
                       isActive
-                        ? 'bg-indigo-50 text-indigo-600'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? "bg-indigo-50 text-indigo-600"
+                        : "text-gray-700 hover:bg-gray-100"
                     }`}
                     aria-expanded={isExpanded}
                   >
@@ -131,7 +139,7 @@ export default function Sidebar({
                     </div>
                     <ChevronDown
                       className={`h-4 w-4 transition-transform duration-200 ${
-                        isExpanded ? 'rotate-180' : ''
+                        isExpanded ? "rotate-180" : ""
                       }`}
                     />
                   </button>
@@ -141,8 +149,8 @@ export default function Sidebar({
                     onClick={isMobileView ? onClose : undefined}
                     className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors rounded-lg ${
                       isActive
-                        ? 'bg-indigo-50 text-indigo-600'
-                        : 'text-gray-700 hover:bg-gray-100'
+                        ? "bg-indigo-50 text-indigo-600"
+                        : "text-gray-700 hover:bg-gray-100"
                     }`}
                   >
                     <Icon className="h-5 w-5" />
@@ -164,8 +172,8 @@ export default function Sidebar({
                               rounded
                               ${
                                 isChildActive
-                                  ? 'bg-indigo-50 text-indigo-600 font-medium'
-                                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                  ? "bg-indigo-50 text-indigo-600 font-medium"
+                                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                               }
                             `}
                           >
