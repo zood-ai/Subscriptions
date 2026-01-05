@@ -16,8 +16,8 @@ const columns: Column<ActivationCodeData>[] = [
 
 const filters: FilterTab[] = [
   { label: "All", value: "all" },
-  { label: "Active", value: "active" },
-  { label: "Inactive", value: "inactive" },
+  { label: "Used", value: "1" },
+  { label: "Not Used", value: "0" },
 ];
 
 const actions: ActionOption[] = [
@@ -52,7 +52,7 @@ export default function Table() {
         columns={columns}
         filters={filters}
         actions={actions}
-        filterKey="status"
+        filterKey="is_used"
       />
     </div>
   );

@@ -7,6 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
+import { useModal } from "@/context/ModalContext";
 
 const formSchema = z.object({
   code: z.string().min(1, "Code is required"),
@@ -40,7 +41,7 @@ const periodOptions: PeriodOption[] = [
 ];
 export default function Form() {
   const queryClient = useQueryClient();
-
+  const { close } = useModal();
   const {
     register,
     handleSubmit,
@@ -64,6 +65,7 @@ export default function Form() {
         queryClient.invalidateQueries({
           queryKey: ["v1/activationcode/list"],
         });
+        close();
       },
       onError: (error) => {
         console.error("Error applying activation code: ", error);

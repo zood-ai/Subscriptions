@@ -5,6 +5,7 @@ import React from "react";
 import CustomModal from "./layout/CustomModal";
 import { Button } from "./ui/button";
 import DeletePopUp from "./DeletePopUp";
+
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -39,6 +40,7 @@ const PageHeader: React.FC<Props> = ({
         {isEdit && deleteEndPoint && (
           <CustomModal
             title={`Delete ${title}`}
+            modalType="delete"
             btnTrigger={<Button variant="danger">Delete</Button>}
           >
             <DeletePopUp
@@ -53,6 +55,7 @@ const PageHeader: React.FC<Props> = ({
         {/* Both */}
         {Form && (
           <CustomModal
+            modalType="create"
             title={`${isEdit ? "Update" : "Create"} ${title}`}
             btnTrigger={<Button>{isEdit ? "Update" : "Create"}</Button>}
           >

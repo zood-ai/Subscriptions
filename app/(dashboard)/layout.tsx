@@ -1,5 +1,6 @@
-import Sidbar from '@/components/layout/Sidbar';
-import NavBar from '@/components/layout/NavBar';
+import Sidbar from "@/components/layout/Sidbar";
+import NavBar from "@/components/layout/NavBar";
+import { ModalProvider } from "@/context/ModalContext";
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -11,7 +12,7 @@ export default function RootLayout({
       <NavBar />
       <main className="pt-16 md:ml-64 transition-all duration-300 ease-in-out">
         <div className="bg-[#FAFAFA] min-h-[calc(100vh-64px)]">
-          {children}
+          <ModalProvider>{children}</ModalProvider>
         </div>
       </main>
     </>

@@ -175,6 +175,7 @@ export function CustomTable<T extends { id: string }>({
               {showFilters && (
                 <CustomModal
                   title={`Filters`}
+                  modalType="filter"
                   btnTrigger={
                     <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
                       <Filter className="h-4 w-4" />
