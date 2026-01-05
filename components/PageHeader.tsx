@@ -1,10 +1,11 @@
-'use client';
-import { ChevronLeft } from 'lucide-react';
-import Link from 'next/link';
-import React from 'react';
-import CustomModal from './layout/CustomModal';
-import { Button } from './ui/button';
-import DeletePopUp from './DeletePopUp';
+"use client";
+import { ChevronLeft } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+import CustomModal from "./layout/CustomModal";
+import { Button } from "./ui/button";
+import DeletePopUp from "./DeletePopUp";
+
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -16,12 +17,12 @@ interface Props {
 const PageHeader: React.FC<Props> = ({
   title,
   isEdit = false,
-  deleteEndPoint = '',
+  deleteEndPoint = "",
   Form,
-  backUrl = '',
+  backUrl = "",
 }) => {
   return (
-    <div className="flex justify-between items-center py-[15px] mainPaddingX bg-white">
+    <div className="flex justify-between items-center py-3.75 mainPaddingX bg-white">
       <div>
         {backUrl && (
           <Link
@@ -39,6 +40,7 @@ const PageHeader: React.FC<Props> = ({
         {isEdit && deleteEndPoint && (
           <CustomModal
             title={`Delete ${title}`}
+            modalType="delete"
             btnTrigger={<Button variant="danger">Delete</Button>}
           >
             <DeletePopUp
@@ -53,8 +55,9 @@ const PageHeader: React.FC<Props> = ({
         {/* Both */}
         {Form && (
           <CustomModal
-            title={`${isEdit ? 'Update' : 'Create'} ${title}`}
-            btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
+            modalType="create"
+            title={`${isEdit ? "Update" : "Create"} ${title}`}
+            btnTrigger={<Button>{isEdit ? "Update" : "Create"}</Button>}
           >
             {Form}
           </CustomModal>

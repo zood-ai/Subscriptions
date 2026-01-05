@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import type React from 'react';
-import { useState } from 'react';
-import { ChevronDown, Filter } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import type React from "react";
+import { useState } from "react";
+import { ChevronDown, Filter } from "lucide-react";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Checkbox } from '@/components/ui/checkbox';
-import TableSkeleton from './TableSkeleton';
-import type { MetaData } from '@/types/global';
-import useCustomQuery from '@/lib/Query';
-import CustomModal from './layout/CustomModal';
+} from "@/components/ui/dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+import TableSkeleton from "./TableSkeleton";
+import type { MetaData } from "@/types/global";
+import useCustomQuery from "@/lib/Query";
+import CustomModal from "./layout/CustomModal";
 
 export interface Column<T> {
   key: keyof T;
@@ -57,9 +57,9 @@ type CustomTableProps<T extends { id: string }> = BaseProps<T> &
 
 export function CustomTable<T extends { id: string }>({
   data = [],
-  endPoint = '',
+  endPoint = "",
   showFilters = true,
-  filterKey = 'status',
+  filterKey = "status",
   columns,
   filters,
   actions,
@@ -69,7 +69,7 @@ export function CustomTable<T extends { id: string }>({
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeFilter, setActiveFilter] = useState(
-    filters?.[0]?.value || 'all'
+    filters?.[0]?.value || "all"
   );
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -78,12 +78,12 @@ export function CustomTable<T extends { id: string }>({
   >({ page: 1 });
   const { data: allData = { data }, isLoading } = useCustomQuery<{
     data: T[];
-    from: MetaData['from'];
-    last_page: MetaData['last_page'];
-    to: MetaData['to'];
-    total: MetaData['total'];
+    from: MetaData["from"];
+    last_page: MetaData["last_page"];
+    to: MetaData["to"];
+    total: MetaData["total"];
   }>({
-    api: endPoint || '',
+    api: endPoint || "",
     enabled: endPoint && data.length === 0 ? true : false,
     filters: allFilters,
     queryKey: [endPoint, allFilters],
@@ -149,7 +149,7 @@ export function CustomTable<T extends { id: string }>({
   return (
     <div>
       {title && (
-        <h2 className="py-[25px] text-gray-500 text-xl font-medium">{title}</h2>
+        <h2 className="py-6.25 text-gray-500 text-xl font-medium">{title}</h2>
       )}
       {allData?.data?.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
@@ -162,10 +162,10 @@ export function CustomTable<T extends { id: string }>({
                     key={filter.value}
                     onClick={() => handleFilterChange(filter.value)}
                     className={cn(
-                      'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
+                      "px-3 py-1.5 text-sm font-medium rounded-full transition-colors",
                       activeFilter === filter.value
-                        ? 'text-blue-600 bg-blue-50 border border-blue-200'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                        ? "text-blue-600 bg-blue-50 border border-blue-200"
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
                     )}
                   >
                     {filter.label}
@@ -175,6 +175,7 @@ export function CustomTable<T extends { id: string }>({
               {showFilters && (
                 <CustomModal
                   title={`Filters`}
+                  modalType="filter"
                   btnTrigger={
                     <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
                       <Filter className="h-4 w-4" />
@@ -231,10 +232,10 @@ export function CustomTable<T extends { id: string }>({
                           checked={allSelected}
                           onCheckedChange={handleSelectAll}
                           className={cn(
-                            'h-4 w-4',
-                            someSelected && 'data-[state=checked]:bg-primary'
+                            "h-4 w-4",
+                            someSelected && "data-[state=checked]:bg-primary"
                           )}
-                          {...(someSelected && { 'data-state': 'checked' })}
+                          {...(someSelected && { "data-state": "checked" })}
                         />
                       )}
                       {someSelected && (
@@ -279,7 +280,7 @@ export function CustomTable<T extends { id: string }>({
                       >
                         {column.render
                           ? column.render(item[column.key], item)
-                          : String(item[column.key] ?? '-')}
+                          : String(item[column.key] ?? "-")}
                       </td>
                     ))}
                   </tr>
@@ -288,9 +289,9 @@ export function CustomTable<T extends { id: string }>({
             </table>
           </div>
           {pagination && paginationData && (
-            <div className="flex justify-end items-center space-x-[19px] mx-[20px] mt-[30px] mb-[20px]">
+            <div className="flex justify-end items-center space-x-4.75 mx-5 mt-7.5 mb-5">
               <div className="flex items-center justify-center text-gray-500 font-[12px]">
-                {paginationData?.from} - {paginationData?.to} of{' '}
+                {paginationData?.from} - {paginationData?.to} of{" "}
                 {paginationData?.total}
               </div>
               <div className="flex justify-center items-center space-x-2 mx-3">
@@ -318,8 +319,8 @@ export function CustomTable<T extends { id: string }>({
                         onClick={() => goToPage(pageNumber)}
                         className={`cursor-pointer px-3 py-1 rounded ${
                           currentPage === pageNumber
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-100'
+                            ? "bg-primary text-white"
+                            : "bg-gray-100"
                         }`}
                       >
                         {pageNumber}
@@ -347,7 +348,7 @@ export function CustomTable<T extends { id: string }>({
           )}
         </div>
       ) : (
-        <div className="text-gray-500 font-medium flex justify-center items-center p-[50px] w-full rounded-2xl border border-border bg-card">
+        <div className="text-gray-500 font-medium flex justify-center items-center p-12.5 w-full rounded-2xl border border-border bg-card">
           No data to display
         </div>
       )}
