@@ -5,7 +5,16 @@ import {
   type FilterTab,
   type ActionOption,
 } from "@/components/CustomTable";
-import { ActivationCodeData } from "@/types/business";
+
+interface ActivationCodeData {
+  business_reference: string;
+  code: string;
+  created_at: string;
+  duration: string;
+  id: string;
+  is_used: number;
+  updated_at: string;
+}
 
 const columns: Column<ActivationCodeData>[] = [
   { key: "code", header: "Code" },
