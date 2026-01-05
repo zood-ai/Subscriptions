@@ -19,9 +19,7 @@ interface WithOptions {
 interface WithEndPoint<L, V> {
   options?: never;
   endPoint: string;
-  // to choice what the key you need to become a label for the select option
   labelKey: L;
-  // to choice what the key you need to become a value for the select option
   valueKey: V;
 }
 
@@ -71,8 +69,10 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
   isDefault = false,
   optionDefaultLabel = 'Choose one',
   endPoint,
-  labelKey = 'name' as L,
-  valueKey = 'id' as V,
+  // to choice what the key you need to become a label for the select option
+  labelKey = '' as L,
+  // to choice what the key you need to become a value for the select option
+  valueKey = '' as V,
 }: SelectProps<L, V>) => {
   const optionDefault: Option = {
     label: placeholder || optionDefaultLabel,
