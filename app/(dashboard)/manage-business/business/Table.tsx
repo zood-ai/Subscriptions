@@ -35,7 +35,7 @@ const actions: ActionOption[] = [
 export default function Table() {
   const router = useRouter();
   return (
-    <div className="py-[40px] mainPaddingX">
+    <div className="py-10 mainPaddingX">
       <CustomTable
         endPoint="v1/super-admin/business"
         columns={columns}

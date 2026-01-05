@@ -1,14 +1,16 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
+import { useModal } from '@/context/ModalContext';
+import { ModalTypes } from '@/context/ModalContext';
 
 interface CustomModalProps {
   btnTrigger: React.ReactElement;
   children: React.ReactNode;
   title?: string;
+  modalType: ModalTypes;
   className?: string;
-  open?: boolean;
 }
 
 const CustomModal: React.FC<CustomModalProps> = ({
@@ -16,15 +18,15 @@ const CustomModal: React.FC<CustomModalProps> = ({
   children,
   title,
   className,
-  open = false,
+  modalType,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState<boolean>(open);
-
+  const { openedModal, close, open } = useModal();
+  const isOpen = openedModal === modalType;
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        setIsOpen(false);
+        close();
       }
     };
 
@@ -37,17 +39,17 @@ const CustomModal: React.FC<CustomModalProps> = ({
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, close]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-      setIsOpen(false);
+      close();
     }
   };
 
   return (
     <div>
-      <div role="button" onClick={() => setIsOpen(true)}>
+      <div role="button" onClick={() => open(modalType)}>
         {btnTrigger}
       </div>
       {isOpen && (
@@ -67,7 +69,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={() => close()}
                 title="Close"
                 className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
               >

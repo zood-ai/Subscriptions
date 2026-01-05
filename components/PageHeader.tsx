@@ -1,5 +1,5 @@
 'use client';
-import { ChevronLeft, Trash, Trash2 } from 'lucide-react';
+import { ChevronLeft, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
 import CustomModal from './layout/CustomModal';
@@ -60,7 +60,7 @@ const PageHeader: React.FC<Props> = ({
         },
       ];
   return (
-    <div className="flex flex-wrap justify-between items-center gap-4 py-[15px] mainPaddingX bg-white">
+    <div className="flex flex-wrap justify-between items-center gap-4 py-3.75 mainPaddingX bg-white">
       <div>
         {backUrl && (
           <Link
@@ -79,6 +79,7 @@ const PageHeader: React.FC<Props> = ({
           <>
             {businessBlockEndPoint && (
               <CustomModal
+                modalType="block"
                 title={isBlocked ? 'Unblock' : 'Block'}
                 btnTrigger={
                   <Button variant="secondary">
@@ -102,6 +103,7 @@ const PageHeader: React.FC<Props> = ({
             )}
             {businessActiveForm && (
               <CustomModal
+                modalType="active"
                 btnTrigger={<Button variant="secondary">Active</Button>}
               >
                 {businessActiveForm}
@@ -109,6 +111,7 @@ const PageHeader: React.FC<Props> = ({
             )}
             {deleteEndPoint && (
               <CustomModal
+                modalType="delete"
                 btnTrigger={
                   <Button variant="danger">
                     <Trash2 />
@@ -134,6 +137,7 @@ const PageHeader: React.FC<Props> = ({
         {/* Both */}
         {Form && (
           <CustomModal
+            modalType="create"
             title={`${isEdit ? 'Update' : 'Create'} ${title}`}
             btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
           >
