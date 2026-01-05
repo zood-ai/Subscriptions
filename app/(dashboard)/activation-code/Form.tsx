@@ -28,7 +28,7 @@ const periodOptions: PeriodOption[] = [
   },
   {
     label: "3 Month",
-    value: "2",
+    value: "3",
   },
   {
     label: "6 Month",
