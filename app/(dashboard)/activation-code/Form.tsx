@@ -1,17 +1,17 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import SingleSelect from "@/components/SingleSelect";
-import { Button } from "@/components/ui/button";
-import useCustomMutation from "@/lib/Mutation";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { useModal } from "@/context/ModalContext";
+'use client';
+import { Input } from '@/components/ui/input';
+import SingleSelect from '@/components/SingleSelect';
+import { Button } from '@/components/ui/button';
+import useCustomMutation from '@/lib/Mutation';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { useModal } from '@/context/ModalContext';
 
 const formSchema = z.object({
-  code: z.string().min(1, "Code is required"),
-  duration: z.string().min(1, "Duration Period is required"),
+  code: z.string().min(1, 'Code is required'),
+  duration: z.string().min(1, 'Duration Period is required'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -23,20 +23,20 @@ interface PeriodOption {
 
 const periodOptions: PeriodOption[] = [
   {
-    label: "1 Month",
-    value: "1",
+    label: '1 Month',
+    value: '1',
   },
   {
-    label: "3 Month",
-    value: "3",
+    label: '3 Month',
+    value: '3',
   },
   {
-    label: "6 Month",
-    value: "6",
+    label: '6 Month',
+    value: '6',
   },
   {
-    label: "Year",
-    value: "12",
+    label: 'Year',
+    value: '12',
   },
 ];
 export default function Form() {
@@ -50,25 +50,25 @@ export default function Form() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      code: "",
-      duration: "",
+      code: '',
+      duration: '',
     },
   });
 
   const formValues = useWatch({ control });
 
   const { mutate, isPending, error } = useCustomMutation<FormData>({
-    api: "v1/activationcode/store",
-    method: "POST",
+    api: 'v1/activationcode/store',
+    method: 'POST',
     options: {
-      onSuccess: (data) => {
+      onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["v1/activationcode/list"],
+          queryKey: ['v1/activationcode/list'],
         });
         close();
       },
       onError: (error) => {
-        console.error("Error applying activation code: ", error);
+        console.error('Error applying activation code: ', error);
       },
     },
   });
@@ -86,7 +86,7 @@ export default function Form() {
           Label="Code"
           error={errors?.code?.message}
           value={formValues.code}
-          {...register("code")}
+          {...register('code')}
           required
         />
         <SingleSelect
@@ -98,9 +98,9 @@ export default function Form() {
           value={formValues.duration}
           onChange={(value) => {
             const event = {
-              target: { name: "duration", value },
+              target: { name: 'duration', value },
             } as React.ChangeEvent<HTMLInputElement>;
-            register("duration").onChange(event);
+            register('duration').onChange(event);
           }}
           options={periodOptions}
           loading={false}
@@ -114,7 +114,7 @@ export default function Form() {
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? "Applying..." : "Apply"}
+          {isPending ? 'Applying...' : 'Apply'}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>

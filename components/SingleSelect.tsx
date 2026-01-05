@@ -135,7 +135,7 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
   const customStyles: StylesConfig<Option, false> = {
     control: (base, state): CSSObjectWithLabel => ({
       ...base,
-      display: isHidden ? 'hidden' : '',
+      display: isHidden ? 'hidden' : 'flex',
       minHeight: 50,
       borderRadius: 9999, // rounded-full
       borderColor: state.isFocused ? '#7272F6' : '#d1d5db',

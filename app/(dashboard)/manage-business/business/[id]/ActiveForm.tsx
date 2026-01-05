@@ -7,13 +7,10 @@ import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
 import { Controller } from 'react-hook-form';
+import { useModal } from '@/context/ModalContext';
 
 const formSchema = z.object({
-  business_reference: z
-    .number()
-    .int()
-    .gte(100000, { message: 'Business reference must be 6 digits' })
-    .lte(999999, { message: 'Business reference must be 6 digits' }),
+  business_reference: z.number().int(),
   months: z.number(),
 });
 
@@ -35,6 +32,7 @@ export default function Form({
   id?: string;
   data?: FormState;
 }) {
+  const { close } = useModal();
   const {
     handleSubmit,
     formState: { errors },
@@ -56,6 +54,7 @@ export default function Form({
           queryClient.invalidateQueries({
             queryKey: ['business', id],
           });
+          close();
         }
       },
     },
