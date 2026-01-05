@@ -24,16 +24,6 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface BusinessTypes {
-  id: string;
-  name: string;
-}
-
-interface Countries {
-  id: string;
-  name_en: string;
-}
-
 interface BusinessRegistration {
   email: string;
   business_reference: number;
@@ -51,8 +41,6 @@ interface CustomerRegistrationResponse {
 
 export default function Form() {
   const router = useRouter();
-  const countries: Countries[] = [];
-  const businessTypes: BusinessTypes[] = [];
   const [tradeRegister, setTradeRegister] = useState<File | null>(null);
 
   const {

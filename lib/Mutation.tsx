@@ -10,7 +10,7 @@ interface UseCustomMutationProps<TBody, R> {
   options?: Omit<UseMutationOptions<R, AxiosResponse, TBody>, 'mutationFn'>;
 }
 
-const useCustomMutation = <TBody = void, TResponse = void>({
+const useCustomMutation = <TBody=void, TResponse=void>({
   api,
   method = 'POST',
   options,
