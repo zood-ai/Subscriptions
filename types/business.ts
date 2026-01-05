@@ -52,3 +52,13 @@ export interface BusinessType {
   };
   businesses: BusinessData[];
 }
+
+export interface ActivationCodeData {
+  business_reference: string;
+  code: string;
+  created_at: string;
+  duration: string;
+  id: string;
+  is_used: number;
+  updated_at: string;
+}

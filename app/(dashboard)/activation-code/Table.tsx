@@ -1,63 +1,57 @@
-'use client';
+"use client";
 import {
   CustomTable,
   type Column,
   type FilterTab,
   type ActionOption,
-} from '@/components/CustomTable';
-import { BusinessData } from '@/types/business';
-import { useRouter } from 'next/navigation';
+} from "@/components/CustomTable";
+import { ActivationCodeData } from "@/types/business";
 
-const columns: Column<BusinessData>[] = [
-  { key: 'name', header: 'Name' },
-  { key: 'reference', header: 'Reference' },
-  { key: 'owner_email', header: 'Owner email' },
-  { key: 'created_at', header: 'Created at' },
-  { key: 'end_at', header: 'End at' },
+const columns: Column<ActivationCodeData>[] = [
+  { key: "code", header: "Code" },
+  { key: "duration", header: "Duration" },
+  { key: "created_at", header: "Created At" },
+  { key: "is_used", header: "Is Used" },
 ];
 
 const filters: FilterTab[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Active', value: 'active' },
-  { label: 'Inactive', value: 'inactive' },
+  { label: "All", value: "all" },
+  { label: "Active", value: "active" },
+  { label: "Inactive", value: "inactive" },
 ];
 
 const actions: ActionOption[] = [
   {
-    label: 'Delete',
+    label: "Delete",
     onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
+      console.log("Deleting items:", selectedIds);
       alert(`Deleting ${selectedIds.length} items`);
     },
   },
   {
-    label: 'Active',
+    label: "Active",
     onClick: (selectedIds) => {
-      console.log('Activing items:', selectedIds);
+      console.log("Activing items:", selectedIds);
       alert(`Activing ${selectedIds.length} items`);
     },
   },
   {
-    label: 'DeActive',
+    label: "DeActive",
     onClick: (selectedIds) => {
-      console.log('DeActiveing items:', selectedIds);
+      console.log("DeActiveing items:", selectedIds);
       alert(`DeActiveing ${selectedIds.length} items`);
     },
   },
 ];
 
 export default function Table() {
-  const router = useRouter();
   return (
     <div className="py-10 mainPaddingX">
       <CustomTable
-        endPoint="v1/super-admin/business"
+        endPoint="v1/activationcode/list"
         columns={columns}
         filters={filters}
         actions={actions}
-        onClickRow={(data) => {
-          router.push(`/manage-business/business/${data.reference}`);
-        }}
         filterKey="status"
       />
     </div>
