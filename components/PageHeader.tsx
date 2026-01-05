@@ -4,14 +4,15 @@ import Link from 'next/link';
 import React from 'react';
 import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';
-import ActionPopUp from './ActionPopUp';
+import ActionPopUp, { Input } from './ActionPopUp';
 interface Props {
   title?: string;
   isEdit?: boolean;
   deleteEndPoint?: string;
   Form?: React.ReactNode;
   businessActiveForm?: React.ReactNode;
-  businessDeActiveEndPoint?: string;
+  businessBlockEndPoint?: string;
+  isBlocked?: boolean;
   backUrl?: string;
 }
 
@@ -21,9 +22,43 @@ const PageHeader: React.FC<Props> = ({
   deleteEndPoint = '',
   Form,
   businessActiveForm,
-  businessDeActiveEndPoint,
+  businessBlockEndPoint,
+  isBlocked,
   backUrl = '',
 }) => {
+  const businessBlockInputs: Input[] = isBlocked
+    ? [
+        {
+          key: 'reason',
+          label: 'Reason',
+          value: '',
+          type: 'text',
+          isHidden: true,
+        },
+        {
+          key: 'active',
+          label: 'Active',
+          value: '1',
+          type: 'text',
+          isHidden: true,
+        },
+      ]
+    : [
+        {
+          key: 'reason',
+          label: 'Reason',
+          value: '',
+          isRequired: true,
+          type: 'text',
+        },
+        {
+          key: 'active',
+          label: 'Active',
+          value: '0',
+          type: 'text',
+          isHidden: true,
+        },
+      ];
   return (
     <div className="flex flex-wrap justify-between items-center gap-4 py-[15px] mainPaddingX bg-white">
       <div>
@@ -42,26 +77,25 @@ const PageHeader: React.FC<Props> = ({
         {/* in Edit Only */}
         {isEdit && (
           <>
-            {businessDeActiveEndPoint && (
+            {businessBlockEndPoint && (
               <CustomModal
-                title="Deactive"
-                btnTrigger={<Button variant="secondary">Deactive</Button>}
+                title={isBlocked ? 'Unblock' : 'Block'}
+                btnTrigger={
+                  <Button variant="secondary">
+                    {isBlocked ? 'Unblock' : 'Block'}
+                  </Button>
+                }
               >
                 <ActionPopUp
-                  endPoint={businessDeActiveEndPoint}
+                  endPoint={businessBlockEndPoint}
                   method="POST"
-                  inputs={[
-                    {
-                      key: 'reason',
-                      label: 'Reason',
-                      value: 'done',
-                      options: [
-                        { label: 'Payment finished', value: 'done' },
-                        { label: 'other', value: 'other' },
-                      ],
-                    },
-                  ]}
-                  btnTitle="Deactive"
+                  message={
+                    isBlocked
+                      ? 'Are you sure you want to Unblock this business?'
+                      : ''
+                  }
+                  inputs={businessBlockInputs}
+                  btnTitle={isBlocked ? 'Unblock' : 'Block'}
                   backUrl={backUrl}
                 />
               </CustomModal>

@@ -74,7 +74,8 @@ const BusinessDetails = ({ id }: { id: string }) => {
         isEdit
         title={data?.business.name}
         businessActiveForm={<ActiveForm id={id} data={formData} />}
-        businessDeActiveEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
+        businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
+        isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
       />
       <div className="py-[40px] mainPaddingX">

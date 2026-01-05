@@ -33,6 +33,8 @@ export interface BusinessData {
   reference: number;
   owner_email: string;
   created_at: string;
+  active: number;
+  reason: string | null;
   end_at: string;
 }
 

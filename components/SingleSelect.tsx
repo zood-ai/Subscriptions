@@ -7,7 +7,7 @@ import { ChevronDown } from 'lucide-react';
 import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
 
 import useCustomQuery from '@/lib/Query';
-export type Option = { label: string; value: string; item?: unknown };
+export type Option = { label: string; value: string | number; item?: unknown };
 
 interface WithOptions {
   options: Option[];
@@ -32,13 +32,14 @@ interface SingleSelectProps {
   errorText?: string;
   required?: boolean;
   value?: string | null;
-  onChange?: (value: string) => void;
+  onChange?: (value: string | number) => void;
   onValueChange?: (option: Option | null) => void;
   loading?: boolean;
   className?: string;
   parentClassName?: string;
   labelClassName?: string;
   showSearch?: boolean;
+  isHidden?: boolean;
   isDefault?: boolean;
   optionDefaultLabel?: string;
 }
@@ -68,6 +69,7 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
   className = '',
   isDefault = false,
   optionDefaultLabel = 'Choose one',
+  isHidden = false,
   endPoint,
   // to choice what the key you need to become a label for the select option
   labelKey = '' as L,
@@ -100,7 +102,7 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
   const finalOptions = endPoint ? fetchedOptions : options;
   const isLoading = endPoint ? isFetching : loading;
 
-  const [internalValue, setInternalValue] = useState<string | null>(
+  const [internalValue, setInternalValue] = useState<string | number | null>(
     controlledValue ?? null
   );
   useEffect(() => {
@@ -133,6 +135,7 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
   const customStyles: StylesConfig<Option, false> = {
     control: (base, state): CSSObjectWithLabel => ({
       ...base,
+      display: isHidden ? 'hidden' : '',
       minHeight: 50,
       borderRadius: 9999, // rounded-full
       borderColor: state.isFocused ? '#7272F6' : '#d1d5db',
@@ -212,7 +215,7 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
     <div
       className={`flex flex-col placeholder:text-opacity-50 w-full ${parentClassName}`}
     >
-      {label && (
+      {!isHidden && label && (
         <div className="flex items-center mb-2">
           <Label
             className={`text-sm font-medium text-gray-700 ${labelClassName}`}

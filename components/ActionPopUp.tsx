@@ -2,46 +2,36 @@
 import { Button } from './ui/button';
 import useCustomMutation, { HttpMethod } from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
-import {
-  Controller,
-  DefaultValues,
-  Path,
-  useForm,
-  useWatch,
-} from 'react-hook-form';
+import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { Input } from './ui/input';
-import SingleSelect from './SingleSelect';
+import SingleSelect, { Option } from './SingleSelect';
 
 interface InputWithOption {
   type?: never;
-  options: { label: string; value: string }[];
+  options: Option[];
 }
 
 interface InputWithType {
   type: 'text';
   options?: never;
 }
-type Input = {
+
+export type Input = {
   key: string;
   label: string;
+  isHidden?: boolean;
+  isRequired?: boolean;
   value?: string;
 } & (InputWithOption | InputWithType);
-
-interface ActionPopUpWithInputs {
-  message?: never;
-  inputs: Input[];
-}
-interface ActionPopUpWithMessage {
-  message: string;
-  inputs?: never;
-}
 
 type ActionPopUpProps = {
   endPoint: string;
   method: HttpMethod;
   btnTitle: string;
   backUrl?: string;
-} & (ActionPopUpWithInputs | ActionPopUpWithMessage);
+  message?: string;
+  inputs?: Input[];
+};
 
 type FormData = Record<string, string>;
 
@@ -56,7 +46,7 @@ const ActionPopUp = ({
   const router = useRouter();
   const defaultValues = inputs.reduce<FormData>((acc, item) => {
     if (item.value !== undefined) {
-      acc[item.key] = item.value;
+      acc[item.key] = item.value ?? '';
     }
     return acc;
   }, {});
@@ -86,6 +76,8 @@ const ActionPopUp = ({
     mutate(data);
   };
 
+  console.log({ errors });
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {message && (
@@ -109,6 +101,7 @@ const ActionPopUp = ({
                     value={field.value}
                     onChange={(value) => field.onChange(value)}
                     options={el.options}
+                    isHidden={el.isHidden}
                     required
                   />
                 )}
@@ -124,7 +117,8 @@ const ActionPopUp = ({
               error={errors?.[el.key]?.message}
               value={formValues?.[el.key]}
               {...register(el.key)}
-              required
+              isHidden={el.isHidden}
+              required={el.isRequired}
             />
           );
         })}
