@@ -44,6 +44,7 @@ const PageHeader: React.FC<Props> = ({
           <>
             {businessDeActiveEndPoint && (
               <CustomModal
+                title="Deactive"
                 btnTrigger={<Button variant="secondary">Deactive</Button>}
               >
                 <ActionPopUp

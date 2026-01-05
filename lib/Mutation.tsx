@@ -2,7 +2,7 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import axiosInstance from '@/guards/axiosInstance';
 import { AxiosResponse } from 'axios';
 
-export type HttpMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 interface UseCustomMutationProps<TBody, R> {
   api: string;
