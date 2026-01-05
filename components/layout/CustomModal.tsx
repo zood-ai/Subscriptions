@@ -1,9 +1,9 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
-import { useModal } from "@/context/ModalContext";
-import { ModalTypes } from "@/context/ModalContext";
+'use client';
+import React, { useEffect, useRef } from 'react';
+import { cn } from '@/lib/utils';
+import { X } from 'lucide-react';
+import { useModal } from '@/context/ModalContext';
+import { ModalTypes } from '@/context/ModalContext';
 
 interface CustomModalProps {
   btnTrigger: React.ReactElement;
@@ -21,25 +21,25 @@ const CustomModal: React.FC<CustomModalProps> = ({
   modalType,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
-  const { openedModal, toggle, close, open } = useModal();
+  const { openedModal, close, open } = useModal();
   const isOpen = openedModal === modalType;
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
+      if (event.key === 'Escape') {
         close();
       }
     };
 
     if (isOpen) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
     };
-  }, [isOpen]);
+  }, [isOpen, close]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -60,7 +60,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
           <div
             ref={modalRef}
             className={cn(
-              "bg-white shadow-lg w-full mx-4 flex flex-col max-h-[90vh] max-w-xl",
+              'bg-white shadow-lg w-full mx-4 flex flex-col max-h-[90vh] max-w-xl',
               className
             )}
             onClick={(e) => e.stopPropagation()}

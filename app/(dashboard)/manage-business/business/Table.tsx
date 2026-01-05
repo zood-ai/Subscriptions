@@ -30,20 +30,6 @@ const actions: ActionOption[] = [
       alert(`Deleting ${selectedIds.length} items`);
     },
   },
-  {
-    label: 'Active',
-    onClick: (selectedIds) => {
-      console.log('Activing items:', selectedIds);
-      alert(`Activing ${selectedIds.length} items`);
-    },
-  },
-  {
-    label: 'DeActive',
-    onClick: (selectedIds) => {
-      console.log('DeActiveing items:', selectedIds);
-      alert(`DeActiveing ${selectedIds.length} items`);
-    },
-  },
 ];
 
 export default function Table() {
