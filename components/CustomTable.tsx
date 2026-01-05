@@ -250,7 +250,7 @@ export function CustomTable<T extends { id: string }>({
                   {columns.map((column) => (
                     <th
                       key={String(column.key)}
-                      className="px-4 py-3 text-left text-sm font-semibold text-foreground"
+                      className="px-4 py-3 text-nowrap text-left text-sm font-semibold text-foreground"
                     >
                       {column.header}
                     </th>

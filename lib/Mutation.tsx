@@ -2,7 +2,7 @@ import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import axiosInstance from '@/guards/axiosInstance';
 import { AxiosResponse } from 'axios';
 
-export type HttpMethod = 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 interface UseCustomMutationProps<TBody, R> {
   api: string;
@@ -10,7 +10,7 @@ interface UseCustomMutationProps<TBody, R> {
   options?: Omit<UseMutationOptions<R, AxiosResponse, TBody>, 'mutationFn'>;
 }
 
-const useCustomMutation = <TBody = void, TResponse = void>({
+const useCustomMutation = <TBody=void, TResponse=void>({
   api,
   method = 'POST',
   options,

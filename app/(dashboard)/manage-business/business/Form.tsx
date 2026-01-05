@@ -4,7 +4,7 @@ import SingleSelect from '@/components/SingleSelect';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
-import { useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useState } from 'react';
@@ -24,16 +24,6 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface BusinessTypes {
-  id: string;
-  name: string;
-}
-
-interface Countries {
-  id: string;
-  name_en: string;
-}
-
 interface BusinessRegistration {
   email: string;
   business_reference: number;
@@ -51,8 +41,6 @@ interface CustomerRegistrationResponse {
 
 export default function Form() {
   const router = useRouter();
-  const countries: Countries[] = [];
-  const businessTypes: BusinessTypes[] = [];
   const [tradeRegister, setTradeRegister] = useState<File | null>(null);
 
   const {
@@ -158,53 +146,44 @@ export default function Form() {
         />
 
         {/* Business Type */}
-        <SingleSelect
-          label="Business Type"
+        <Controller
           name="business_type_id"
-          className="placeholder:text-opacity-50"
-          placeholder="Select business type"
-          errorText={errors?.business_type_id?.message}
-          value={formValues.business_type_id}
-          onChange={(value) => {
-            const event = {
-              target: { name: 'business_type_id', value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register('business_type_id').onChange(event);
-          }}
-          options={businessTypes?.map(
-            (business: { id: string; name: string }) => ({
-              label: business.name,
-              value: business.id,
-            })
+          control={control}
+          render={({ field }) => (
+            <SingleSelect<{
+              id: string;
+              name: string;
+            }>
+              label="Business Type"
+              placeholder="Select business type"
+              errorText={errors?.business_type_id?.message}
+              value={String(field.value)}
+              onChange={(value) => field.onChange(value)}
+              endPoint="v1/super-admin/businessTypes"
+              labelKey="name"
+              valueKey="id"
+              required
+            />
           )}
-          loading={false}
-          required
-          showSearch
         />
 
         {/* Country */}
-        <SingleSelect
-          label="Country"
+        <Controller
           name="business_location_id"
-          className="placeholder:text-opacity-50"
-          placeholder="Select country"
-          errorText={errors?.business_location_id?.message}
-          value={formValues.business_location_id}
-          onChange={(value) => {
-            const event = {
-              target: { name: 'business_location_id', value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register('business_location_id').onChange(event);
-          }}
-          options={countries?.map(
-            (country: { id: string; name_en: string }) => ({
-              label: country.name_en,
-              value: country.id,
-            })
+          control={control}
+          render={({ field }) => (
+            <SingleSelect<{ name_en: string; id: string }, 'name_en'>
+              label="Country"
+              placeholder="Select country"
+              errorText={errors?.business_location_id?.message}
+              value={formValues.business_location_id}
+              onChange={(value) => field.onChange(value)}
+              endPoint="v1/manage/countries"
+              labelKey="name_en"
+              valueKey="id"
+              required
+            />
           )}
-          loading={false}
-          required
-          showSearch
         />
 
         {/* Divider */}

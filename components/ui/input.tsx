@@ -5,6 +5,7 @@ import { Eye, EyeClosed } from 'lucide-react';
 
 interface InputProps extends React.ComponentProps<'input'> {
   error?: string;
+  isHidden?: boolean;
   parentClassName?: string;
   required?: boolean;
   disabled?: boolean;
@@ -28,6 +29,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       value = '',
       onChange,
       disabled = false,
+      isHidden = false,
       ...props
     },
     ref
@@ -37,7 +39,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     return (
       <div className={cn('relative w-full', parentClassName)}>
-        {Label && (
+        {!isHidden && Label && (
           <label
             htmlFor={props.id}
             className={cn(
@@ -64,9 +66,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onChange={onChange}
             placeholder={animateLabel ? '' : props.placeholder ?? Label ?? ''}
             className={cn(
-              'mt-2 border border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
+              'mt-2 border bg-white border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
               'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/50 duration-300',
               'disabled:opacity-50 disabled:cursor-not-allowed',
+              isHidden ? 'hidden' : '',
               className
             )}
             onFocus={() => setFocused(true)}
