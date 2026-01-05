@@ -1,13 +1,31 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-import React, { useMemo, useRef, useState, useEffect } from 'react';
-import Select, { components, type StylesConfig } from 'react-select';
+import React, { useMemo, useState, useEffect } from 'react';
+import Select, { components } from 'react-select';
 import { Label } from '@/components/ui/label';
 import { ChevronDown } from 'lucide-react';
+import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
 
-export type Option = { label: string; value: string; item?: any };
+import useCustomQuery from '@/lib/Query';
+export type Option = { label: string; value: string; item?: unknown };
 
-export interface SingleSelectProps {
-  options?: Option[];
+interface WithOptions {
+  options: Option[];
+  endPoint?: never;
+  labelKey?: never;
+  valueKey?: never;
+}
+
+interface WithEndPoint<L, V> {
+  options?: never;
+  endPoint: string;
+  // to choice what the key you need to become a label for the select option
+  labelKey: L;
+  // to choice what the key you need to become a value for the select option
+  valueKey: V;
+}
+
+interface SingleSelectProps {
   placeholder?: string;
   label?: string;
   name?: string;
@@ -27,7 +45,13 @@ export interface SingleSelectProps {
   optionDefaultLabel?: string;
 }
 
-const SingleSelect: React.FC<SingleSelectProps> = ({
+type SelectProps<L, V> = SingleSelectProps & (WithOptions | WithEndPoint<L, V>);
+
+type ApiResponse<T> = {
+  data: T[];
+};
+
+const SingleSelect = <T, L = 'name', V = 'id'>({
   options = [],
   placeholder = 'Select an option',
   label,
@@ -46,16 +70,39 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
   className = '',
   isDefault = false,
   optionDefaultLabel = 'Choose one',
-}) => {
+  endPoint,
+  labelKey = 'name' as L,
+  valueKey = 'id' as V,
+}: SelectProps<L, V>) => {
   const optionDefault: Option = {
     label: placeholder || optionDefaultLabel,
     value: '',
   };
 
+  const {
+    data: fetchedData,
+    isLoading: isFetching,
+    error: fetchError,
+  } = useCustomQuery<ApiResponse<T>>({
+    queryKey: [endPoint || 'select-options'],
+    api: endPoint ?? '',
+    enabled: !!endPoint,
+  });
+  const fetchedOptions = useMemo(() => {
+    if (!fetchedData?.data || !Array.isArray(fetchedData?.data)) return [];
+    return fetchedData?.data?.map((item: T) => ({
+      label: item[labelKey as keyof T],
+      value: String(item[valueKey as keyof T]),
+      item,
+    }));
+  }, [fetchedData, labelKey, valueKey]);
+
+  const finalOptions = endPoint ? fetchedOptions : options;
+  const isLoading = endPoint ? isFetching : loading;
+
   const [internalValue, setInternalValue] = useState<string | null>(
     controlledValue ?? null
   );
-
   useEffect(() => {
     if (controlledValue !== undefined) {
       setInternalValue(controlledValue);
@@ -65,9 +112,9 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
   const value = controlledValue !== undefined ? controlledValue : internalValue;
 
   const fullOptions = useMemo(() => {
-    const opts = isDefault ? [optionDefault, ...options] : options;
+    const opts = isDefault ? [optionDefault, ...finalOptions] : finalOptions;
     return opts.filter((el) => el?.value !== undefined);
-  }, [options, isDefault, optionDefault]);
+  }, [finalOptions, isDefault, optionDefault]);
 
   const selectedOption = useMemo(
     () => fullOptions.find((o) => o.value === value) || null,
@@ -84,7 +131,7 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
   };
 
   const customStyles: StylesConfig<Option, false> = {
-    control: (base, state) => ({
+    control: (base, state): CSSObjectWithLabel => ({
       ...base,
       minHeight: 50,
       borderRadius: 9999, // rounded-full
@@ -139,7 +186,7 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
         borderRadius: '3px',
       },
     }),
-    option: (base, state) => ({
+    option: (base, state): CSSObjectWithLabel => ({
       ...base,
       backgroundColor: state.isSelected
         ? '#7272F6'
@@ -184,7 +231,7 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
           onFocus={onFocus}
           onChange={(opt) => handleChange(opt as Option)}
           placeholder={placeholder}
-          isLoading={loading}
+          isLoading={isLoading}
           menuPortalTarget={
             typeof document !== 'undefined' ? document.body : null
           }
@@ -203,7 +250,8 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
             ),
             IndicatorSeparator: () => null,
           }}
-          styles={customStyles}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          styles={customStyles as any}
           className="custom-select-container"
           classNamePrefix="custom-select"
           name={name}
@@ -211,7 +259,11 @@ const SingleSelect: React.FC<SingleSelectProps> = ({
         />
       </div>
 
-      {errorText && <p className="text-red-500 text-sm mt-1">{errorText}</p>}
+      {(errorText || fetchError) && (
+        <p className="text-red-500 text-sm mt-1">
+          {errorText || fetchError?.data?.message || 'Failed to load options'}
+        </p>
+      )}
     </div>
   );
 };
