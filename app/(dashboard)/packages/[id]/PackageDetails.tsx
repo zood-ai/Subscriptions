@@ -30,7 +30,7 @@ const PackageDetails = ({ id }: { id: string }) => {
       value: `${data?.period ?? 0} month${(data?.period ?? 0) > 1 ? 's' : ''}`,
     },
     { title: 'Project', value: data?.project },
-    { title: 'Created at', value: data?.created_at },
+    { title: 'Created at', value: data?.created_at, type: 'date' },
   ];
 
   const tables = [

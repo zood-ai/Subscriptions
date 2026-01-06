@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 const columns: Column<BusinessType['businessType']>[] = [
   { key: 'name', header: 'Name' },
-  { key: 'created_at', header: 'Created at' },
+  { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
 const filters: FilterTab[] = [
