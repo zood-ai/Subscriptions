@@ -5,6 +5,7 @@ import React from 'react';
 import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';
 import ActionPopUp, { Input } from './ActionPopUp';
+import { Badge } from './ui/badge';
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -71,7 +72,14 @@ const PageHeader: React.FC<Props> = ({
             Back
           </Link>
         )}
-        <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
+        <div>
+          <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
+          <div>
+            {isBlocked && (
+              <Badge variant="danger" label="Blocked" className="mt-1" />
+            )}
+          </div>
+        </div>
       </div>
       <div className="flex gap-2">
         {/* in Edit Only */}
@@ -138,7 +146,7 @@ const PageHeader: React.FC<Props> = ({
         {Form && (
           <CustomModal
             modalType="create"
-            title={`${isEdit ? 'Update' : 'Create'}`}
+            title={`${isEdit ? 'Update' : 'Create'} ${title}`}
             btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
           >
             {Form}
