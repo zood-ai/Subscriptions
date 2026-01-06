@@ -1,10 +1,11 @@
-'use client';
-import { ChevronLeft, Trash2 } from 'lucide-react';
-import Link from 'next/link';
-import React from 'react';
-import CustomModal from './layout/CustomModal';
-import { Button } from './ui/button';
-import ActionPopUp, { Input } from './ActionPopUp';
+"use client";
+import { ChevronLeft, Trash2 } from "lucide-react";
+import Link from "next/link";
+import React from "react";
+import CustomModal from "./layout/CustomModal";
+import { Button } from "./ui/button";
+import ActionPopUp, { Input } from "./ActionPopUp";
+import { Badge } from "./ui/badge";
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -19,43 +20,43 @@ interface Props {
 const PageHeader: React.FC<Props> = ({
   title,
   isEdit = false,
-  deleteEndPoint = '',
+  deleteEndPoint = "",
   Form,
   businessActiveForm,
   businessBlockEndPoint,
   isBlocked,
-  backUrl = '',
+  backUrl = "",
 }) => {
   const businessBlockInputs: Input[] = isBlocked
     ? [
         {
-          key: 'reason',
-          label: 'Reason',
-          value: '',
-          type: 'text',
+          key: "reason",
+          label: "Reason",
+          value: "",
+          type: "text",
           isHidden: true,
         },
         {
-          key: 'active',
-          label: 'Active',
-          value: '1',
-          type: 'text',
+          key: "active",
+          label: "Active",
+          value: "1",
+          type: "text",
           isHidden: true,
         },
       ]
     : [
         {
-          key: 'reason',
-          label: 'Reason',
-          value: '',
+          key: "reason",
+          label: "Reason",
+          value: "",
           isRequired: true,
-          type: 'text',
+          type: "text",
         },
         {
-          key: 'active',
-          label: 'Active',
-          value: '0',
-          type: 'text',
+          key: "active",
+          label: "Active",
+          value: "0",
+          type: "text",
           isHidden: true,
         },
       ];
@@ -71,7 +72,14 @@ const PageHeader: React.FC<Props> = ({
             Back
           </Link>
         )}
-        <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
+        <div>
+          <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
+          <div>
+            {isBlocked && (
+              <Badge variant="danger" label="Blocked" className="mt-1" />
+            )}
+          </div>
+        </div>
       </div>
       <div className="flex gap-2">
         {/* in Edit Only */}
@@ -80,10 +88,10 @@ const PageHeader: React.FC<Props> = ({
             {businessBlockEndPoint && (
               <CustomModal
                 modalType="block"
-                title={isBlocked ? 'Unblock' : 'Block'}
+                title={isBlocked ? "Unblock" : "Block"}
                 btnTrigger={
                   <Button variant="secondary">
-                    {isBlocked ? 'Unblock' : 'Block'}
+                    {isBlocked ? "Unblock" : "Block"}
                   </Button>
                 }
               >
@@ -92,11 +100,11 @@ const PageHeader: React.FC<Props> = ({
                   method="POST"
                   message={
                     isBlocked
-                      ? 'Are you sure you want to Unblock this business?'
-                      : ''
+                      ? "Are you sure you want to Unblock this business?"
+                      : ""
                   }
                   inputs={businessBlockInputs}
-                  btnTitle={isBlocked ? 'Unblock' : 'Block'}
+                  btnTitle={isBlocked ? "Unblock" : "Block"}
                   backUrl={backUrl}
                 />
               </CustomModal>
@@ -138,8 +146,8 @@ const PageHeader: React.FC<Props> = ({
         {Form && (
           <CustomModal
             modalType="create"
-            title={`${isEdit ? 'Update' : 'Create'} ${title}`}
-            btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
+            title={`${isEdit ? "Update" : "Create"} ${title}`}
+            btnTrigger={<Button>{isEdit ? "Update" : "Create"}</Button>}
           >
             {Form}
           </CustomModal>
