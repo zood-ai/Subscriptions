@@ -1,6 +1,7 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import axiosInstance from '@/guards/axiosInstance';
 import { AxiosResponse } from 'axios';
+import { useModal } from '@/context/ModalContext';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
@@ -15,6 +16,7 @@ const useCustomMutation = <TBody=void, TResponse=void>({
   method = 'POST',
   options,
 }: UseCustomMutationProps<TBody, TResponse>) => {
+  const { close } = useModal()
   return useMutation<TResponse, AxiosResponse, TBody>({
     mutationFn: async (body) => {
       const response = await axiosInstance.request<TResponse>({
@@ -25,8 +27,15 @@ const useCustomMutation = <TBody=void, TResponse=void>({
 
       return response.data;
     },
-
     ...options,
+    onSuccess: (...rest) => {
+      close();
+      if (options?.onSuccess) options?.onSuccess?.(...rest);
+    },
+    onError: (...rest) => {
+      close();
+      if (options?.onError) options?.onError?.(...rest);
+    },
   });
 };
 
