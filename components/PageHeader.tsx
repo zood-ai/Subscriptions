@@ -5,7 +5,7 @@ import React from "react";
 import CustomModal from "./layout/CustomModal";
 import { Button } from "./ui/button";
 import ActionPopUp, { Input } from "./ActionPopUp";
-import AppBadge from "./Badge";
+import { Badge } from "./ui/badge";
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -76,7 +76,7 @@ const PageHeader: React.FC<Props> = ({
           <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
           <div>
             {isBlocked && (
-              <AppBadge variant="danger" label="Blocked" className="mt-1" />
+              <Badge variant="danger" label="Blocked" className="mt-1" />
             )}
           </div>
         </div>
