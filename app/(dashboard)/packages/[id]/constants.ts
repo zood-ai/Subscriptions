@@ -6,5 +6,4 @@ const usersColumns: Column<BusinessData>[] = [
   { key: 'reference', header: 'Reference' },
 ];
 
-
 export { usersColumns };

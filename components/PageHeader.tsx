@@ -138,7 +138,7 @@ const PageHeader: React.FC<Props> = ({
         {Form && (
           <CustomModal
             modalType="create"
-            title={`${isEdit ? 'Update' : 'Create'} ${title}`}
+            title={`${isEdit ? 'Update' : 'Create'}`}
             btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
           >
             {Form}

@@ -11,8 +11,8 @@ import { useRouter } from 'next/navigation';
 const columns: Column<PackageData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'project', header: 'Project' },
+  { key: 'period', header: 'Duration Period' },
   { key: 'created_at', header: 'Created at' },
-  { key: 'period', header: 'Period' },
 ];
 
 const filters: FilterTab[] = [
