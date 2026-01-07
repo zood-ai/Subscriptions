@@ -1,8 +1,8 @@
 import { Column } from '@/components/CustomTable';
 import { Badge } from '@/components/ui/badge';
-import { Business } from '@/types/dashboard';
+import { BusinessData } from '@/types/business';
 
-export const topUserColumns: Column<Business>[] = [
+export const topUserColumns: Column<BusinessData>[] = [
   {
     key: 'name',
     header: 'Business',
@@ -21,7 +21,7 @@ export const topUserColumns: Column<Business>[] = [
   },
 ];
 
-export const topInvoicesColumns: Column<Business>[] = [
+export const topInvoicesColumns: Column<BusinessData>[] = [
   {
     key: 'name',
     header: 'Business',
