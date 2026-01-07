@@ -48,8 +48,10 @@ interface BaseProps<T extends { id: string }> {
   columns: Column<T>[];
   filterKey?: string;
   filters?: FilterTab[];
+  forceLoading?: boolean;
   actions?: ActionOption[];
   title?: string;
+  titleClassName?: string;
   onClickRow?: (data: T) => void;
   pagination?: boolean;
 }
@@ -62,11 +64,13 @@ export function CustomTable<T extends { id: string }>({
   endPoint = '',
   showFilters = true,
   filterKey = 'status',
+  forceLoading = false,
   columns,
   filters,
   actions,
   onClickRow,
   title,
+  titleClassName = '',
   pagination = true,
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -144,14 +148,21 @@ export function CustomTable<T extends { id: string }>({
     }));
   };
 
-  if (isLoading) {
-    return <TableSkeleton title={title} />;
+  if (forceLoading || isLoading) {
+    return <TableSkeleton titleClassName={titleClassName} title={title} />;
   }
 
   return (
     <div>
       {title && (
-        <h2 className="py-6.25 text-gray-500 text-xl font-medium">{title}</h2>
+        <h2
+          className={cn(
+            'py-6.25 text-gray-500 text-xl font-medium',
+            titleClassName
+          )}
+        >
+          {title}
+        </h2>
       )}
       {allData?.data?.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
@@ -227,9 +238,9 @@ export function CustomTable<T extends { id: string }>({
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="w-12 px-4 py-3 text-left">
-                    <div className="relative flex items-center justify-center">
-                      {actions && actions?.length && (
+                  {actions?.length && (
+                    <th className="w-12 px-4 py-3 text-left">
+                      <div className="relative flex items-center justify-center">
                         <Checkbox
                           checked={allSelected}
                           onCheckedChange={handleSelectAll}
@@ -239,16 +250,16 @@ export function CustomTable<T extends { id: string }>({
                           )}
                           {...(someSelected && { 'data-state': 'checked' })}
                         />
-                      )}
-                      {someSelected && (
-                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <div className="h-4 w-4 rounded-sm bg-primary flex items-center justify-center">
-                            <div className="w-2 h-0.5 bg-primary-foreground rounded-full" />
+                        {someSelected && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="h-4 w-4 rounded-sm bg-primary flex items-center justify-center">
+                              <div className="w-2 h-0.5 bg-primary-foreground rounded-full" />
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  </th>
+                        )}
+                      </div>
+                    </th>
+                  )}
                   {columns.map((column) => (
                     <th
                       key={String(column.key)}
@@ -265,15 +276,15 @@ export function CustomTable<T extends { id: string }>({
                     key={item.id}
                     className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
                   >
-                    <td className="w-12 px-4 py-4">
-                      {actions && actions?.length && (
+                    {actions && actions?.length && (
+                      <td className="w-12 px-4 py-4">
                         <Checkbox
                           checked={selectedIds.includes(item.id)}
                           onCheckedChange={() => handleSelectRow(item.id)}
                           className="h-4 w-4"
                         />
-                      )}
-                    </td>
+                      </td>
+                    )}
                     {columns.map((column) => (
                       <td
                         key={String(column.key)}

@@ -1,10 +1,12 @@
 import type * as React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Checkbox } from '@/components/ui/checkbox';
+import { cn } from '@/lib/utils';
 
 export interface TableSkeletonProps {
   title?: string;
   className?: string;
+  titleClassName?: string;
   columnCount?: number;
   rowCount?: number;
 }
@@ -12,13 +14,21 @@ export interface TableSkeletonProps {
 const TableSkeleton: React.FC<TableSkeletonProps> = ({
   title,
   className = '',
+  titleClassName = '',
   columnCount = 4,
   rowCount = 5,
 }) => {
   return (
     <div className={className}>
       {title && (
-        <h2 className="py-[25px] text-gray-500 text-xl font-medium">{title}</h2>
+        <h2
+          className={cn(
+            'py-6.25 text-gray-500 text-xl font-medium',
+            titleClassName
+          )}
+        >
+          {title}
+        </h2>
       )}
       <div className="w-full rounded-2xl border border-border bg-card">
         {/* Filter Tabs Skeleton */}
