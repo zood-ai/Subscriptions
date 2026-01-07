@@ -2,11 +2,11 @@
 import { useState, useMemo } from 'react';
 import useCustomQuery from '@/lib/Query';
 import {
-  BusinessType,
   DashboardStats,
   DashboardFilters,
   ChartDataPoint,
 } from '@/types/dashboard';
+import { BusinessType } from '@/types/business';
 import { Filter, Shuffle } from 'lucide-react';
 import PieChar from './components/PieChar';
 import { Button } from '@/components/ui/button';
@@ -32,7 +32,7 @@ export default function Dashboard() {
     });
 
   const { data: businessTypes, isFetching: typesLoading } = useCustomQuery<
-    BusinessType[]
+    BusinessType['businessType'][]
   >({
     api: 'v1/super-admin/businessTypes/dashboard',
     queryKey: ['business-types-dashboard'],

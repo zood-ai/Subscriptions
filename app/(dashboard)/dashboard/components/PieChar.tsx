@@ -1,5 +1,4 @@
 import { ChartDataPoint } from '@/types/dashboard';
-import React from 'react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
 import { COLORS } from '../constants';
 
