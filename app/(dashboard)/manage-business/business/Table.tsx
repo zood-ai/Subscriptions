@@ -5,11 +5,22 @@ import {
   type FilterTab,
   type ActionOption,
 } from '@/components/CustomTable';
+import { Badge } from '@/components/ui/badge';
 import { BusinessData } from '@/types/business';
 import { useRouter } from 'next/navigation';
 
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
+  {
+    key: 'active',
+    header: 'is Blocked?',
+    render: (value) =>
+      value === 0 ? (
+        <Badge variant="danger" label="Blcoked" />
+      ) : (
+        <Badge variant="success" label="Active" />
+      ),
+  },
   { key: 'reference', header: 'Reference' },
   { key: 'owner_email', header: 'Owner email' },
   { key: 'created_at', header: 'Created at', type: 'date' },
