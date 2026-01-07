@@ -15,11 +15,13 @@ import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
+import dayjs from 'dayjs';
 
 export interface Column<T> {
   key: keyof T;
   header: string;
   render?: (value: T[keyof T], item: T) => React.ReactNode;
+  type?: 'date';
 }
 
 export interface FilterTab {
@@ -291,6 +293,10 @@ export function CustomTable<T extends { id: string }>({
                       >
                         {column.render
                           ? column.render(item[column.key], item)
+                          : column.type === 'date' && item[column.key]
+                          ? dayjs(new Date(item[column.key] as string)).format(
+                              'h:mm A D/M/YYYY'
+                            )
                           : String(item[column.key] ?? '-')}
                       </td>
                     ))}

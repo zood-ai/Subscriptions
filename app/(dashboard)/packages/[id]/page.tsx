@@ -1,13 +1,11 @@
-interface PackageParams {
-  params: Promise<{ id: string }>
+import PackageDetails from './PackageDetails';
+
+interface Props {
+  params: Promise<{ id: string }>;
 }
 
-
-export default async function Package({ params }: PackageParams) {
+export default async function Package({ params }: Props) {
   const { id } = await params;
-  return (
-    <>
-      <h1>Package - {id}</h1>
-    </>
-  )
+
+  return <PackageDetails id={id} />;
 }

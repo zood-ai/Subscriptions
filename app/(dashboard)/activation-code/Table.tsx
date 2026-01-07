@@ -1,10 +1,10 @@
-"use client";
+'use client';
 import {
   CustomTable,
   type Column,
   type FilterTab,
   type ActionOption,
-} from "@/components/CustomTable";
+} from '@/components/CustomTable';
 
 interface ActivationCodeData {
   business_reference: string;
@@ -17,37 +17,41 @@ interface ActivationCodeData {
 }
 
 const columns: Column<ActivationCodeData>[] = [
-  { key: "code", header: "Code" },
-  { key: "duration", header: "Duration" },
-  { key: "created_at", header: "Created At" },
-  { key: "is_used", header: "Is Used" },
+  { key: 'code', header: 'Code' },
+  { key: 'duration', header: 'Duration' },
+  { key: 'created_at', header: 'Created At', type: 'date' },
+  {
+    key: 'is_used',
+    header: 'Is Used',
+    render: (value) => <div>{value === 0 ? 'Not used' : 'Used'}</div>,
+  },
 ];
 
 const filters: FilterTab[] = [
-  { label: "All", value: "all" },
-  { label: "Used", value: "1" },
-  { label: "Not Used", value: "0" },
+  { label: 'All', value: 'all' },
+  { label: 'Used', value: '1' },
+  { label: 'Not Used', value: '0' },
 ];
 
 const actions: ActionOption[] = [
   {
-    label: "Delete",
+    label: 'Delete',
     onClick: (selectedIds) => {
-      console.log("Deleting items:", selectedIds);
+      console.log('Deleting items:', selectedIds);
       alert(`Deleting ${selectedIds.length} items`);
     },
   },
   {
-    label: "Active",
+    label: 'Active',
     onClick: (selectedIds) => {
-      console.log("Activing items:", selectedIds);
+      console.log('Activing items:', selectedIds);
       alert(`Activing ${selectedIds.length} items`);
     },
   },
   {
-    label: "DeActive",
+    label: 'DeActive',
     onClick: (selectedIds) => {
-      console.log("DeActiveing items:", selectedIds);
+      console.log('DeActiveing items:', selectedIds);
       alert(`DeActiveing ${selectedIds.length} items`);
     },
   },

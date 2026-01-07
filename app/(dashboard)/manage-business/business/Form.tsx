@@ -89,7 +89,6 @@ export default function Form() {
       <div className="space-y-6">
         {/* Full Name */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Full Name"
           error={errors?.name?.message}
@@ -100,7 +99,6 @@ export default function Form() {
 
         {/* Email */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="email"
           Label="Email"
           error={errors?.email?.message}
@@ -111,7 +109,6 @@ export default function Form() {
 
         {/* Phone */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Phone"
           error={errors?.phone?.message}
@@ -123,7 +120,6 @@ export default function Form() {
         {/* Password */}
         <Input
           Label="Password"
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="password"
           error={errors?.password?.message}
           value={formValues.password}
@@ -136,7 +132,6 @@ export default function Form() {
 
         {/* Business Name */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Business Name"
           error={errors?.business_name?.message}

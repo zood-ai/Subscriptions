@@ -29,8 +29,8 @@ const TypeData = ({ id }: { id: string }) => {
     { key: 'name', header: 'Name' },
     { key: 'reference', header: 'Reference' },
     { key: 'owner_email', header: 'Owner email' },
-    { key: 'created_at', header: 'Created at' },
-    { key: 'end_at', header: 'End at' },
+    { key: 'created_at', header: 'Created at', type: 'date' },
+    { key: 'end_at', header: 'End at', type: 'date' },
   ];
   if (isFetching) {
     return <LoadingComponent />;

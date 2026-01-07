@@ -126,7 +126,7 @@ export default function Sidebar({
                 {hasChildren ? (
                   <button
                     onClick={() => toggleExpand(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors ${
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors cursor-pointer ${
                       isActive
                         ? "bg-indigo-50 text-indigo-600"
                         : "text-gray-700 hover:bg-gray-100"

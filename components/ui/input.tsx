@@ -35,7 +35,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     const [inputType, setInputType] = useState(type);
-    const [focused, setFocused] = useState(false);
 
     return (
       <div className={cn('relative w-full', parentClassName)}>
@@ -45,9 +44,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               'absolute left-[25px] text-[13px] pointer-events-none transition-all duration-300',
               animateLabel
-                ? focused || value
+                ? value
                   ? 'top-0 text-[11px] text-primary z-1 bg-white px-1 font-extrabold '
-                  : 'top-[23px] text-gray-400 font-medium '
+                  : 'top-[23px] text-gray-400 z-1 font-medium'
                 : 'static',
               labelClassName
             )}
@@ -72,8 +71,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               isHidden ? 'hidden' : '',
               className
             )}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
             {...props}
           />
 

@@ -5,18 +5,28 @@ import {
   type FilterTab,
   type ActionOption,
 } from '@/components/CustomTable';
-import { BusinessType } from '@/types/business';
+import { PackageData } from '@/types/packages';
 import { useRouter } from 'next/navigation';
 
-const columns: Column<BusinessType['businessType']>[] = [
+const columns: Column<PackageData>[] = [
   { key: 'name', header: 'Name' },
+  { key: 'project', header: 'Project' },
+  {
+    key: 'period',
+    header: 'Duration Period',
+    render: (value) => (
+      <div>
+        {value} {Number(value) > 1 ? 'Months' : 'Month'}
+      </div>
+    ),
+  },
   { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
 const filters: FilterTab[] = [
   { label: 'All', value: 'all' },
-  { label: 'Active', value: 'true' },
-  { label: 'Deleted', value: 'false' },
+  { label: 'Zood Light', value: 'zood-light' },
+  { label: 'Accountant', value: 'accountant' },
 ];
 
 const actions: ActionOption[] = [
@@ -32,16 +42,16 @@ const actions: ActionOption[] = [
 export default function Table() {
   const router = useRouter();
   return (
-    <div className="py-[40px] mainPaddingX">
+    <div className="py-10 mainPaddingX">
       <CustomTable
-        endPoint="v1/super-admin/businessTypes"
-        filterKey="isDeleted"
-        filters={filters}
+        endPoint="v1/super-admin/business"
         columns={columns}
+        filters={filters}
         actions={actions}
         onClickRow={(data) => {
-          router.push(`/manage-business/type/${data.id}`);
+          router.push(`/packages/${data.id}`);
         }}
+        filterKey="project"
       />
     </div>
   );
