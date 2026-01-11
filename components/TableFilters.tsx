@@ -30,23 +30,25 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
   }, [data]);
 
   return (
-    <div>
-      {filters.showName && (
-        <Input
-          type="text"
-          Label="Name"
-          value={(allFilters?.name as string) ?? ''}
-          onChange={(e) => handleChnage('name', e.target.value)}
-        />
-      )}
-      {filters.showReference && (
-        <Input
-          type="text"
-          Label="Reference"
-          value={(allFilters?.reference as string) ?? ''}
-          onChange={(e) => handleChnage('reference', e.target.value)}
-        />
-      )}
+    <>
+      <div className="space-y-4">
+        {filters.showName && (
+          <Input
+            type="text"
+            Label="Name"
+            value={(allFilters?.name as string) ?? ''}
+            onChange={(e) => handleChnage('name', e.target.value)}
+          />
+        )}
+        {filters.showReference && (
+          <Input
+            type="text"
+            Label="Reference"
+            value={(allFilters?.reference as string) ?? ''}
+            onChange={(e) => handleChnage('reference', e.target.value)}
+          />
+        )}
+      </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button
           onClick={() => {
@@ -58,7 +60,7 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           Apply
         </Button>
       </div>
-    </div>
+    </>
   );
 };
 
