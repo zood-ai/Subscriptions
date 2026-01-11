@@ -14,6 +14,7 @@ import {
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
 import Form from '../Form';
+import { ModalTypes } from '@/context/ModalContext';
 
 const BusinessDetails = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -41,24 +42,28 @@ const BusinessDetails = ({ id }: { id: string }) => {
       id: 'suppliers',
       title: 'Suppliers',
       endPoint: `v1/super-admin/business/${id}/suppliers`,
+      modalType: 'suppliers-filters',
       columns: suppliersColumns,
     },
     {
       id: 'devices',
       title: 'Devices',
       endPoint: `v1/super-admin/business/${id}/devices`,
+      modalType: 'devices-filters',
       columns: devicesColumns,
     },
     {
       id: 'users',
       title: 'Users',
       endPoint: `v1/super-admin/business/${id}/users`,
+      modalType: 'users-filters',
       columns: usersColumns,
     },
     {
       id: 'customers',
       title: 'Customers',
       endPoint: `v1/super-admin/business/${id}/customers`,
+      modalType: 'customers-filters',
       columns: customersColumns,
     },
   ];
@@ -99,6 +104,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
             key={el.id}
             title={el.title}
             endPoint={el.endPoint}
+            modalType={el.modalType as ModalTypes}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             columns={el.columns as Column<any>[]}
           />

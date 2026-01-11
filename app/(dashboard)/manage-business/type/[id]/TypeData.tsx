@@ -54,6 +54,7 @@ const TypeData = ({ id }: { id: string }) => {
           showStatusFilters={false}
           data={data?.businesses ?? []}
           title={'Business'}
+          modalType={'business-type-filters'}
           columns={columns}
           onClickRow={(data) => {
             router.push(`/manage-business/business/${data.reference}`);

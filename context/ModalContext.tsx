@@ -2,7 +2,22 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-export type ModalTypes = 'create' | 'filter' | 'delete' | 'block' | 'active';
+export type ModalTypes =
+  | 'create'
+  | 'filter'
+  | 'delete'
+  | 'block'
+  | 'active'
+  | 'businesses-by-users-filters'
+  | 'businesses-by-invoices-filters'
+  | 'businesses-filters'
+  | 'suppliers-filters'
+  | 'devices-filters'
+  | 'users-filters'
+  | 'customers-filters'
+  | 'business-type-filters'
+  | 'business-types-filters'
+  | 'activation-code-filters';
 
 interface ModalContextType {
   openedModal: ModalTypes | null;

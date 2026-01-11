@@ -38,6 +38,7 @@ export default function Table() {
       <CustomTable
         endPoint="v1/super-admin/business"
         columns={columns}
+        modalType="businesses-filters"
         statusFilters={filters}
         filters={{
           showName: true,
