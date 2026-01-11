@@ -53,6 +53,8 @@ export interface BusinessData {
   end_at: string;
   active: number;
   reason: string | null;
+  phone: string;
+  business_name: string;
   users_count?: number;
   invoices_count?: number;
 }

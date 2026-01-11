@@ -7,22 +7,29 @@ import { useRouter } from 'next/navigation';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useState } from 'react';
+import { queryClient } from '@/app/ReactQueryProvider';
 
-const formSchema = z.object({
+const baseSchema = {
   name: z.string().min(1, 'Name is required'),
   email: z
     .string()
     .min(1, 'Email is required')
     .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
   phone: z.string().min(1, 'Phone is required'),
   business_name: z.string().min(1, 'Business name is required'),
   business_type_id: z.string().min(1, 'Business type is required'),
   business_location_id: z.string().min(1, 'Country is required'),
+};
+
+const createSchema = z.object({
+  ...baseSchema,
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-type FormData = z.infer<typeof formSchema>;
+const editSchema = z.object({
+  ...baseSchema,
+  password: z.string().optional(),
+});
 
 interface BusinessRegistration {
   email: string;
@@ -39,9 +46,28 @@ interface CustomerRegistrationResponse {
   };
 }
 
-export default function Form() {
+interface FormState {
+  name: string;
+  email: string;
+  phone: string;
+  password?: string;
+  business_name: string;
+  business_type_id: string;
+  business_location_id: string;
+}
+
+export default function Form({
+  id = '',
+  isEdit = false,
+  data,
+}: {
+  id?: string;
+  isEdit?: boolean;
+  data?: FormState;
+}) {
+  const schema = isEdit ? editSchema : createSchema;
+  type FormData = z.infer<typeof schema>;
   const router = useRouter();
-  const [tradeRegister, setTradeRegister] = useState<File | null>(null);
 
   const {
     register,
@@ -49,17 +75,18 @@ export default function Form() {
     formState: { errors },
     control,
   } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
+      name: data?.name ?? '',
+      email: data?.email ?? '',
+      phone: data?.phone ?? '',
       password: '',
-      business_name: '',
-      business_type_id: '',
-      business_location_id: '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
+      business_name: data?.business_name ?? '',
+      business_type_id: data?.business_type_id ?? '',
+      business_location_id: data?.business_location_id ?? '',
     },
   });
+  console.log({ errors });
 
   const formValues = useWatch({ control });
 
@@ -71,16 +98,24 @@ export default function Form() {
     method: 'POST',
     options: {
       onSuccess: (data) => {
-        if (data?.data?.user?.business_reference) {
+        if (!isEdit && data?.data?.user?.business_reference) {
           router.push(
             `/manage-business/business/${data.data.user.business_reference}`
           );
+        }
+        if (isEdit) {
+          queryClient.invalidateQueries({
+            queryKey: ['businessTypes', id],
+          });
         }
       },
     },
   });
 
   const onSubmit = (data: FormData) => {
+    if (isEdit && data.password) {
+      delete data.password;
+    }
     mutate(data);
   };
 
@@ -121,15 +156,17 @@ export default function Form() {
         />
 
         {/* Password */}
-        <Input
-          Label="Password"
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
-          type="password"
-          error={errors?.password?.message}
-          value={formValues.password}
-          {...register('password')}
-          required
-        />
+        {!isEdit && (
+          <Input
+            Label="Password"
+            className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+            type="password"
+            error={errors?.password?.message}
+            value={formValues.password}
+            {...register('password')}
+            required
+          />
+        )}
 
         {/* Divider */}
         <div className="border-t border-gray-200"></div>
@@ -190,7 +227,7 @@ export default function Form() {
         <div className="border-t border-gray-200"></div>
 
         {/* Trade Register Upload */}
-        <label className="text-base font-semibold text-gray-700 mb-3 block">
+        {/* <label className="text-base font-semibold text-gray-700 mb-3 block">
           Upload Trade Register
         </label>
         <div className="flex flex-col gap-3">
@@ -237,7 +274,7 @@ export default function Form() {
               </span>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button

@@ -13,6 +13,7 @@ import {
 } from './constants';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
+import Form from '../Form';
 
 const BusinessDetails = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -64,7 +65,17 @@ const BusinessDetails = ({ id }: { id: string }) => {
     return <LoadingComponent />;
   }
 
+  // phone, business_name
   const formData = {
+    name: data?.business.name ?? '',
+    email: data?.business.owner_email ?? '',
+    phone: data?.business.phone ?? '',
+    business_name: data?.business.business_name ?? '',
+    business_type_id: data?.business.type ?? '',
+    business_location_id:
+      data?.business.location ?? '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
+  };
+  const acitveFormData = {
     business_reference: data?.business.reference ?? 1,
     months: 12,
   };
@@ -73,7 +84,9 @@ const BusinessDetails = ({ id }: { id: string }) => {
       <PageHeader
         isEdit
         title={data?.business.name}
-        businessActiveForm={<ActiveForm id={id} data={formData} />}
+        Form={<Form id={id} isEdit data={formData} />}
+        deleteEndPoint={`deleteBusiness/${id}`}
+        businessActiveForm={<ActiveForm id={id} data={acitveFormData} />}
         businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
