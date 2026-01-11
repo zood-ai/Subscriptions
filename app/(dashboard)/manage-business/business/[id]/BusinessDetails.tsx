@@ -26,6 +26,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
       },
     },
   });
+
   const items = [
     { title: 'Name', value: data?.business.name },
     { title: 'Reference', value: data?.business.reference },
