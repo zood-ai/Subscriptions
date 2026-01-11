@@ -7,6 +7,7 @@ import { ChevronDown } from 'lucide-react';
 import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
 
 import useCustomQuery from '@/lib/Query';
+import { cn } from '@/lib/utils';
 export type Option = { label: string; value: string | number; item?: unknown };
 
 interface WithOptions {
@@ -213,7 +214,10 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
 
   return (
     <div
-      className={`flex flex-col placeholder:text-opacity-50 w-full ${parentClassName}`}
+      className={cn(
+        'flex flex-col placeholder:text-opacity-50 w-full',
+        parentClassName
+      )}
     >
       {!isHidden && label && (
         <div className="flex items-center mb-2">
@@ -226,41 +230,39 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
         </div>
       )}
 
-      <div className={`relative ${className}`}>
-        <Select
-          options={fullOptions}
-          isDisabled={disabled}
-          value={selectedOption}
-          onFocus={onFocus}
-          onChange={(opt) => handleChange(opt as Option)}
-          placeholder={placeholder}
-          isLoading={isLoading}
-          menuPortalTarget={
-            typeof document !== 'undefined' ? document.body : null
-          }
-          menuPosition="fixed"
-          filterOption={(candidate, rawInput) => {
-            if (!showSearch) return true;
-            return candidate?.label
-              ?.toLowerCase()
-              ?.includes(rawInput?.toLowerCase());
-          }}
-          components={{
-            DropdownIndicator: (props) => (
-              <components.DropdownIndicator {...props}>
-                <ChevronDown className="h-4 w-4 text-gray-400" />
-              </components.DropdownIndicator>
-            ),
-            IndicatorSeparator: () => null,
-          }}
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          styles={customStyles as any}
-          className="custom-select-container"
-          classNamePrefix="custom-select"
-          name={name}
-          isSearchable={showSearch}
-        />
-      </div>
+      <Select
+        options={fullOptions}
+        isDisabled={disabled}
+        value={selectedOption}
+        onFocus={onFocus}
+        onChange={(opt) => handleChange(opt as Option)}
+        placeholder={placeholder}
+        isLoading={isLoading}
+        menuPortalTarget={
+          typeof document !== 'undefined' ? document.body : null
+        }
+        menuPosition="fixed"
+        filterOption={(candidate, rawInput) => {
+          if (!showSearch) return true;
+          return candidate?.label
+            ?.toLowerCase()
+            ?.includes(rawInput?.toLowerCase());
+        }}
+        components={{
+          DropdownIndicator: (props) => (
+            <components.DropdownIndicator {...props}>
+              <ChevronDown className="h-4 w-4 text-gray-400" />
+            </components.DropdownIndicator>
+          ),
+          IndicatorSeparator: () => null,
+        }}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        styles={customStyles as any}
+        className={`custom-select-container ${className}`}
+        classNamePrefix="custom-select"
+        name={name}
+        isSearchable={showSearch}
+      />
 
       {(errorText || fetchError) && (
         <p className="text-red-500 text-sm mt-1">
