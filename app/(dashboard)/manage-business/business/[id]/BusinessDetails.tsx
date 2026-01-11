@@ -65,12 +65,11 @@ const BusinessDetails = ({ id }: { id: string }) => {
     return <LoadingComponent />;
   }
 
-  // phone, business_name
   const formData = {
-    name: data?.business.name ?? '',
+    name: data?.business.owner_name ?? '',
     email: data?.business.owner_email ?? '',
     phone: data?.business.phone ?? '',
-    business_name: data?.business.business_name ?? '',
+    business_name: data?.business.name ?? '',
     business_type_id: data?.business.type ?? '',
     business_location_id:
       data?.business.location ?? '70c4bc20-1fe4-48b2-87c5-26407fe09cde',

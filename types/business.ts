@@ -32,6 +32,7 @@ export interface BusinessData {
   name: string;
   country_iso_code: string;
   owner_email: string;
+  owner_name: string;
   owner_id: string;
   location: string;
   reference: number;
@@ -54,7 +55,6 @@ export interface BusinessData {
   active: number;
   reason: string | null;
   phone: string;
-  business_name: string;
   users_count?: number;
   invoices_count?: number;
 }
