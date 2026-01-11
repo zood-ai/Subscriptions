@@ -30,6 +30,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
     { title: 'Name', value: data?.business.name },
     { title: 'Reference', value: data?.business.reference },
     { title: 'Owner email', value: data?.business.owner_email },
+    { title: 'Owner name', value: data?.business.owner_name },
     { title: 'Created at', value: data?.business.created_at },
     { title: 'End at', value: data?.business.end_at },
   ];
