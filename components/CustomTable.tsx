@@ -45,7 +45,7 @@ interface WithEndPoint {
 interface BaseProps<T extends { id: string }> {
   showStatusFilters?: boolean;
   columns: Column<T>[];
-  filters: AllowedFilters;
+  filters?: AllowedFilters;
   statusFilterKey?: string;
   statusFilters?: StatusFiltersTab[];
   forceLoading?: boolean;
