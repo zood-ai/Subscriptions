@@ -1,7 +1,6 @@
 import { useQuery, QueryKey } from '@tanstack/react-query';
 import axiosInstance from '@/guards/axiosInstance';
 import { AxiosResponse } from 'axios';
-import { useModal } from '@/context/ModalContext';
 
 export type QueryFilters = Record<string, number | string | boolean>;
 
@@ -25,7 +24,6 @@ const useCustomQuery = <R,>({
   enabled = true,
   options,
 }: Props<R>) => {
-  const { close } = useModal();
   return useQuery<R, AxiosResponse>({
     queryKey,
     enabled,
@@ -36,12 +34,10 @@ const useCustomQuery = <R,>({
           params: filters,
         })
         .then((res) => {
-          close();
           options?.onSuccess?.(res.data);
           return res.data;
         })
         .catch((error) => {
-          close();
           options?.onError?.(error);
           throw error;
         });

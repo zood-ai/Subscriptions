@@ -16,6 +16,7 @@ import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
 import TableFilters, { AllowedFilters } from './TableFilters';
+import { useModal } from '@/context/ModalContext';
 
 export interface Column<T> {
   key: keyof T;
@@ -80,6 +81,7 @@ export function CustomTable<T extends { id: string }>({
     Record<string, number | string | boolean>
   >({ page: 1, [statusFilterKey]: '' });
   const currentPage = allFilters.page as number;
+  const { close: closeModal } = useModal();
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
@@ -94,6 +96,7 @@ export function CustomTable<T extends { id: string }>({
     queryKey: [endPoint, allFilters],
     options: {
       onSuccess: (data) => {
+        closeModal();
         setPaginationData({
           from: data.from,
           last_page: data.last_page,
