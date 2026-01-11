@@ -4,6 +4,7 @@ import { Input } from './ui/input';
 
 export interface AllowedFilters {
   showName?: boolean;
+  showReference?: boolean;
 }
 
 interface TableFiltersProps {
@@ -15,7 +16,7 @@ interface TableFiltersProps {
 const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
-  >({ page: 1 });
+  >({});
 
   const handleChnage = (filed: string, value: number | string | boolean) => {
     setAllFilters((prev) => ({
@@ -36,6 +37,14 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           Label="Name"
           value={(allFilters?.name as string) ?? ''}
           onChange={(e) => handleChnage('name', e.target.value)}
+        />
+      )}
+      {filters.showReference && (
+        <Input
+          type="text"
+          Label="Reference"
+          value={(allFilters?.reference as string) ?? ''}
+          onChange={(e) => handleChnage('reference', e.target.value)}
         />
       )}
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">

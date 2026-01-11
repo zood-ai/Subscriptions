@@ -41,6 +41,7 @@ export default function Table() {
         statusFilters={filters}
         filters={{
           showName: true,
+          showReference: true,
         }}
         actions={actions}
         onClickRow={(data) => {

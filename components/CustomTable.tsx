@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useState } from 'react';
 import { ChevronDown, Filter, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, ObjectCleaner } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -90,7 +90,7 @@ export function CustomTable<T extends { id: string }>({
   }>({
     api: endPoint || '',
     enabled: endPoint && data.length === 0 ? true : false,
-    filters: allFilters,
+    filters: ObjectCleaner(allFilters),
     queryKey: [endPoint, allFilters],
     options: {
       onSuccess: (data) => {
