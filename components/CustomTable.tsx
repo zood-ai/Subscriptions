@@ -15,7 +15,7 @@ import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
-import TableFilters from './TableFilters';
+import TableFilters, { AllowedFilters } from './TableFilters';
 
 export interface Column<T> {
   key: keyof T;
@@ -23,7 +23,7 @@ export interface Column<T> {
   render?: (value: T[keyof T], item: T) => React.ReactNode;
 }
 
-export interface FilterTab {
+export interface StatusFiltersTab {
   label: string;
   value: string;
 }
@@ -43,10 +43,11 @@ interface WithEndPoint {
   endPoint: string;
 }
 interface BaseProps<T extends { id: string }> {
-  showFilters?: boolean;
+  showStatusFilters?: boolean;
   columns: Column<T>[];
-  filterKey?: string;
-  filters?: FilterTab[];
+  filters: AllowedFilters;
+  statusFilterKey?: string;
+  statusFilters?: StatusFiltersTab[];
   forceLoading?: boolean;
   actions?: ActionOption[];
   title?: string;
@@ -61,11 +62,12 @@ type CustomTableProps<T extends { id: string }> = BaseProps<T> &
 export function CustomTable<T extends { id: string }>({
   data = [],
   endPoint = '',
-  showFilters = true,
-  filterKey = 'status',
+  showStatusFilters = true,
+  statusFilterKey = 'status',
   forceLoading = false,
   columns,
-  filters = [],
+  statusFilters = [],
+  filters = {},
   actions,
   onClickRow,
   title,
@@ -76,7 +78,7 @@ export function CustomTable<T extends { id: string }>({
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
-  >({ page: 1, [filterKey]: '' });
+  >({ page: 1, [statusFilterKey]: '' });
   const currentPage = allFilters.page as number;
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
@@ -129,7 +131,7 @@ export function CustomTable<T extends { id: string }>({
   const handleFilterChange = (value: string) => {
     setAllFilters((prev) => ({
       ...prev,
-      [filterKey]: value,
+      [statusFilterKey]: value,
       page: 1,
     }));
   };
@@ -161,25 +163,28 @@ export function CustomTable<T extends { id: string }>({
       {allData?.data?.length > 0 ? (
         <div className="w-full rounded-2xl border border-border bg-card">
           {/* Filter Tabs Row */}
-          {(showFilters || (filters && filters?.length > 0)) && (
+          {(showStatusFilters ||
+            (statusFilters && statusFilters?.length > 0)) && (
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-2">
-                {[{ label: 'All', value: '' }, ...filters]?.map((filter) => (
-                  <button
-                    key={filter.value}
-                    onClick={() => handleFilterChange(filter.value)}
-                    className={cn(
-                      'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
-                      allFilters[filterKey] === filter.value
-                        ? 'text-blue-600 bg-blue-50 border border-blue-200'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
-                    )}
-                  >
-                    {filter.label}
-                  </button>
-                ))}
+                {[{ label: 'All', value: '' }, ...statusFilters]?.map(
+                  (filter) => (
+                    <button
+                      key={filter.value}
+                      onClick={() => handleFilterChange(filter.value)}
+                      className={cn(
+                        'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
+                        allFilters[statusFilterKey] === filter.value
+                          ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      )}
+                    >
+                      {filter.label}
+                    </button>
+                  )
+                )}
               </div>
-              {showFilters && (
+              {showStatusFilters && (
                 <CustomModal
                   title="Filters"
                   modalType="filter"
@@ -193,7 +198,7 @@ export function CustomTable<T extends { id: string }>({
                             e.stopPropagation();
                             setAllFilters({
                               page: 1,
-                              [filterKey]: '',
+                              [statusFilterKey]: '',
                             });
                           }}
                           className="bg-gray-100 cursor-pointer rounded-full p-1"
@@ -205,7 +210,7 @@ export function CustomTable<T extends { id: string }>({
                   }
                 >
                   <TableFilters
-                    showName
+                    filters={filters}
                     data={allFilters}
                     onSubmit={(
                       data: Record<string, number | string | boolean>

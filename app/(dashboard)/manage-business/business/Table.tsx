@@ -2,8 +2,8 @@
 import {
   CustomTable,
   type Column,
-  type FilterTab,
   type ActionOption,
+  type StatusFiltersTab,
 } from '@/components/CustomTable';
 import { BusinessData } from '@/types/business';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ const columns: Column<BusinessData>[] = [
   { key: 'end_at', header: 'End at' },
 ];
 
-const filters: FilterTab[] = [
+const filters: StatusFiltersTab[] = [
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
 ];
@@ -38,12 +38,15 @@ export default function Table() {
       <CustomTable
         endPoint="v1/super-admin/business"
         columns={columns}
-        filters={filters}
+        statusFilters={filters}
+        filters={{
+          showName: true,
+        }}
         actions={actions}
         onClickRow={(data) => {
           router.push(`/manage-business/business/${data.reference}`);
         }}
-        filterKey="status"
+        statusFilterKey="status"
       />
     </div>
   );

@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
-interface TableFiltersProps {
+export interface AllowedFilters {
   showName?: boolean;
+}
+
+interface TableFiltersProps {
+  filters: AllowedFilters;
   data: Record<string, number | string | boolean>;
   onSubmit: (data: Record<string, number | string | boolean>) => void;
 }
 
-const TableFilters = ({
-  showName = false,
-  data,
-  onSubmit,
-}: TableFiltersProps) => {
+const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
   >({ page: 1 });
@@ -30,7 +30,7 @@ const TableFilters = ({
 
   return (
     <div>
-      {showName && (
+      {filters.showName && (
         <Input
           type="text"
           Label="Name"
