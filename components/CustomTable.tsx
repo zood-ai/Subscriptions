@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import { ChevronDown, Filter } from 'lucide-react';
+import { ChevronDown, Filter, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
+import TableFilters from './TableFilters';
 
 export interface Column<T> {
   key: keyof T;
@@ -64,7 +65,7 @@ export function CustomTable<T extends { id: string }>({
   filterKey = 'status',
   forceLoading = false,
   columns,
-  filters,
+  filters = [],
   actions,
   onClickRow,
   title,
@@ -72,15 +73,13 @@ export function CustomTable<T extends { id: string }>({
   pagination = true,
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [activeFilter, setActiveFilter] = useState(
-    filters?.[0]?.value || 'all'
-  );
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
-  >({ page: 1 });
-  const { data: allData = { data }, isLoading } = useCustomQuery<{
+  >({ page: 1, [filterKey]: '' });
+  const currentPage = allFilters.page as number;
+
+  const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
     from: MetaData['from'];
     last_page: MetaData['last_page'];
@@ -128,18 +127,15 @@ export function CustomTable<T extends { id: string }>({
   };
 
   const handleFilterChange = (value: string) => {
-    setActiveFilter(value);
     setAllFilters((prev) => ({
       ...prev,
       [filterKey]: value,
       page: 1,
     }));
-    setCurrentPage(1);
   };
 
   const goToPage = (pageNumber: number) => {
     if (currentPage === pageNumber) return;
-    setCurrentPage(pageNumber);
     setAllFilters((prev) => ({
       ...prev,
       page: pageNumber,
@@ -168,13 +164,13 @@ export function CustomTable<T extends { id: string }>({
           {(showFilters || (filters && filters?.length > 0)) && (
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-2">
-                {filters?.map((filter) => (
+                {[{ label: 'All', value: '' }, ...filters]?.map((filter) => (
                   <button
                     key={filter.value}
                     onClick={() => handleFilterChange(filter.value)}
                     className={cn(
                       'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
-                      activeFilter === filter.value
+                      allFilters[filterKey] === filter.value
                         ? 'text-blue-600 bg-blue-50 border border-blue-200'
                         : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     )}
@@ -185,16 +181,36 @@ export function CustomTable<T extends { id: string }>({
               </div>
               {showFilters && (
                 <CustomModal
-                  title={`Filters`}
+                  title="Filters"
                   modalType="filter"
                   btnTrigger={
                     <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
                       <Filter className="h-4 w-4" />
                       Filter
+                      {Object.entries(allFilters).length > 2 && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setAllFilters({
+                              page: 1,
+                              [filterKey]: '',
+                            });
+                          }}
+                          className="bg-gray-100 cursor-pointer rounded-full p-1"
+                        >
+                          <X size={15} />
+                        </button>
+                      )}
                     </button>
                   }
                 >
-                  Filter Component Here
+                  <TableFilters
+                    showName
+                    data={allFilters}
+                    onSubmit={(
+                      data: Record<string, number | string | boolean>
+                    ) => setAllFilters(data)}
+                  />
                 </CustomModal>
               )}
             </div>

@@ -14,7 +14,6 @@ const columns: Column<BusinessType['businessType']>[] = [
 ];
 
 const filters: FilterTab[] = [
-  { label: 'All', value: 'all' },
   { label: 'Active', value: 'true' },
   { label: 'Deleted', value: 'false' },
 ];

@@ -17,7 +17,6 @@ const columns: Column<BusinessData>[] = [
 ];
 
 const filters: FilterTab[] = [
-  { label: 'All', value: 'all' },
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
 ];
