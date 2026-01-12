@@ -1,5 +1,11 @@
-const User = () => {
-  return <div>User</div>;
-};
+import Details from './Details';
 
-export default User;
+interface Props {
+  params: Promise<{ reference: string; id: string }>;
+}
+
+export default async function User({ params }: Props) {
+  const { reference, id } = await params;
+
+  return <Details reference={reference} id={id} />;
+}

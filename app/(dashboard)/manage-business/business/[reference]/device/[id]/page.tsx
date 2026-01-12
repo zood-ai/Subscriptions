@@ -1,5 +1,11 @@
-const Device = () => {
-  return <div>Device</div>;
-};
+import Details from './Details';
 
-export default Device;
+interface Props {
+  params: Promise<{ reference: string; id: string }>;
+}
+
+export default async function User({ params }: Props) {
+  const { reference, id } = await params;
+
+  return <Details reference={reference} id={id} />;
+}
