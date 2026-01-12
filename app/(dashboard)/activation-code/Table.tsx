@@ -58,7 +58,6 @@ export default function Table() {
       <CustomTable
         endPoint="v1/activationcode/list"
         columns={columns}
-        modalType="activation-code-filters"
         statusFilters={filters}
         actions={actions}
         statusFilterKey="is_used"

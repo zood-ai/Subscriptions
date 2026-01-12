@@ -166,7 +166,6 @@ export default function Dashboard() {
         <CustomTable
           title="Top Businesses by Users"
           titleClassName="text-xl font-semibold text-gray-900"
-          modalType="businesses-by-users-filters"
           forceLoading={isLoading}
           showStatusFilters={false}
           data={stats?.top_by_users ?? []}
@@ -178,7 +177,6 @@ export default function Dashboard() {
 
         <CustomTable
           title="Top Businesses by Invoices"
-          modalType="businesses-by-invoices-filters"
           titleClassName="text-xl font-semibold text-gray-900"
           forceLoading={isLoading}
           showStatusFilters={false}

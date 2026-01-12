@@ -37,7 +37,6 @@ export default function Table() {
         statusFilterKey="isDeleted"
         statusFilters={filters}
         columns={columns}
-        modalType={'business-types-filters'}
         actions={actions}
         onClickRow={(data) => {
           router.push(`/manage-business/type/${data.id}`);

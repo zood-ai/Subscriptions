@@ -16,7 +16,7 @@ import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
 import TableFilters, { AllowedFilters } from './TableFilters';
-import { ModalTypes, useModal } from '@/context/ModalContext';
+import { useModal } from '@/context/ModalContext';
 
 export interface Column<T> {
   key: keyof T;
@@ -45,7 +45,6 @@ interface WithEndPoint {
 }
 interface BaseProps<T extends { id: string }> {
   showStatusFilters?: boolean;
-  modalType: ModalTypes;
   columns: Column<T>[];
   filters?: AllowedFilters;
   statusFilterKey?: string;
@@ -64,7 +63,6 @@ type CustomTableProps<T extends { id: string }> = BaseProps<T> &
 export function CustomTable<T extends { id: string }>({
   data = [],
   endPoint = '',
-  modalType,
   showStatusFilters = true,
   statusFilterKey = 'status',
   forceLoading = false,
@@ -192,7 +190,6 @@ export function CustomTable<T extends { id: string }>({
               {showStatusFilters && (
                 <CustomModal
                   title="Filters"
-                  modalType={modalType}
                   btnTrigger={
                     <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
                       <Filter className="h-4 w-4" />
