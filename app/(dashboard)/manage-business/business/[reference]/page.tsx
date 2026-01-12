@@ -1,11 +1,11 @@
 import BusinessDetails from './BusinessDetails';
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ reference: string }>;
 }
 
 export default async function Business({ params }: Props) {
-  const { id } = await params;
+  const { reference } = await params;
 
-  return <BusinessDetails id={id} />;
+  return <BusinessDetails reference={reference} />;
 }

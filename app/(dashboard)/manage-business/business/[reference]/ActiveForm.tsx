@@ -16,20 +16,16 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface Response {
-  id: string;
-}
-
 interface FormState {
   business_reference: number;
   months: number;
 }
 
 export default function Form({
-  id = '',
+  reference = '',
   data,
 }: {
-  id?: string;
+  reference?: string;
   data?: FormState;
 }) {
   const { close } = useModal();
@@ -45,14 +41,14 @@ export default function Form({
     },
   });
 
-  const { mutate, isPending, error } = useCustomMutation<FormData, Response>({
+  const { mutate, isPending, error } = useCustomMutation<FormData>({
     api: 'v1/auth/extendBusiness',
     method: 'POST',
     options: {
       onSuccess: () => {
-        if (id) {
+        if (reference) {
           queryClient.invalidateQueries({
-            queryKey: ['business', id],
+            queryKey: ['business', reference],
           });
           close();
         }

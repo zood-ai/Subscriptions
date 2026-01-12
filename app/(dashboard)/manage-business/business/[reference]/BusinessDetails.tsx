@@ -14,11 +14,11 @@ import {
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
 
-const BusinessDetails = ({ id }: { id: string }) => {
+const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
   const { data, isFetching } = useCustomQuery<BusinessResponse>({
-    api: `v1/super-admin/business/${id}`,
-    queryKey: ['business', id],
+    api: `v1/super-admin/business/${reference}`,
+    queryKey: ['business', reference],
     options: {
       onError: () => {
         router.push('/manage-business/business');
@@ -35,27 +35,27 @@ const BusinessDetails = ({ id }: { id: string }) => {
 
   const tables = [
     {
-      id: 'suppliers',
+      type: 'supplier',
       title: 'Suppliers',
-      endPoint: `v1/super-admin/business/${id}/suppliers`,
+      endPoint: `v1/super-admin/business/${reference}/suppliers`,
       columns: suppliersColumns,
     },
     {
-      id: 'devices',
+      type: 'device',
       title: 'Devices',
-      endPoint: `v1/super-admin/business/${id}/devices`,
+      endPoint: `v1/super-admin/business/${reference}/devices`,
       columns: devicesColumns,
     },
     {
-      id: 'users',
+      type: 'user',
       title: 'Users',
-      endPoint: `v1/super-admin/business/${id}/users`,
+      endPoint: `v1/super-admin/business/${reference}/users`,
       columns: usersColumns,
     },
     {
-      id: 'customers',
+      type: 'customer',
       title: 'Customers',
-      endPoint: `v1/super-admin/business/${id}/customers`,
+      endPoint: `v1/super-admin/business/${reference}/customers`,
       columns: customersColumns,
     },
   ];
@@ -73,8 +73,10 @@ const BusinessDetails = ({ id }: { id: string }) => {
       <PageHeader
         isEdit
         title={data?.business.name}
-        businessActiveForm={<ActiveForm id={id} data={formData} />}
-        businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
+        businessActiveForm={
+          <ActiveForm reference={reference} data={formData} />
+        }
+        businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
       />
@@ -82,11 +84,16 @@ const BusinessDetails = ({ id }: { id: string }) => {
         <DetailCard items={items} />
         {tables.map((el) => (
           <CustomTable
-            key={el.id}
+            key={el.type}
             title={el.title}
             endPoint={el.endPoint}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             columns={el.columns as Column<any>[]}
+            onClickRow={(data) => {
+              router.push(
+                `/manage-business/business/${reference}/${el.type}/${data.id}`
+              );
+            }}
           />
         ))}
       </div>
