@@ -1,4 +1,4 @@
-import BusinessDetails from './BusinessDetails';
+import BusinessDetails from './components/BusinessDetails';
 
 interface Props {
   params: Promise<{ reference: string }>;

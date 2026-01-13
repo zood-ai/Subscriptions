@@ -1,5 +1,5 @@
-import Table from './Table';
-import Form from './Form';
+import Table from './components/Table';
+import Form from './components/Form';
 import PageHeader from '@/components/PageHeader';
 
 export default function Businesses() {
