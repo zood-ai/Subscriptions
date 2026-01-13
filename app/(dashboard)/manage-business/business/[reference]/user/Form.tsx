@@ -1,43 +1,45 @@
 'use client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import useCustomMutation from '@/lib/Mutation';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
-import SingleSelect from '@/components/SingleSelect';
 
 const formSchema = z.object({
-  type: z.string().optional(),
   name: z.string().min(1, 'Name is required'),
-  reference: z.string().min(1, 'Reference is required'),
-  branch: z.string().min(1, 'Branch is required'),
+  language: z.string().min(1, 'Language is required'),
+  email: z.email().min(1, 'Email is required'),
+  password: z.string().min(1, 'Password is required'),
+  loginPin: z.string().min(1, 'Login Pin is required'),
+  displayLocalizeName: z.boolean(),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-interface CreateBusinessTypeResponse {
+interface CreateResponse {
   id: string;
 }
 
 interface FormState {
-  type?: string;
   name: string;
-  reference: string;
-  branch: string;
+  language: string;
+  email: string;
+  password: string;
+  loginPin: string;
+  displayLocalizeName: boolean;
 }
 
 export default function Form({
   id = '',
   isEdit = false,
   data,
-  reference,
 }: {
   id?: string;
   isEdit?: boolean;
   data?: FormState;
-  reference: string;
 }) {
   const {
     register,
@@ -48,10 +50,12 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: data?.type || '',
       name: data?.name || '',
-      reference: data?.reference || '',
-      branch: data?.branch || '',
+      language: data?.language || '',
+      email: data?.email || '',
+      password: data?.password || '',
+      loginPin: data?.loginPin || '',
+      displayLocalizeName: data?.displayLocalizeName || false,
     },
   });
 
@@ -59,30 +63,28 @@ export default function Form({
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
-    CreateBusinessTypeResponse
+    CreateResponse
   >({
-    api: isEdit
-      ? `v1/super-admin/business/${reference}/devices/${id}`
-      : `v1/super-admin/business/${reference}/devices`,
+    api: isEdit ? `v1/super-admin/users/${id}` : 'v1/super-admin/users',
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: () => {
         if (id) {
           queryClient.invalidateQueries({
-            queryKey: ['devices', reference, id],
+            queryKey: ['users', id],
           });
         }
       },
     },
   });
 
-  const { mutate: generateReference, isPending: isGenerating } =
-    useCustomMutation<void, { reference: string }>({
-      api: 'v1/super-admin/businessTypes/generate-reference',
+  const { mutate: generateLoginPin, isPending: isGenerating } =
+    useCustomMutation<void, { loginPin: string }>({
+      api: 'v1/super-admin/users/generate-login-pin',
       method: 'POST',
       options: {
         onSuccess: (response) => {
-          setValue('reference', response.reference);
+          setValue('loginPin', response.loginPin);
         },
       },
     });
@@ -91,56 +93,19 @@ export default function Form({
     mutate(data);
   };
 
-  const handleGenerateReference = () => {
-    generateReference();
+  const handleGenerateLoginPin = () => {
+    generateLoginPin();
   };
 
-  const deviceTypes = [
-    {
-      value: '1',
-      label: 'Cashier',
-    },
-    {
-      value: '2',
-      label: 'KDS',
-    },
-    {
-      value: '4',
-      label: 'Notifier',
-    },
-    {
-      value: '5',
-      label: 'Display',
-    },
-    {
-      value: '6',
-      label: 'Sub Cashier',
-    },
-    {
-      value: '7',
-      label: 'Dashboard',
-    },
-  ];
+  const allLanguages = [{
+    label:''
+  }]
 
   const btnText = isEdit ? 'Update' : 'Create';
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
-        <Controller
-          name="type"
-          control={control}
-          render={({ field }) => (
-            <SingleSelect
-              label="Type"
-              errorText={errors?.type?.message}
-              value={String(field.value)}
-              onChange={(value) => field.onChange(value)}
-              options={deviceTypes}
-            />
-          )}
-        />
-
         <Input
           type="text"
           Label="Name"
@@ -150,43 +115,70 @@ export default function Form({
           required
         />
 
+        <Input
+          type="text"
+          Label="Language"
+          error={errors?.language?.message}
+          value={formValues.language}
+          {...register('language')}
+          required
+        />
+
+        <Input
+          type="email"
+          Label="Email"
+          error={errors?.email?.message}
+          value={formValues.email}
+          {...register('email')}
+          required
+        />
+
+        <Input
+          type="password"
+          Label="Password"
+          error={errors?.password?.message}
+          value={formValues.password}
+          {...register('password')}
+          required
+        />
+
         <div className="flex max-sm:flex-wrap gap-x-3 items-center">
           <Input
             type="text"
-            Label="Reference"
-            error={errors?.reference?.message}
-            value={formValues.reference}
-            {...register('reference')}
+            Label="Login Pin"
+            error={errors?.loginPin?.message}
+            value={formValues.loginPin}
+            {...register('loginPin')}
             required
           />
-          {/* <Button
+          <Button
             variant="secondary"
             type="button"
-            onClick={handleGenerateReference}
+            onClick={handleGenerateLoginPin}
             disabled={isGenerating}
             className="w-full sm:w-[200px] h-[50px] mt-7"
           >
             {isGenerating ? 'Generating...' : 'Generate'}
-          </Button> */}
+          </Button>
         </div>
 
-        <Controller
-          name="branch"
-          control={control}
-          render={({ field }) => (
-            <SingleSelect
-              label="Branch"
-              required
-              errorText={errors?.branch?.message}
-              value={String(field.value)}
-              onChange={(value) => field.onChange(value)}
-              endPoint={`v1/super-admin/business/${reference}/branches`}
-              labelKey="name"
-              valueKey="id"
-            />
-          )}
-        />
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="displayLocalizeName"
+            checked={formValues.displayLocalizeName}
+            onCheckedChange={(checked) =>
+              setValue('displayLocalizeName', checked as boolean)
+            }
+          />
+          <label
+            htmlFor="displayLocalizeName"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Display Localize Name
+          </label>
+        </div>
       </div>
+
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button
           type="submit"

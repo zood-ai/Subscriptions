@@ -5,6 +5,7 @@ import { BusinessResponse } from '@/types/business';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
 import PageHeader from '@/components/PageHeader';
+import Form from '../Form';
 
 const Details = ({ reference, id }: { reference: string; id: string }) => {
   const router = useRouter();
@@ -12,9 +13,9 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
     api: `v1/super-admin/business/${reference}/users/${id}`,
     queryKey: ['users', id],
     options: {
-      onError: () => {
-        router.push(`/manage-business/business/${reference}`);
-      },
+      // onError: () => {
+      //   router.push(`/manage-business/business/${reference}`);
+      // },
     },
   });
 
@@ -33,6 +34,7 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
       <PageHeader
         deleteEndPoint={`v1/super-admin/business/${reference}/users/${id}`}
         title={data?.name}
+        Form={<Form isEdit id={id} />}
         backUrl={`/manage-business/business/${reference}`}
       />
       <div className="py-[40px] mainPaddingX">
