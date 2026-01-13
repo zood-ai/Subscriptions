@@ -6,6 +6,7 @@ import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';
 import ActionPopUp, { Input } from './ActionPopUp';
 import { Badge } from './ui/badge';
+import { cn } from '@/lib/utils';
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -15,6 +16,7 @@ interface Props {
   businessBlockEndPoint?: string;
   isBlocked?: boolean;
   backUrl?: string;
+  className?: string;
 }
 
 const PageHeader: React.FC<Props> = ({
@@ -26,6 +28,7 @@ const PageHeader: React.FC<Props> = ({
   businessBlockEndPoint,
   isBlocked,
   backUrl = '',
+  className = '',
 }) => {
   const businessBlockInputs: Input[] = isBlocked
     ? [
@@ -61,7 +64,12 @@ const PageHeader: React.FC<Props> = ({
         },
       ];
   return (
-    <div className="flex flex-wrap justify-between items-center gap-4 py-3.75 mainPaddingX bg-white">
+    <div
+      className={cn(
+        'flex flex-wrap justify-between items-center gap-4 py-3.75 mainPaddingX bg-white',
+        className
+      )}
+    >
       <div>
         {backUrl && (
           <Link

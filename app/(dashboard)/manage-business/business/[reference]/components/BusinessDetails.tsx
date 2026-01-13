@@ -13,6 +13,10 @@ import {
 } from './constants';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
+import SupplierForm from '../supplier/Form';
+import CustomerForm from '../customer/Form';
+import UserForm from '../user/Form';
+import DeviceForm from '../device/Form';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -39,24 +43,28 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       title: 'Suppliers',
       endPoint: `v1/super-admin/business/${reference}/suppliers`,
       columns: suppliersColumns,
+      form: <SupplierForm reference={reference} />,
     },
     {
       type: 'device',
       title: 'Devices',
       endPoint: `v1/super-admin/business/${reference}/devices`,
       columns: devicesColumns,
+      form: <DeviceForm reference={reference} />,
     },
     {
       type: 'user',
       title: 'Users',
       endPoint: `v1/super-admin/business/${reference}/users`,
       columns: usersColumns,
+      form: <UserForm reference={reference} />,
     },
     {
       type: 'customer',
       title: 'Customers',
       endPoint: `v1/super-admin/business/${reference}/customers`,
       columns: customersColumns,
+      form: <CustomerForm reference={reference} />,
     },
   ];
 
@@ -82,20 +90,28 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
-        {tables.map((el) => (
-          <CustomTable
-            key={el.type}
-            title={el.title}
-            endPoint={el.endPoint}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            columns={el.columns as Column<any>[]}
-            onClickRow={(data) => {
-              router.push(
-                `/manage-business/business/${reference}/${el.type}/${data.id}`
-              );
-            }}
-          />
-        ))}
+        <div className="space-y-[25px] pt-[25px]">
+          {tables.map((el) => (
+            <>
+              <PageHeader
+                Form={el.form}
+                className="p-0 px-0! bg-[#FAFAFA]"
+                title={el.title}
+              />
+              <CustomTable
+                key={el.type}
+                endPoint={el.endPoint}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                columns={el.columns as Column<any>[]}
+                onClickRow={(data) => {
+                  router.push(
+                    `/manage-business/business/${reference}/${el.type}/${data.id}`
+                  );
+                }}
+              />
+            </>
+          ))}
+        </div>
       </div>
     </>
   );
