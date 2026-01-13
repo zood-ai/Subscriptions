@@ -35,7 +35,8 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
         deleteEndPoint={`v1/super-admin/business/${reference}/devices/${id}`}
         title={data?.name}
         backUrl={`/manage-business/business/${reference}`}
-        Form={<Form isEdit reference={reference} />}
+        isEdit
+        Form={<Form isEdit reference={reference} id={id} />}
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />

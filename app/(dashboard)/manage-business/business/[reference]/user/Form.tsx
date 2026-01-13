@@ -3,10 +3,11 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import useCustomMutation from '@/lib/Mutation';
-import { useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
+import SingleSelect from '@/components/SingleSelect';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -35,10 +36,12 @@ interface FormState {
 export default function Form({
   id = '',
   isEdit = false,
+  reference,
   data,
 }: {
   id?: string;
   isEdit?: boolean;
+  reference: string;
   data?: FormState;
 }) {
   const {
@@ -65,7 +68,9 @@ export default function Form({
     FormData,
     CreateResponse
   >({
-    api: isEdit ? `v1/super-admin/users/${id}` : 'v1/super-admin/users',
+    api: isEdit
+      ? `v1/super-admin/users/${reference}/${id}`
+      : 'v1/super-admin/users',
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: () => {
@@ -97,9 +102,24 @@ export default function Form({
     generateLoginPin();
   };
 
-  const allLanguages = [{
-    label:''
-  }]
+  const allLanguages = [
+    {
+      value: 'ar',
+      label: 'Arabic',
+    },
+    {
+      value: 'en',
+      label: 'English',
+    },
+    {
+      value: 'es',
+      label: 'Espanol',
+    },
+    {
+      value: 'fr',
+      label: 'Francais',
+    },
+  ];
 
   const btnText = isEdit ? 'Update' : 'Create';
 
@@ -115,13 +135,19 @@ export default function Form({
           required
         />
 
-        <Input
-          type="text"
-          Label="Language"
-          error={errors?.language?.message}
-          value={formValues.language}
-          {...register('language')}
-          required
+        <Controller
+          name="language"
+          control={control}
+          render={({ field }) => (
+            <SingleSelect
+              label="Language"
+              errorText={errors?.language?.message}
+              value={String(field.value)}
+              onChange={(value) => field.onChange(value)}
+              options={allLanguages}
+              required
+            />
+          )}
         />
 
         <Input

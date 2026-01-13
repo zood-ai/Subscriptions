@@ -5,6 +5,7 @@ import { BusinessResponse } from '@/types/business';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
 import PageHeader from '@/components/PageHeader';
+import Form from '../Form';
 
 const Details = ({ reference, id }: { reference: string; id: string }) => {
   const router = useRouter();
@@ -34,6 +35,8 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
         deleteEndPoint={`v1/super-admin/business/${reference}/suppliers/${id}`}
         title={data?.name}
         backUrl={`/manage-business/business/${reference}`}
+        isEdit
+        Form={<Form isEdit reference={reference} id={id} />}
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />

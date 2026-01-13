@@ -13,9 +13,9 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
     api: `v1/super-admin/business/${reference}/users/${id}`,
     queryKey: ['users', id],
     options: {
-      // onError: () => {
-      //   router.push(`/manage-business/business/${reference}`);
-      // },
+      onError: () => {
+        router.push(`/manage-business/business/${reference}`);
+      },
     },
   });
 
@@ -34,8 +34,9 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
       <PageHeader
         deleteEndPoint={`v1/super-admin/business/${reference}/users/${id}`}
         title={data?.name}
-        Form={<Form isEdit id={id} />}
         backUrl={`/manage-business/business/${reference}`}
+        isEdit
+        Form={<Form isEdit reference={reference} id={id} />}
       />
       <div className="py-[40px] mainPaddingX">
         <DetailCard items={items} />
