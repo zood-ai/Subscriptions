@@ -217,58 +217,8 @@ export default function Form({
 
         {/* Divider */}
         <div className="border-t border-gray-200"></div>
-
-        {/* Trade Register Upload */}
-        {/* <label className="text-base font-semibold text-gray-700 mb-3 block">
-          Upload Trade Register
-        </label>
-        <div className="flex flex-col gap-3">
-          <label className="group flex items-center justify-center gap-2 h-12 px-6 font-semibold bg-linear-to-r from-gray-50 to-gray-100 hover:from-[#7272F6]/5 hover:to-[#7272F6]/10 rounded-lg border-2 border-dashed border-gray-300 hover:border-[#7272F6] text-gray-700 cursor-pointer transition-all duration-200">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              />
-            </svg>
-            <span className="text-base">Choose File</span>
-            <input
-              type="file"
-              accept="image/*"
-              name="tradeRegister"
-              className="hidden"
-              onChange={(e) => setTradeRegister(e.target.files?.[0] || null)}
-            />
-          </label>
-          {tradeRegister && (
-            <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-lg">
-              <svg
-                className="w-5 h-5 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span className="text-sm text-green-700 font-medium">
-                {tradeRegister?.name}
-              </span>
-            </div>
-          )}
-        </div> */}
       </div>
-      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
+      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
         <Button
           type="submit"
           disabled={isPending}
