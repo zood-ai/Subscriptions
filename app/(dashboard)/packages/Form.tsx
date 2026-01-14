@@ -63,8 +63,8 @@ export default function Form({
     PackageResponse
   >({
     api: isEdit
-      ? `v1/super-admin/businessTypes/${id}`
-      : 'v1/super-admin/businessTypes',
+      ? `v1/super-admin/packages/${id}`
+      : 'v1/super-admin/packages',
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: (data) => {

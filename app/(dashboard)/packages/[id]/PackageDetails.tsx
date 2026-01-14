@@ -12,7 +12,7 @@ import Form from '../Form';
 const PackageDetails = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data, isFetching } = useCustomQuery<PackageData>({
-    api: `v1/super-admin/business/${id}`,
+    api: `v1/super-admin/packages/${id}`,
     queryKey: ['packages', id],
     options: {
       onError: () => {
@@ -37,7 +37,7 @@ const PackageDetails = ({ id }: { id: string }) => {
     {
       id: 'users',
       title: 'Users',
-      endPoint: `v1/super-admin/business/${id}/users`,
+      endPoint: `v1/super-admin/packages/${id}/users`,
       columns: usersColumns,
     },
   ];
@@ -58,7 +58,7 @@ const PackageDetails = ({ id }: { id: string }) => {
     <>
       <PageHeader
         isEdit
-        deleteEndPoint={`v1/super-admin/businessTypes/${id}`}
+        deleteEndPoint={`v1/super-admin/packages/${id}`}
         Form={<Form id={id} isEdit data={formData} />}
         title={data?.name}
         backUrl="/packages"

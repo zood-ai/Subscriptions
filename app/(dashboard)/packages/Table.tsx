@@ -44,7 +44,7 @@ export default function Table() {
   return (
     <div className="py-10 mainPaddingX">
       <CustomTable
-        endPoint="v1/super-admin/business"
+        endPoint="v1/super-admin/packages"
         columns={columns}
         filters={filters}
         actions={actions}
