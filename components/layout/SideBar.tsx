@@ -26,7 +26,7 @@ interface MenuItemProps {
   }[];
 }
 
-interface SidebarProps {
+interface SideBarProps {
   isMobileView?: boolean;
   isMobileMenuOpen?: boolean;
   onClose?: () => void;
@@ -67,11 +67,11 @@ const menuItems: MenuItemProps[] = [
   },
 ];
 
-export default function Sidebar({
+export default function SideBar({
   isMobileView = false,
   isMobileMenuOpen = false,
   onClose,
-}: SidebarProps) {
+}: SideBarProps) {
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 

@@ -2,7 +2,7 @@
 
 import { User, Menu, LogOut } from "lucide-react";
 import { useState } from "react";
-import Sidebar from "./Sidbar";
+import Sidebar from "./SideBar";
 import {
   Popover,
   PopoverContent,

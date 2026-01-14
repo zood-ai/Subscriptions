@@ -1,4 +1,4 @@
-import Sidbar from "@/components/layout/Sidbar";
+import Sidbar from "@/components/layout/SideBar";
 import NavBar from "@/components/layout/NavBar";
 import { ModalProvider } from "@/context/ModalContext";
 export default function RootLayout({
