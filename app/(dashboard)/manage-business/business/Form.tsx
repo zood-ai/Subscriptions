@@ -11,10 +11,7 @@ import { queryClient } from '@/app/ReactQueryProvider';
 
 const baseSchema = {
   name: z.string().min(1, 'Name is required'),
-  email: z
-    .string()
-    .min(1, 'Email is required')
-    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format'),
+  email: z.email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
   business_name: z.string().min(1, 'Business name is required'),
   business_type_id: z.string().min(1, 'Business type is required'),
