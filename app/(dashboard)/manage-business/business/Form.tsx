@@ -91,8 +91,8 @@ export default function Form({
     FormData,
     CustomerRegistrationResponse
   >({
-    api: isEdit ? 'v1/auth/Register' : `v1/super-admin/business/${id}`,
-    method: isEdit ? 'POST' : 'PUT',
+    api: isEdit ? `v1/super-admin/business/${id}` : 'v1/auth/Register',
+    method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: (data) => {
         if (!isEdit && data?.data?.user?.business_reference) {
@@ -110,9 +110,6 @@ export default function Form({
   });
 
   const onSubmit = (data: FormData) => {
-    if (isEdit && data.password) {
-      delete data.password;
-    }
     mutate(data);
   };
 
@@ -153,17 +150,15 @@ export default function Form({
         />
 
         {/* Password */}
-        {!isEdit && (
-          <Input
-            Label="Password"
-            className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
-            type="password"
-            error={errors?.password?.message}
-            value={formValues.password}
-            {...register('password')}
-            required
-          />
-        )}
+        <Input
+          Label="Password"
+          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          type="password"
+          error={errors?.password?.message}
+          value={formValues.password}
+          {...register('password')}
+          required
+        />
 
         {/* Divider */}
         <div className="border-t border-gray-200"></div>
