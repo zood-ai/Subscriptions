@@ -69,8 +69,8 @@ export default function Form({
     CreateResponse
   >({
     api: isEdit
-      ? `v1/super-admin/users/${reference}/${id}`
-      : 'v1/super-admin/users',
+      ? `v1/super-admin/business/${reference}/users`
+      : `v1/super-admin/business/${reference}/users/${id}`,
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: () => {
