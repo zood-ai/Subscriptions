@@ -71,7 +71,7 @@ export default function Form({
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: () => {
-        if (id) {
+        if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['suppliers', id],
           });

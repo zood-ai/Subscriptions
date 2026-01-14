@@ -67,7 +67,7 @@ export default function Form({
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: () => {
-        if (id) {
+        if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['devices', reference, id],
           });
@@ -76,23 +76,8 @@ export default function Form({
     },
   });
 
-  const { mutate: generateReference, isPending: isGenerating } =
-    useCustomMutation<void, { reference: string }>({
-      api: 'v1/super-admin/businessTypes/generate-reference',
-      method: 'POST',
-      options: {
-        onSuccess: (response) => {
-          setValue('reference', response.reference);
-        },
-      },
-    });
-
   const onSubmit = (data: FormData) => {
     mutate(data);
-  };
-
-  const handleGenerateReference = () => {
-    generateReference();
   };
 
   const deviceTypes = [
@@ -159,15 +144,6 @@ export default function Form({
             {...register('reference')}
             required
           />
-          {/* <Button
-            variant="secondary"
-            type="button"
-            onClick={handleGenerateReference}
-            disabled={isGenerating}
-            className="w-full sm:w-[200px] h-[50px] mt-7"
-          >
-            {isGenerating ? 'Generating...' : 'Generate'}
-          </Button> */}
         </div>
 
         <Controller
