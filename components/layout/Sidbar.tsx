@@ -2,11 +2,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/assets/logo.svg";
-import { Monitor, Package, Briefcase, X, ChevronDown } from "lucide-react";
+import {
+  Monitor,
+  Package,
+  Briefcase,
+  X,
+  Store,
+  ChevronDown,
+} from "lucide-react";
+
 import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
-
 
 interface MenuItemProps {
   id: string;
@@ -52,6 +59,19 @@ const menuItems: MenuItemProps[] = [
     label: "Activation Code",
     path: "/activation-code",
     icon: CheckCircle,
+  },
+  {
+    id: "marketplace",
+    label: "Marketplace",
+    path: "/marketplace",
+    icon: Store,
+    children: [
+      {
+        id: "zatca",
+        label: "Zatca",
+        path: "/marketplace/zatca",
+      },
+    ],
   },
 ];
 
