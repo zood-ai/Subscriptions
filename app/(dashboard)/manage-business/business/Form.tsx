@@ -94,8 +94,8 @@ export default function Form({
     FormData,
     CustomerRegistrationResponse
   >({
-    api: 'v1/auth/Register',
-    method: 'POST',
+    api: isEdit ? 'v1/auth/Register' : `v1/super-admin/business/${id}`,
+    method: isEdit ? 'POST' : 'PUT',
     options: {
       onSuccess: (data) => {
         if (!isEdit && data?.data?.user?.business_reference) {
@@ -105,7 +105,7 @@ export default function Form({
         }
         if (isEdit) {
           queryClient.invalidateQueries({
-            queryKey: ['businessTypes', id],
+            queryKey: ['business', id],
           });
         }
       },

@@ -86,7 +86,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
         isEdit
         title={data?.business.name}
         Form={<Form id={id} isEdit data={formData} />}
-        deleteEndPoint={`deleteBusiness/${id}`}
+        deleteEndPoint={`v1/super-admin/business/${id}`}
         businessActiveForm={<ActiveForm id={id} data={acitveFormData} />}
         businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
         isBlocked={data?.business.active === 0 ? true : false}
