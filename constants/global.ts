@@ -106,11 +106,11 @@ export const activationCodePeriods = [
     value: '1',
   },
   {
-    label: '3 Month',
+    label: '3 Months',
     value: '3',
   },
   {
-    label: '6 Month',
+    label: '6 Months',
     value: '6',
   },
   {

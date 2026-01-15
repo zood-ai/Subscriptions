@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
 import { Controller } from 'react-hook-form';
+import { activationCodePeriods } from '@/constants/global';
 
 const formSchema = z.object({
   business_reference: z.number().int(),
@@ -70,11 +71,7 @@ export default function Form({
               errorText={errors?.months?.message}
               value={String(field.value)}
               onChange={(value) => field.onChange(+value)}
-              options={[
-                { label: '3 Months', value: '3' },
-                { label: '6 Months', value: '6' },
-                { label: '12 Months', value: '12' },
-              ]}
+              options={activationCodePeriods}
               required
             />
           )}
