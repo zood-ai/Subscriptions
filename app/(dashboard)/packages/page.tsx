@@ -14,14 +14,15 @@ const columns: Column<PackageData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'project', header: 'Project' },
   {
-    key: 'period',
-    header: 'Duration Period',
+    key: 'duration',
+    header: 'Duration',
     render: (value) => (
       <div>
         {value} {Number(value) > 1 ? 'Months' : 'Month'}
       </div>
     ),
   },
+  { key: 'price', header: 'Price' },
   { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 

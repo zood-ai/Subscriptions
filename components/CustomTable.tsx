@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useState } from 'react';
 import { ChevronDown, Filter } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, formatDate } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +15,6 @@ import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
-import dayjs from 'dayjs';
 
 export interface Column<T> {
   key: keyof T;
@@ -294,9 +293,7 @@ export function CustomTable<T extends { id: string }>({
                         {column.render
                           ? column.render(item[column.key], item)
                           : column.type === 'date' && item[column.key]
-                          ? dayjs(new Date(item[column.key] as string)).format(
-                              'DD/MM/YYYY h:mm A'
-                            )
+                          ? formatDate(new Date(item[column.key] as string))
                           : String(item[column.key] ?? '-')}
                       </td>
                     ))}

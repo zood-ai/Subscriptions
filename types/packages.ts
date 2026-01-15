@@ -4,6 +4,7 @@ export interface PackageData {
   project: string;
   created_at: string;
   discreption: string;
+  price: number;
   discount?: number;
-  period: number;
+  duration: number;
 }

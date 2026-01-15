@@ -24,10 +24,13 @@ const PackageDetails = ({ id }: { id: string }) => {
   const items = [
     { title: 'Name', value: data?.name },
     { title: 'Discreption', value: data?.discreption },
+    { title: 'Price', value: data?.price ?? 1 },
     { title: 'Discount', value: data?.discount ?? 0 },
     {
-      title: 'Period',
-      value: `${data?.period ?? 0} month${(data?.period ?? 0) > 1 ? 's' : ''}`,
+      title: 'Duration',
+      value: `${data?.duration ? data?.duration / 30 : 0} month${
+        (data?.duration ? data?.duration / 30 : 0) > 1 ? 's' : ''
+      }`,
     },
     { title: 'Project', value: data?.project },
     { title: 'Created at', value: data?.created_at, type: 'date' },
@@ -49,8 +52,9 @@ const PackageDetails = ({ id }: { id: string }) => {
   const formData = {
     name: data?.name || '',
     discreption: data?.discreption || '',
+    price: data?.price ?? 1,
     discount: data?.discount ?? 0,
-    period: data?.period ?? 1,
+    duration: data?.duration ? data?.duration / 30 : 0,
     project: data?.project || '',
   };
 

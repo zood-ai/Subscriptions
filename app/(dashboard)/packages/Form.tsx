@@ -8,6 +8,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from '@/components/ui/textarea';
+import { queryClient } from '@/app/ReactQueryProvider';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -16,10 +17,11 @@ const formSchema = z.object({
     .number()
     .min(0, 'Discount is required')
     .max(100, 'Discount is at most 100'),
-  period: z
+  duration: z
     .number()
-    .min(1, 'Period is required and at least 1')
-    .max(12, 'Period is required and at most 12'),
+    .min(1, 'Duration is required and at least 1')
+    .max(12, 'Duration is required and at most 12'),
+  price: z.number().min(1, 'Price must be bigger than 1'),
   project: z.string().min(1, 'Project is required'),
 });
 
@@ -51,7 +53,8 @@ export default function Form({
       name: data?.name || '',
       discreption: data?.discreption || '',
       discount: data?.discount ?? 0,
-      period: data?.period ?? 1,
+      duration: data?.duration ?? 1,
+      price: data?.price ?? 1,
       project: data?.project || '',
     },
   });
@@ -62,13 +65,15 @@ export default function Form({
     FormData,
     PackageResponse
   >({
-    api: isEdit
-      ? `v1/super-admin/packages/${id}`
-      : 'v1/super-admin/packages',
+    api: isEdit ? `v1/super-admin/packages/${id}` : 'v1/super-admin/packages',
     method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: (data) => {
-        if (data?.id) {
+        if (isEdit) {
+          queryClient.invalidateQueries({
+            queryKey: ['packages', id],
+          });
+        } else {
           router.push(`/packages/${data.id}`);
         }
       },
@@ -76,10 +81,13 @@ export default function Form({
   });
 
   const onSubmit = (data: FormData) => {
-    mutate(data);
+    mutate({
+      ...data,
+      duration: data.duration * 30,
+    });
   };
 
-  const Periods = Array.from({ length: 12 }, (_, i) => {
+  const Durations = Array.from({ length: 12 }, (_, i) => {
     const month = i + 1;
     return {
       label: `${month} ${month === 1 ? 'Month' : 'Months'}`,
@@ -116,6 +124,16 @@ export default function Form({
 
         <Input
           type="number"
+          Label="Price"
+          min={1}
+          error={errors?.price?.message}
+          value={formValues.price}
+          {...register('price', { valueAsNumber: true })}
+          required
+        />
+
+        <Input
+          type="number"
           Label="Discount %"
           min={0}
           max={100}
@@ -126,16 +144,16 @@ export default function Form({
         />
 
         <Controller
-          name="period"
+          name="duration"
           control={control}
           render={({ field }) => (
             <SingleSelect
-              label="Period"
-              placeholder="Select Period"
-              errorText={errors?.period?.message}
-              value={String(formValues.period)}
+              label="Duration"
+              placeholder="Select Duration"
+              errorText={errors?.duration?.message}
+              value={String(formValues.duration)}
               onChange={(value) => field.onChange(Number(value))}
-              options={Periods}
+              options={Durations}
               required
             />
           )}
