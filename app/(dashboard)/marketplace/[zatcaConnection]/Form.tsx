@@ -7,22 +7,31 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
-import { useModal } from "@/context/ModalContext";
 
 const formSchema = z.object({
-  code: z.string().min(1, "Code is required"),
-  business: z.string().min(1, "Business is required"),
-  duration: z.string().min(1, "Duration Period is required"),
+  service: z.string(),
+  name: z.string().min(0, "Name  is required"),
+  business: z.object({
+    name: z.string().optional(),
+  }),
+  credentials: z.object({
+    device_id: z.string().min(0, "Device is required"),
+    company_name: z.string().min(0, "Company Name is required"),
+    company_address: z.string().min(0, "Company Address is required"),
+    company_id: z.string().min(0, "Company ID is required"),
+    company_unit_name: z.string().min(0, "Company Unit Name is required"),
+    company_category: z.string().min(0, "Company Category is required"),
+    otp: z.string().min(1, "OTP is required"),
+    egd_unit_common_name: z.string().min(0, "EGD Unit Common Name is required"),
+    env: z.string().min(1, "Environment is required"),
+    enable_tax_invoices: z.number().optional(),
+    enable_simplified_invoices: z.number().optional(),
+  }),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-interface PeriodOption {
-  label: string;
-  value: string;
-}
-
-const zatcaEnvironment: PeriodOption[] = [
+const zatcaEnvironment = [
   {
     label: "Simulation",
     value: "simulation",
@@ -34,7 +43,6 @@ const zatcaEnvironment: PeriodOption[] = [
 ];
 export default function Form() {
   const queryClient = useQueryClient();
-  const { close } = useModal();
   const {
     register,
     handleSubmit,
@@ -43,9 +51,24 @@ export default function Form() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      code: "",
-      duration: "",
-      business: "",
+      service: "zatca",
+      name: "",
+      business: {
+        name: "",
+      },
+      credentials: {
+        device_id: "",
+        company_name: "",
+        company_address: "",
+        company_id: "",
+        company_unit_name: "",
+        company_category: "",
+        otp: "",
+        egd_unit_common_name: "",
+        env: "",
+        enable_tax_invoices: 0,
+        enable_simplified_invoices: 1,
+      },
     },
   });
 
@@ -59,7 +82,6 @@ export default function Form() {
         queryClient.invalidateQueries({
           queryKey: ["v1/activationcode/list"],
         });
-        close();
       },
       onError: (error) => {
         console.error("Error applying activation code: ", error);
@@ -70,7 +92,6 @@ export default function Form() {
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
-  console.log("formValues", { businessSelected: formValues.business });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -79,9 +100,9 @@ export default function Form() {
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Connection Name"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
+          error={errors?.name?.message}
+          value={formValues.name}
+          {...register("name")}
           required
         />
 
@@ -90,35 +111,34 @@ export default function Form() {
           name="business"
           className="placeholder:text-opacity-50 z-1000000"
           placeholder="Select Business"
-          errorText={errors?.business?.message}
+          errorText={errors?.business?.name?.message}
           endPoint="v1/super-admin/business"
           value={formValues.business?.name}
           onChange={(value) => {
             const event = {
-              target: { name: "business", value },
+              target: { name: "business.name", value },
             } as React.ChangeEvent<HTMLInputElement>;
-            register("business").onChange(event);
+            register("business.name").onChange(event);
           }}
           labelKey="name"
           valueKey="reference"
           required
           showSearch
         />
-        {formValues.business && (
+        {formValues.business?.name && (
           <SingleSelect
             label="Zatca Device"
             name="duration"
             className="placeholder:text-opacity-50 z-1000000"
             placeholder="Select Code Duration Period"
-            errorText={errors?.duration?.message}
-            value={formValues.duration}
+            errorText={errors?.credentials?.device_id?.message}
+            value={formValues?.credentials?.device_id}
             onChange={(value) => {
               const event = {
-                target: { name: "duration", value },
+                target: { name: "credentials.device_id", value },
               } as React.ChangeEvent<HTMLInputElement>;
-              register("duration").onChange(event);
+              register("credentials.device_id").onChange(event);
             }}
-            //
             endPoint={`v1/select/devices?filter[is_deleted]=false&type=1&zatca_connection=0&reference=${formValues.business}`}
             labelKey="name"
             valueKey="id"
@@ -127,72 +147,64 @@ export default function Form() {
             showSearch
           />
         )}
+
         <Input
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
-          Label="Connection Name"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
-          required
-        />
-        <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
-          type="text"
-          Label="Company Tax Registeration Number *"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
+          Label="Company Tax Registeration Number"
+          error={errors?.credentials?.company_id?.message}
+          value={formValues.credentials?.company_id}
+          {...register("credentials.company_id")}
           required
         />
         <Input
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Company Unit Name"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
+          error={errors?.credentials?.company_unit_name?.message}
+          value={formValues.credentials?.company_unit_name}
+          {...register("credentials.company_unit_name")}
           required
         />
         <Input
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Company Category"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
+          error={errors?.credentials?.company_category?.message}
+          value={formValues.credentials?.company_category}
+          {...register("credentials.company_category")}
           required
         />
         <Input
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="OTP"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
+          error={errors?.credentials?.otp?.message}
+          value={formValues.credentials?.otp}
+          {...register("credentials.otp")}
           required
         />
         <Input
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="EGD Unit Common Name"
-          error={errors?.code?.message}
-          value={formValues.code}
-          {...register("code")}
+          error={errors?.credentials?.egd_unit_common_name?.message}
+          value={formValues.credentials?.egd_unit_common_name}
+          {...register("credentials.egd_unit_common_name")}
           required
         />
         <SingleSelect
           label="Environment"
-          name="duration"
+          name="credentials.env"
           className="placeholder:text-opacity-50 z-1000000"
-          placeholder="Select Code Duration Period"
-          errorText={errors?.duration?.message}
-          value={formValues.duration}
+          placeholder="Select Environment"
+          errorText={errors?.credentials?.env?.message}
+          value={formValues.credentials?.env}
           onChange={(value) => {
             const event = {
-              target: { name: "duration", value },
+              target: { name: "credentials.env", value },
             } as React.ChangeEvent<HTMLInputElement>;
-            register("duration").onChange(event);
+            register("credentials.env").onChange(event);
           }}
           options={zatcaEnvironment}
           loading={false}
