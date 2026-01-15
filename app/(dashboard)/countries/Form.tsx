@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { Responce } from "@/types/countries";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, "Country Name is required"),
@@ -23,6 +24,7 @@ export default function Form({
   isEdit?: boolean;
   data?: FormData;
 }) {
+  const router = useRouter();
   const queryClient = useQueryClient();
   const {
     register,
@@ -42,10 +44,14 @@ export default function Form({
     api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
     method: isEdit ? "PUT" : "POST",
     options: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["countries", id],
-        });
+      onSuccess: (data) => {
+        if (isEdit) {
+          queryClient.invalidateQueries({
+            queryKey: ["countries", id],
+          });
+        } else {
+          router.push(`/countries/${data.data.id}`);
+        }
       },
     },
   });
