@@ -2,7 +2,7 @@
 
 import type React from 'react';
 import { useState } from 'react';
-import { ChevronDown, Filter, X } from 'lucide-react';
+import { ChevronDown, Filter, X, ArrowUpDown } from 'lucide-react';
 import { cn, formatDate, ObjectCleaner } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -33,6 +33,11 @@ export interface StatusFiltersTab {
 export interface ActionOption {
   label: string;
   onClick: (selectedItems: string[]) => void;
+}
+
+export interface SortOption {
+  label: string;
+  value: string;
 }
 
 interface WithData<T> {
@@ -80,9 +85,13 @@ export function CustomTable<T extends { id: string }>({
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
-  >({ page: 1, [statusFilterKey]: '' });
+  >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
   const currentPage = allFilters.page as number;
   const { close: closeModal } = useModal();
+  const sortOptions: SortOption[] = [
+    { label: 'Descending', value: 'desc' },
+    { label: 'Ascending', value: 'asc' },
+  ];
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
@@ -188,39 +197,69 @@ export function CustomTable<T extends { id: string }>({
                   )
                 )}
               </div>
-              {showStatusFilters && (
-                <CustomModal
-                  title="Filters"
-                  btnTrigger={
-                    <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
-                      <Filter className="h-4 w-4" />
-                      Filter
-                      {Object.entries(allFilters).length > 2 && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setAllFilters({
+              <div className="flex items-center gap-2">
+                {endPoint && sortOptions && sortOptions.length > 0 && (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
+                      <ArrowUpDown className="h-4 w-4" />
+                      Sort
+                      <ChevronDown className="h-4 w-4" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      {sortOptions.map((option) => (
+                        <DropdownMenuItem
+                          key={option.value}
+                          onClick={() =>
+                            setAllFilters((prev) => ({
+                              ...prev,
+                              sort: option.value,
                               page: 1,
-                              [statusFilterKey]: '',
-                            });
-                          }}
-                          className="bg-gray-100 cursor-pointer rounded-full p-1"
+                            }))
+                          }
+                          className={cn(
+                            allFilters['sort'] === option.value && 'bg-muted'
+                          )}
                         >
-                          <X size={15} />
-                        </button>
-                      )}
-                    </button>
-                  }
-                >
-                  <TableFilters
-                    filters={filters}
-                    data={allFilters}
-                    onSubmit={(
-                      data: Record<string, number | string | boolean>
-                    ) => setAllFilters(data)}
-                  />
-                </CustomModal>
-              )}
+                          {option.label}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                )}
+                {showStatusFilters && (
+                  <CustomModal
+                    title="Filters"
+                    btnTrigger={
+                      <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
+                        <Filter className="h-4 w-4" />
+                        Filter
+                        {Object.entries(allFilters).length > 2 && (
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setAllFilters({
+                                page: 1,
+                                [statusFilterKey]: '',
+                              });
+                            }}
+                            className="bg-gray-100 cursor-pointer rounded-full p-1"
+                          >
+                            <X size={15} />
+                          </button>
+                        )}
+                      </button>
+                    }
+                  >
+                    <TableFilters
+                      filters={filters}
+                      data={allFilters}
+                      onSubmit={(
+                        data: Record<string, number | string | boolean>
+                      ) => setAllFilters(data)}
+                    />
+                  </CustomModal>
+                )}
+              </div>
             </div>
           )}
           {/* Selection Info Row */}
