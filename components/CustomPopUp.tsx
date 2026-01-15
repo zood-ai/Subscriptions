@@ -6,17 +6,17 @@ import {
 import React from "react";
 
 interface CustomPopUpProps {
-  PopoverTriggerElement: React.ReactElement;
+  btnTrigger: React.ReactElement;
   children: React.ReactElement;
 }
 
 export default function CustomPopUp({
-  PopoverTriggerElement,
+  btnTrigger,
   children,
 }: CustomPopUpProps) {
   return (
     <Popover>
-      <PopoverTrigger asChild>{PopoverTriggerElement}</PopoverTrigger>
+      <PopoverTrigger asChild>{btnTrigger}</PopoverTrigger>
 
       <PopoverContent
         align="end"

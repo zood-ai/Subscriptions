@@ -11,11 +11,11 @@ import Form from "../Form";
 const CountryData = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data, isFetching } = useCustomQuery<BusinessType>({
-    api: `v1/super-admin/businessTypes/${id}`,
-    queryKey: ["businessTypes", id],
+    api: `v1/super-admin/countries/${id}`,
+    queryKey: ["countries", id],
     options: {
       onError: () => {
-        router.push("/manage-business/type");
+        router.push("/countries");
       },
     },
   });
@@ -36,7 +36,7 @@ const CountryData = ({ id }: { id: string }) => {
     <>
       <PageHeader
         isEdit
-        deleteEndPoint={`v1/super-admin/businessTypes/${id}`}
+        deleteEndPoint={`v1/super-admin/countries/${id}`}
         title={data?.businessType?.name}
         backUrl="/countries"
         Form={<Form id={id} isEdit data={formData} />}
