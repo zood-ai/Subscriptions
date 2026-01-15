@@ -18,7 +18,7 @@ const columns: Column<PackageData>[] = [
     header: 'Duration',
     render: (value) => (
       <div>
-        {value} {Number(value) > 1 ? 'Months' : 'Month'}
+        {Number(value) / 30} {Number(value) / 30 > 1 ? 'Months' : 'Month'}
       </div>
     ),
   },
