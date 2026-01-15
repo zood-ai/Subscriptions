@@ -1,28 +1,33 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import SingleSelect from "@/components/SingleSelect";
-import { Button } from "@/components/ui/button";
-import useCustomMutation from "@/lib/Mutation";
-import { useRouter } from "next/navigation";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useState } from "react";
+'use client';
+import { Input } from '@/components/ui/input';
+import SingleSelect from '@/components/SingleSelect';
+import { Button } from '@/components/ui/button';
+import useCustomMutation from '@/lib/Mutation';
+import { useRouter } from 'next/navigation';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { queryClient } from '@/app/ReactQueryProvider';
 import { Country } from "@/types/countries";
-const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"),
-  password: z.string().min(6, "Password must be at least 6 characters"),
-  phone: z.string().min(1, "Phone is required"),
-  business_name: z.string().min(1, "Business name is required"),
-  business_type_id: z.string().min(1, "Business type is required"),
-  business_location_id: z.string().min(1, "Country is required"),
+
+const baseSchema = {
+  name: z.string().min(1, 'Name is required'),
+  email: z.email('Invalid email'),
+  phone: z.string().min(1, 'Phone is required'),
+  business_name: z.string().min(1, 'Business name is required'),
+  business_type_id: z.string().min(1, 'Business type is required'),
+  business_location_id: z.string().min(1, 'Country is required'),
+};
+
+const createSchema = z.object({
+  ...baseSchema,
+  password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-type FormData = z.infer<typeof formSchema>;
+const editSchema = z.object({
+  ...baseSchema,
+  password: z.string().optional(),
+});
 
 interface BusinessRegistration {
   email: string;
@@ -39,9 +44,28 @@ interface CustomerRegistrationResponse {
   };
 }
 
-export default function Form() {
+interface FormState {
+  name: string;
+  email: string;
+  phone: string;
+  password?: string;
+  business_name: string;
+  business_type_id: string;
+  business_location_id: string;
+}
+
+export default function Form({
+  id = '',
+  isEdit = false,
+  data,
+}: {
+  id?: string;
+  isEdit?: boolean;
+  data?: FormState;
+}) {
+  const schema = isEdit ? editSchema : createSchema;
+  type FormData = z.infer<typeof schema>;
   const router = useRouter();
-  const [tradeRegister, setTradeRegister] = useState<File | null>(null);
 
   const {
     register,
@@ -49,15 +73,15 @@ export default function Form() {
     formState: { errors },
     control,
   } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      password: "",
-      business_name: "",
-      business_type_id: "",
-      business_location_id: "70c4bc20-1fe4-48b2-87c5-26407fe09cde",
+      name: data?.name ?? '',
+      email: data?.email ?? '',
+      phone: data?.phone ?? '',
+      password: '',
+      business_name: data?.business_name ?? '',
+      business_type_id: data?.business_type_id ?? '',
+      business_location_id: data?.business_location_id ?? '',
     },
   });
 
@@ -67,14 +91,19 @@ export default function Form() {
     FormData,
     CustomerRegistrationResponse
   >({
-    api: "v1/auth/Register",
-    method: "POST",
+    api: isEdit ? `v1/super-admin/business/${id}` : 'v1/auth/Register',
+    method: isEdit ? 'PUT' : 'POST',
     options: {
       onSuccess: (data) => {
-        if (data?.data?.user?.business_reference) {
+        if (!isEdit && data?.data?.user?.business_reference) {
           router.push(
             `/manage-business/business/${data.data.user.business_reference}`
           );
+        }
+        if (isEdit) {
+          queryClient.invalidateQueries({
+            queryKey: ['business', id],
+          });
         }
       },
     },
@@ -188,58 +217,8 @@ export default function Form() {
 
         {/* Divider */}
         <div className="border-t border-gray-200"></div>
-
-        {/* Trade Register Upload */}
-        <label className="text-base font-semibold text-gray-700 mb-3 block">
-          Upload Trade Register
-        </label>
-        <div className="flex flex-col gap-3">
-          <label className="group flex items-center justify-center gap-2 h-12 px-6 font-semibold bg-linear-to-r from-gray-50 to-gray-100 hover:from-[#7272F6]/5 hover:to-[#7272F6]/10 rounded-lg border-2 border-dashed border-gray-300 hover:border-[#7272F6] text-gray-700 cursor-pointer transition-all duration-200">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-              />
-            </svg>
-            <span className="text-base">Choose File</span>
-            <input
-              type="file"
-              accept="image/*"
-              name="tradeRegister"
-              className="hidden"
-              onChange={(e) => setTradeRegister(e.target.files?.[0] || null)}
-            />
-          </label>
-          {tradeRegister && (
-            <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-lg">
-              <svg
-                className="w-5 h-5 text-green-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-              <span className="text-sm text-green-700 font-medium">
-                {tradeRegister?.name}
-              </span>
-            </div>
-          )}
-        </div>
       </div>
-      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
+      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
         <Button
           type="submit"
           disabled={isPending}

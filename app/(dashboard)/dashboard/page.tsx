@@ -167,7 +167,7 @@ export default function Dashboard() {
           title="Top Businesses by Users"
           titleClassName="text-xl font-semibold text-gray-900"
           forceLoading={isLoading}
-          showFilters={false}
+          showStatusFilters={false}
           data={stats?.top_by_users ?? []}
           columns={topUserColumns}
           onClickRow={(business) => {
@@ -179,7 +179,7 @@ export default function Dashboard() {
           title="Top Businesses by Invoices"
           titleClassName="text-xl font-semibold text-gray-900"
           forceLoading={isLoading}
-          showFilters={false}
+          showStatusFilters={false}
           data={stats?.top_by_invoices ?? []}
           columns={topInvoicesColumns}
           onClickRow={(business) => {
