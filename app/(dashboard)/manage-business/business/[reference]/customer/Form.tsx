@@ -6,8 +6,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
-import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context';
 import { useRouter } from 'next/navigation';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -116,27 +116,12 @@ export default function Form({
           {...register('email')}
         />
 
-        <div className="space-y-2">
-          {/* <label
-            htmlFor="customerNotes"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            Customer Notes
-          </label>
-          <Textarea
-            la
-            id="customerNotes"
-            placeholder="Enter customer notes..."
-            className="min-h-[120px] resize-none"
-            value={formValues.customerNotes}
-            {...register('customerNotes')}
-          />
-          {errors?.customerNotes?.message && (
-            <p className="text-sm text-red-600">
-              {errors.customerNotes.message}
-            </p>
-          )} */}
-        </div>
+        <Textarea
+          Label="Customer Notes"
+          error={errors?.customerNotes?.message}
+          value={formValues.customerNotes}
+          {...register('customerNotes')}
+        />
       </div>
 
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
