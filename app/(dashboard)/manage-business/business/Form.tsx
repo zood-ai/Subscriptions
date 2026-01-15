@@ -8,6 +8,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
+import { Country } from "@/types/countries";
 
 const baseSchema = {
   name: z.string().min(1, 'Name is required'),
@@ -123,7 +124,7 @@ export default function Form({
           Label="Full Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register('name')}
+          {...register("name")}
           required
         />
 
@@ -134,7 +135,7 @@ export default function Form({
           Label="Email"
           error={errors?.email?.message}
           value={formValues.email}
-          {...register('email')}
+          {...register("email")}
           required
         />
 
@@ -145,7 +146,7 @@ export default function Form({
           Label="Phone"
           error={errors?.phone?.message}
           value={formValues.phone}
-          {...register('phone')}
+          {...register("phone")}
           required
         />
 
@@ -156,7 +157,7 @@ export default function Form({
           type="password"
           error={errors?.password?.message}
           value={formValues.password}
-          {...register('password')}
+          {...register("password")}
           required
         />
 
@@ -170,7 +171,7 @@ export default function Form({
           Label="Business Name"
           error={errors?.business_name?.message}
           value={formValues.business_name}
-          {...register('business_name')}
+          {...register("business_name")}
           required
         />
 
@@ -201,13 +202,13 @@ export default function Form({
           name="business_location_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<{ name_en: string; id: string }, 'name_en'>
+            <SingleSelect<Country, "name_en">
               label="Country"
               placeholder="Select country"
               errorText={errors?.business_location_id?.message}
               value={formValues.business_location_id}
               onChange={(value) => field.onChange(value)}
-              endPoint="v1/manage/countries"
+              endPoint="v1/super-admin/countries"
               labelKey="name_en"
               valueKey="id"
               required
@@ -224,7 +225,7 @@ export default function Form({
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? 'Applying...' : 'Apply'}
+          {isPending ? "Applying..." : "Apply"}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>
