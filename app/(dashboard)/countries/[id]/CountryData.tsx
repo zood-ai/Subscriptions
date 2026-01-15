@@ -1,7 +1,7 @@
 "use client";
 import { DetailCard } from "@/components/DetailCard";
 import { useRouter } from "next/navigation";
-import { CountryResponse } from "@/types/countries";
+import { Country } from "@/types/countries";
 import useCustomQuery from "@/lib/Query";
 import LoadingComponent from "@/components/layout/loading";
 import PageHeader from "@/components/PageHeader";
@@ -9,7 +9,7 @@ import Form from "../Form";
 
 const CountryData = ({ id }: { id: string }) => {
   const router = useRouter();
-  const { data, isFetching } = useCustomQuery<CountryResponse>({
+  const { data, isFetching } = useCustomQuery<Country>({
     api: `v1/super-admin/countries/${id}`,
     queryKey: ["countries", id],
     options: {
@@ -20,8 +20,8 @@ const CountryData = ({ id }: { id: string }) => {
   });
 
   const items = [
-    { title: "Name", value: data?.data?.name_en },
-    { title: "Created at", value: data?.data?.created_at },
+    { title: "Name", value: data?.name_en },
+    { title: "Created at", value: data?.created_at },
   ];
 
   if (isFetching) {
@@ -29,14 +29,14 @@ const CountryData = ({ id }: { id: string }) => {
   }
 
   const formData = {
-    name: data?.data?.name_en || "",
+    name: data?.name_en || "",
   };
   return (
     <>
       <PageHeader
         isEdit
         deleteEndPoint={`v1/super-admin/countries/${id}`}
-        title={data?.data?.name_en}
+        title={data?.name_en}
         backUrl="/countries"
         Form={<Form id={id} isEdit data={formData} />}
       />
