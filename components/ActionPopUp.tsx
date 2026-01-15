@@ -76,8 +76,6 @@ const ActionPopUp = ({
     mutate(data);
   };
 
-  console.log({ errors });
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {message && (
@@ -110,7 +108,6 @@ const ActionPopUp = ({
           }
           return (
             <Input
-              className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
               type={el.type}
               key={el.key}
               Label={el.label}

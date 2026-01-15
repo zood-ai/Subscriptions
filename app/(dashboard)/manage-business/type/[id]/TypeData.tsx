@@ -1,5 +1,5 @@
 "use client";
-import { DetailCard } from "@/components/DetailCard";
+import { DetailCard, DetailItem } from "@/components/DetailCard";
 import { useRouter } from "next/navigation";
 import { BusinessData, BusinessType } from "@/types/business";
 import { Column, CustomTable } from "@/components/CustomTable";
@@ -7,6 +7,7 @@ import useCustomQuery from "@/lib/Query";
 import LoadingComponent from "@/components/layout/loading";
 import PageHeader from "@/components/PageHeader";
 import Form from "../Form";
+import { formatDate } from "@/lib/utils";
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -20,17 +21,20 @@ const TypeData = ({ id }: { id: string }) => {
     },
   });
 
-  const items = [
-    { title: "Name", value: data?.businessType?.name },
-    { title: "Created at", value: data?.businessType?.created_at },
+  const items: DetailItem[] = [
+    { title: 'Name', value: data?.businessType?.name },
+    {
+      title: 'Created at',
+      value: formatDate(data?.businessType?.created_at ?? ''),
+    },
   ];
 
   const columns: Column<BusinessData>[] = [
-    { key: "name", header: "Name" },
-    { key: "reference", header: "Reference" },
-    { key: "owner_email", header: "Owner email" },
-    { key: "created_at", header: "Created at" },
-    { key: "end_at", header: "End at" },
+    { key: 'name', header: 'Name' },
+    { key: 'reference', header: 'Reference' },
+    { key: 'owner_email', header: 'Owner email' },
+    { key: 'created_at', header: 'Created at', type: 'date' },
+    { key: 'end_at', header: 'End at', type: 'date' },
   ];
   if (isFetching) {
     return <LoadingComponent />;
@@ -51,7 +55,7 @@ const TypeData = ({ id }: { id: string }) => {
       <div className="py-10 mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
-          showFilters={false}
+          showStatusFilters={false}
           data={data?.businesses ?? []}
           title={"Business"}
           columns={columns}

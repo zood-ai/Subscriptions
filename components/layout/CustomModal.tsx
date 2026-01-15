@@ -1,15 +1,13 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useModal } from '@/context/ModalContext';
-import { ModalTypes } from '@/context/ModalContext';
 
 interface CustomModalProps {
   btnTrigger: React.ReactElement;
   children: React.ReactNode;
   title?: string;
-  modalType: ModalTypes;
   className?: string;
 }
 
@@ -18,11 +16,13 @@ const CustomModal: React.FC<CustomModalProps> = ({
   children,
   title,
   className,
-  modalType,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const mouseDownPositionRef = useRef<{ x: number; y: number } | null>(null);
   const { openedModal, close, open } = useModal();
-  const isOpen = openedModal === modalType;
+  const id = useId();
+  const isOpen = openedModal === id;
+
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -41,20 +41,37 @@ const CustomModal: React.FC<CustomModalProps> = ({
     };
   }, [isOpen, close]);
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    mouseDownPositionRef.current = { x: e.clientX, y: e.clientY };
+  };
+
   const handleBackdropClick = (e: React.MouseEvent) => {
+    if (mouseDownPositionRef.current) {
+      const deltaX = Math.abs(e.clientX - mouseDownPositionRef.current.x);
+      const deltaY = Math.abs(e.clientY - mouseDownPositionRef.current.y);
+
+      if (deltaX > 5 || deltaY > 5) {
+        mouseDownPositionRef.current = null;
+        return;
+      }
+    }
+
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       close();
     }
+
+    mouseDownPositionRef.current = null;
   };
 
   return (
     <div>
-      <div role="button" onClick={() => open(modalType)}>
+      <div role="button" onClick={() => open(id)}>
         {btnTrigger}
       </div>
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 transition-opacity"
+          onMouseDown={handleMouseDown}
           onClick={handleBackdropClick}
         >
           <div

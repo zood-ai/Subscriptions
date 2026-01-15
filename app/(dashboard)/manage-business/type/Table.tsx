@@ -2,7 +2,7 @@
 import {
   CustomTable,
   type Column,
-  type FilterTab,
+  type StatusFiltersTab,
   type ActionOption,
 } from '@/components/CustomTable';
 import { BusinessType } from '@/types/business';
@@ -10,11 +10,10 @@ import { useRouter } from 'next/navigation';
 
 const columns: Column<BusinessType['businessType']>[] = [
   { key: 'name', header: 'Name' },
-  { key: 'created_at', header: 'Created at' },
+  { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
-const filters: FilterTab[] = [
-  { label: 'All', value: 'all' },
+const filters: StatusFiltersTab[] = [
   { label: 'Active', value: 'true' },
   { label: 'Deleted', value: 'false' },
 ];
@@ -35,8 +34,11 @@ export default function Table() {
     <div className="py-10 mainPaddingX">
       <CustomTable
         endPoint="v1/super-admin/businessTypes"
-        filterKey="isDeleted"
-        filters={filters}
+        statusFilterKey="isDeleted"
+        statusFilters={filters}
+        filters={{
+          showName: true,
+        }}
         columns={columns}
         actions={actions}
         onClickRow={(data) => {

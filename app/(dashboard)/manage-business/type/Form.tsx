@@ -2,7 +2,6 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
-import { useRouter } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -18,10 +17,6 @@ interface CreateBusinessTypeResponse {
   id: string;
 }
 
-interface FormState {
-  name: string;
-}
-
 export default function Form({
   id = '',
   isEdit = false,
@@ -29,10 +24,8 @@ export default function Form({
 }: {
   id?: string;
   isEdit?: boolean;
-  data?: FormState;
+  data?: FormData;
 }) {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,
@@ -75,7 +68,6 @@ export default function Form({
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Name"
           error={errors?.name?.message}
