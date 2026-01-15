@@ -32,6 +32,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
     { title: 'Name', value: data?.business.name },
     { title: 'Reference', value: data?.business.reference },
     { title: 'Owner email', value: data?.business.owner_email },
+    { title: 'Package', value: data?.business.plan },
     { title: 'Created at', value: formatDate(data?.business.created_at ?? '') },
     { title: 'End at', value: formatDate(data?.business.end_at ?? '') },
     { title: 'Block Reason', value: data?.business?.reason },
@@ -74,6 +75,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
     email: data?.business.owner_email ?? '',
     phone: data?.business.phone ?? '',
     business_name: data?.business.name ?? '',
+    package_id: data?.business.plan ?? '',
     business_type_id: data?.business.type ?? '',
     business_location_id:
       data?.business.location ?? '70c4bc20-1fe4-48b2-87c5-26407fe09cde',

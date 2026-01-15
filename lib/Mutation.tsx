@@ -33,7 +33,6 @@ const useCustomMutation = <TBody=void, TResponse=void>({
       if (options?.onSuccess) options?.onSuccess?.(...rest);
     },
     onError: (...rest) => {
-      close();
       if (options?.onError) options?.onError?.(...rest);
     },
   });
