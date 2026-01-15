@@ -1,11 +1,12 @@
 'use client';
-import { DetailCard } from '@/components/DetailCard';
+import { DetailCard, DetailItem } from '@/components/DetailCard';
 import { useRouter } from 'next/navigation';
 import { Country } from '@/types/countries';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
 import PageHeader from '@/components/PageHeader';
 import Form from '../Form';
+import { formatDate } from '@/lib/utils';
 
 const CountryData = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -19,9 +20,12 @@ const CountryData = ({ id }: { id: string }) => {
     },
   });
 
-  const items = [
+  const items: DetailItem[] = [
     { title: 'Name', value: data?.name_en },
-    { title: 'Created at', value: data?.created_at },
+    {
+      title: 'Created at',
+      value: formatDate(data?.created_at ?? ''),
+    },
   ];
 
   if (isFetching) {

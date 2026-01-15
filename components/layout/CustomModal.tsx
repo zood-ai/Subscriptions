@@ -18,6 +18,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
   className,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
+  const mouseDownPositionRef = useRef<{ x: number; y: number } | null>(null);
   const { openedModal, close, open } = useModal();
   const id = useId();
   const isOpen = openedModal === id;
@@ -40,10 +41,26 @@ const CustomModal: React.FC<CustomModalProps> = ({
     };
   }, [isOpen, close]);
 
+  const handleMouseDown = (e: React.MouseEvent) => {
+    mouseDownPositionRef.current = { x: e.clientX, y: e.clientY };
+  };
+
   const handleBackdropClick = (e: React.MouseEvent) => {
+    if (mouseDownPositionRef.current) {
+      const deltaX = Math.abs(e.clientX - mouseDownPositionRef.current.x);
+      const deltaY = Math.abs(e.clientY - mouseDownPositionRef.current.y);
+
+      if (deltaX > 5 || deltaY > 5) {
+        mouseDownPositionRef.current = null;
+        return;
+      }
+    }
+
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       close();
     }
+
+    mouseDownPositionRef.current = null;
   };
 
   return (
@@ -54,6 +71,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 transition-opacity"
+          onMouseDown={handleMouseDown}
           onClick={handleBackdropClick}
         >
           <div

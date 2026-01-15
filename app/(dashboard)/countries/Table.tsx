@@ -12,7 +12,7 @@ const columns: Column<Country>[] = [
   {
     key: "created_at",
     header: "Created At",
-    // type: "date",
+    type: "date",
   },
 ];
 
@@ -33,6 +33,9 @@ export default function Table() {
       <CustomTable
         endPoint="v1/super-admin/countries"
         columns={columns}
+        filters={{
+          showName: true,
+        }}
         onClickRow={(row) => {
           router.push(`/countries/${row.id}`);
         }}

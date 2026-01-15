@@ -5,6 +5,7 @@ import { Input } from './ui/input';
 export interface AllowedFilters {
   showName?: boolean;
   showReference?: boolean;
+  showCode?: boolean;
 }
 
 interface TableFiltersProps {
@@ -46,6 +47,14 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
             Label="Reference"
             value={(allFilters?.reference as string) ?? ''}
             onChange={(e) => handleChnage('reference', e.target.value)}
+          />
+        )}
+        {filters.showCode && (
+          <Input
+            type="text"
+            Label="Code"
+            value={(allFilters?.code as string) ?? ''}
+            onChange={(e) => handleChnage('code', e.target.value)}
           />
         )}
       </div>

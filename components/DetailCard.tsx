@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-interface DetailItem {
+export interface DetailItem {
   title: string;
   value: string | ReactNode;
 }
@@ -21,12 +21,7 @@ export function DetailCard({ items }: DetailCardProps) {
   );
 }
 
-interface DetailFieldProps {
-  title: string;
-  value: string | ReactNode;
-}
-
-function DetailField({ title, value }: DetailFieldProps) {
+function DetailField({ title, value }: DetailItem) {
   return (
     <div className="border-b-2 border-gray-200 pb-3">
       <p className="text-sm text-gray-600 mb-1">{title}</p>

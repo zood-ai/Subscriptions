@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 
 const columns: Column<BusinessType['businessType']>[] = [
   { key: 'name', header: 'Name' },
-  { key: 'created_at', header: 'Created at' },
+  { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
 const filters: StatusFiltersTab[] = [
@@ -36,6 +36,9 @@ export default function Table() {
         endPoint="v1/super-admin/businessTypes"
         statusFilterKey="isDeleted"
         statusFilters={filters}
+        filters={{
+          showName: true,
+        }}
         columns={columns}
         actions={actions}
         onClickRow={(data) => {

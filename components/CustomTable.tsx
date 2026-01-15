@@ -3,7 +3,7 @@
 import type React from 'react';
 import { useState } from 'react';
 import { ChevronDown, Filter, X } from 'lucide-react';
-import { cn, ObjectCleaner } from '@/lib/utils';
+import { cn, formatDate, ObjectCleaner } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +22,7 @@ export interface Column<T> {
   key: keyof T;
   header: string;
   render?: (value: T[keyof T], item: T) => React.ReactNode;
+  type?: 'date';
 }
 
 export interface StatusFiltersTab {
@@ -314,6 +315,8 @@ export function CustomTable<T extends { id: string }>({
                       >
                         {column.render
                           ? column.render(item[column.key], item)
+                          : column.type === 'date' && item[column.key]
+                          ? formatDate(new Date(item[column.key] as string))
                           : String(item[column.key] ?? '-')}
                       </td>
                     ))}
