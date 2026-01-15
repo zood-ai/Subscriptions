@@ -14,7 +14,7 @@ const columns: Column<Country>[] = [
   {
     key: 'created_at',
     header: 'Created At',
-    // type: "date",
+    type: 'date',
   },
 ];
 
@@ -37,12 +37,14 @@ export default function CountriesPage() {
         <CustomTable
           endPoint="v1/super-admin/countries"
           columns={columns}
-          filters={[]}
+          filters={{
+            showName: true,
+          }}
           onClickRow={(row) => {
             router.push(`/countries/${row.id}`);
           }}
           actions={actions}
-          filterKey="status"
+          statusFilterKey="status"
         />
       </div>
     </>
