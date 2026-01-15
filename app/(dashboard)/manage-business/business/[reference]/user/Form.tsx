@@ -8,6 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
+import { useRouter } from 'next/navigation';
+import { allLanguages } from '@/constants/business';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -44,6 +46,7 @@ export default function Form({
   reference: string;
   data?: FormState;
 }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -73,53 +76,23 @@ export default function Form({
       : `v1/super-admin/business/${reference}/users/${id}`,
     method: isEdit ? 'PUT' : 'POST',
     options: {
-      onSuccess: () => {
+      onSuccess: (data) => {
         if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['users', id],
           });
+        } else {
+          router.push(`/manage-business/business/${reference}/user/${data.id}`);
         }
       },
     },
   });
 
-  const { mutate: generateLoginPin, isPending: isGenerating } =
-    useCustomMutation<void, { loginPin: string }>({
-      api: 'v1/super-admin/users/generate-login-pin',
-      method: 'POST',
-      options: {
-        onSuccess: (response) => {
-          setValue('loginPin', response.loginPin);
-        },
-      },
-    });
-
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
 
-  const handleGenerateLoginPin = () => {
-    generateLoginPin();
-  };
-
-  const allLanguages = [
-    {
-      value: 'ar',
-      label: 'Arabic',
-    },
-    {
-      value: 'en',
-      label: 'English',
-    },
-    {
-      value: 'es',
-      label: 'Espanol',
-    },
-    {
-      value: 'fr',
-      label: 'Francais',
-    },
-  ];
+  
 
   const btnText = isEdit ? 'Update' : 'Create';
 
@@ -168,25 +141,14 @@ export default function Form({
           required
         />
 
-        <div className="flex max-sm:flex-wrap gap-x-3 items-center">
-          <Input
-            type="text"
-            Label="Login Pin"
-            error={errors?.loginPin?.message}
-            value={formValues.loginPin}
-            {...register('loginPin')}
-            required
-          />
-          <Button
-            variant="secondary"
-            type="button"
-            onClick={handleGenerateLoginPin}
-            disabled={isGenerating}
-            className="w-full sm:w-[200px] h-[50px] mt-7"
-          >
-            {isGenerating ? 'Generating...' : 'Generate'}
-          </Button>
-        </div>
+        <Input
+          type="text"
+          Label="Login Pin"
+          error={errors?.loginPin?.message}
+          value={formValues.loginPin}
+          {...register('loginPin')}
+          required
+        />
 
         <div className="flex items-center space-x-2">
           <Checkbox

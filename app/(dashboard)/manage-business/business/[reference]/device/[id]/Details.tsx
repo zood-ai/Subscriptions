@@ -13,9 +13,9 @@ const Details = ({ reference, id }: { reference: string; id: string }) => {
     api: `v1/super-admin/business/${reference}/devices/${id}`,
     queryKey: ['devices', id],
     options: {
-      // onError: () => {
-      //   router.push(`/manage-business/business/${reference}`);
-      // },
+      onError: () => {
+        router.push(`/manage-business/business/${reference}`);
+      },
     },
   });
 

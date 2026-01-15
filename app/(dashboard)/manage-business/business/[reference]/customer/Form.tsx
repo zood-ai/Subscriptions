@@ -6,6 +6,8 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
+import { routerServerGlobal } from 'next/dist/server/lib/router-utils/router-server-context';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -38,6 +40,7 @@ export default function Form({
   reference: string;
   data?: FormState;
 }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -64,11 +67,15 @@ export default function Form({
       : `v1/super-admin/business/${reference}/customers`,
     method: isEdit ? 'PUT' : 'POST',
     options: {
-      onSuccess: () => {
+      onSuccess: (data) => {
         if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['customers', id],
           });
+        } else {
+          router.push(
+            `/manage-business/business/${reference}/customer/${data.id}`
+          );
         }
       },
     },

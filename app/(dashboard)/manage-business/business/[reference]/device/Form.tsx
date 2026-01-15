@@ -7,6 +7,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
+import { useRouter } from 'next/navigation';
+import { deviceTypes } from '@/constants/business';
 
 const formSchema = z.object({
   type: z.string().optional(),
@@ -17,7 +19,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface CreateBusinessTypeResponse {
+interface CreateResponse {
   id: string;
 }
 
@@ -39,12 +41,12 @@ export default function Form({
   data?: FormState;
   reference: string;
 }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
     control,
-    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -59,18 +61,22 @@ export default function Form({
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
-    CreateBusinessTypeResponse
+    CreateResponse
   >({
     api: isEdit
       ? `v1/super-admin/business/${reference}/devices/${id}`
       : `v1/super-admin/business/${reference}/devices`,
     method: isEdit ? 'PUT' : 'POST',
     options: {
-      onSuccess: () => {
+      onSuccess: (data) => {
         if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['devices', reference, id],
           });
+        } else {
+          router.push(
+            `/manage-business/business/${reference}/device/${data.id}`
+          );
         }
       },
     },
@@ -79,33 +85,6 @@ export default function Form({
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
-
-  const deviceTypes = [
-    {
-      value: '1',
-      label: 'Cashier',
-    },
-    {
-      value: '2',
-      label: 'KDS',
-    },
-    {
-      value: '4',
-      label: 'Notifier',
-    },
-    {
-      value: '5',
-      label: 'Display',
-    },
-    {
-      value: '6',
-      label: 'Sub Cashier',
-    },
-    {
-      value: '7',
-      label: 'Dashboard',
-    },
-  ];
 
   const btnText = isEdit ? 'Update' : 'Create';
 
