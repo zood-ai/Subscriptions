@@ -6,6 +6,7 @@ import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
+import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -13,7 +14,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface CreateBusinessTypeResponse {
+interface CreateResponse {
   id: string;
 }
 
@@ -26,6 +27,7 @@ export default function Form({
   isEdit?: boolean;
   data?: FormData;
 }) {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -42,18 +44,20 @@ export default function Form({
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
-    CreateBusinessTypeResponse
+    CreateResponse
   >({
     api: isEdit
       ? `v1/super-admin/businessTypes/${id}`
       : 'v1/super-admin/businessTypes',
     method: isEdit ? 'PUT' : 'POST',
     options: {
-      onSuccess: () => {
-        if (id) {
+      onSuccess: (data) => {
+        if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['businessTypes', id],
           });
+        } else {
+          router.push(`/manage-business/type/${data.id}`);
         }
       },
     },

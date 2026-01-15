@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
 import { Controller } from 'react-hook-form';
+import { activationCodePeriods } from '@/constants/global';
 
 const formSchema = z.object({
   business_reference: z.number().int(),
@@ -15,20 +16,16 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface Response {
-  id: string;
-}
-
 interface FormState {
   business_reference: number;
   months: number;
 }
 
 export default function Form({
-  id = '',
+  reference = '',
   data,
 }: {
-  id?: string;
+  reference?: string;
   data?: FormState;
 }) {
   const {
@@ -43,14 +40,14 @@ export default function Form({
     },
   });
 
-  const { mutate, isPending, error } = useCustomMutation<FormData, Response>({
+  const { mutate, isPending, error } = useCustomMutation<FormData>({
     api: 'v1/auth/extendBusiness',
     method: 'POST',
     options: {
       onSuccess: () => {
-        if (id) {
+        if (reference) {
           queryClient.invalidateQueries({
-            queryKey: ['business', id],
+            queryKey: ['business', reference],
           });
         }
       },
@@ -74,11 +71,7 @@ export default function Form({
               errorText={errors?.months?.message}
               value={String(field.value)}
               onChange={(value) => field.onChange(+value)}
-              options={[
-                { label: '3 Months', value: '3' },
-                { label: '6 Months', value: '6' },
-                { label: '12 Months', value: '12' },
-              ]}
+              options={activationCodePeriods}
               required
             />
           )}

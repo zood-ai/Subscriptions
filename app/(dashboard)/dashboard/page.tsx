@@ -16,7 +16,8 @@ import { CustomTable } from '@/components/CustomTable';
 import { useRouter } from 'next/navigation';
 import SingleSelect from '@/components/SingleSelect';
 import { Input } from '@/components/ui/input';
-import { statusOptions, topInvoicesColumns, topUserColumns } from './constants';
+import { topInvoicesColumns, topUserColumns } from './columns';
+import { businessStatusOptions } from '@/constants/global';
 
 export default function Dashboard() {
   const [filters, setFilters] = useState<DashboardFilters>({
@@ -105,7 +106,7 @@ export default function Dashboard() {
               }
               className="w-fit"
               parentClassName="w-fit"
-              options={statusOptions}
+              options={businessStatusOptions}
               loading={false}
               required
               showSearch

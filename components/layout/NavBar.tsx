@@ -31,7 +31,7 @@ export default function NavBar() {
             <CustomPopUp
               btnTrigger={
                 <button className="rounded-full p-2 hover:bg-muted cursor-pointer transition">
-                  <User className="h-5 w-5 text-muted-foreground" />
+                  <User className="h-6 w-6 text-muted-foreground" />
                 </button>
               }
             >

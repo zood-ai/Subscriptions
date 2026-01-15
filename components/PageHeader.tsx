@@ -6,6 +6,8 @@ import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';
 import ActionPopUp, { Input } from './ActionPopUp';
 import { Badge } from './ui/badge';
+import { cn } from '@/lib/utils';
+import { isBlockedInputs } from '@/constants/global';
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -15,6 +17,7 @@ interface Props {
   blockEndPoint?: string;
   isBlocked?: boolean;
   backUrl?: string;
+  className?: string;
 }
 
 const PageHeader: React.FC<Props> = ({
@@ -24,44 +27,17 @@ const PageHeader: React.FC<Props> = ({
   Form,
   businessActiveForm,
   blockEndPoint,
-  isBlocked,
+  isBlocked = false,
   backUrl = '',
+  className = '',
 }) => {
-  const businessBlockInputs: Input[] = isBlocked
-    ? [
-        {
-          key: 'reason',
-          label: 'Reason',
-          value: '',
-          type: 'text',
-          isHidden: true,
-        },
-        {
-          key: 'active',
-          label: 'Active',
-          value: '1',
-          type: 'text',
-          isHidden: true,
-        },
-      ]
-    : [
-        {
-          key: 'reason',
-          label: 'Reason',
-          value: '',
-          isRequired: true,
-          type: 'text',
-        },
-        {
-          key: 'active',
-          label: 'Active',
-          value: '0',
-          type: 'text',
-          isHidden: true,
-        },
-      ];
   return (
-    <div className="flex flex-wrap justify-between items-center gap-4 py-3.75 mainPaddingX bg-white">
+    <div
+      className={cn(
+        'flex flex-wrap justify-between items-center gap-4 py-3.75 mainPaddingX bg-white',
+        className
+      )}
+    >
       <div>
         {backUrl && (
           <Link
@@ -102,7 +78,7 @@ const PageHeader: React.FC<Props> = ({
                       ? 'Are you sure you want to Unblock this business?'
                       : ''
                   }
-                  inputs={businessBlockInputs}
+                  inputs={isBlockedInputs(isBlocked)}
                   btnTitle={isBlocked ? 'Unblock' : 'Block'}
                   backUrl={backUrl}
                 />
@@ -118,6 +94,7 @@ const PageHeader: React.FC<Props> = ({
             )}
             {deleteEndPoint && (
               <CustomModal
+                title="Delete"
                 btnTrigger={
                   <Button variant="danger">
                     <Trash2 />
@@ -143,7 +120,7 @@ const PageHeader: React.FC<Props> = ({
         {/* Both */}
         {Form && (
           <CustomModal
-            title={`${isEdit ? 'Update' : 'Create'} ${title}`}
+            title={isEdit ? 'Update' : 'Create'}
             btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
           >
             {Form}
