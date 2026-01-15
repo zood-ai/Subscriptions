@@ -12,7 +12,7 @@ const columns: Column<Country>[] = [
   {
     key: "created_at",
     header: "Created At",
-    // type: "date",
+    type: "date",
   },
 ];
 

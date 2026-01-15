@@ -295,7 +295,7 @@ export function CustomTable<T extends { id: string }>({
                           ? column.render(item[column.key], item)
                           : column.type === 'date' && item[column.key]
                           ? dayjs(new Date(item[column.key] as string)).format(
-                              'h:mm A D/M/YYYY'
+                              'DD/MM/YYYY h:mm A'
                             )
                           : String(item[column.key] ?? '-')}
                       </td>
