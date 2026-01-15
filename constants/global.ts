@@ -99,3 +99,22 @@ export const allLanguages = [
     label: 'Francais',
   },
 ];
+
+export const activationCodePeriods = [
+  {
+    label: '1 Month',
+    value: '1',
+  },
+  {
+    label: '3 Month',
+    value: '3',
+  },
+  {
+    label: '6 Month',
+    value: '6',
+  },
+  {
+    label: 'Year',
+    value: '12',
+  },
+];

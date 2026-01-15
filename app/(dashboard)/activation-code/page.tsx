@@ -26,7 +26,6 @@ const columns: Column<ActivationCodeData>[] = [
 ];
 
 const filters: StatusFiltersTab[] = [
-  { label: 'All', value: 'all' },
   { label: 'Used', value: '1' },
   { label: 'Not Used', value: '0' },
 ];
