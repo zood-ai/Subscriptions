@@ -6,26 +6,13 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
+import { Responce } from "@/types/countries";
 
 const formSchema = z.object({
   name: z.string().min(1, "Country Name is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
-
-interface Responce {
-  status: boolean;
-  code: number;
-  message: string;
-  data: Data;
-}
-
-interface Data {
-  name: string;
-  id: string;
-  updated_at: string;
-  created_at: string;
-}
 
 export default function Form({
   id = "",

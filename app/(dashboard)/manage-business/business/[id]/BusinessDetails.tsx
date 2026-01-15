@@ -78,7 +78,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
       />
-      <div className="py-[40px] mainPaddingX">
+      <div className="py-10 mainPaddingX">
         <DetailCard items={items} />
         {tables.map((el) => (
           <CustomTable

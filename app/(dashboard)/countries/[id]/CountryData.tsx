@@ -1,25 +1,11 @@
 "use client";
 import { DetailCard } from "@/components/DetailCard";
 import { useRouter } from "next/navigation";
-import { BusinessType } from "@/types/business";
-
+import { Responce } from "@/types/countries";
 import useCustomQuery from "@/lib/Query";
 import LoadingComponent from "@/components/layout/loading";
 import PageHeader from "@/components/PageHeader";
 import Form from "../Form";
-interface Responce {
-  status: boolean;
-  code: number;
-  message: string;
-  data: Data;
-}
-
-interface Data {
-  name: string;
-  id: string;
-  updated_at: string;
-  created_at: string;
-}
 
 const CountryData = ({ id }: { id: string }) => {
   const router = useRouter();
