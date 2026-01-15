@@ -5,14 +5,9 @@ import {
   type ActionOption,
 } from "@/components/CustomTable";
 import { useRouter } from "next/navigation";
+import { Country } from "@/types/countries";
 
-interface CountryData {
-  name_en: string;
-  created_at: string;
-  id: string;
-}
-
-const columns: Column<CountryData>[] = [
+const columns: Column<Country>[] = [
   { key: "name_en", header: "Name" },
   {
     key: "created_at",
