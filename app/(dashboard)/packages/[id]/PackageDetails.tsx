@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
-import { usersColumns } from './constants';
+import { usersColumns } from './columns';
 import PageHeader from '@/components/PageHeader';
 import { PackageData } from '@/types/packages';
 import Form from '../Form';
