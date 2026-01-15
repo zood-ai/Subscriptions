@@ -27,7 +27,15 @@ interface Data {
   created_at: string;
 }
 
-export default function Form() {
+export default function Form({
+  id = "",
+  isEdit = false,
+  data,
+}: {
+  id?: string;
+  isEdit?: boolean;
+  data?: FormData;
+}) {
   const queryClient = useQueryClient();
   const {
     register,
@@ -37,19 +45,19 @@ export default function Form() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name: data?.name || "",
     },
   });
 
   const formValues = useWatch({ control });
 
   const { mutate, isPending, error } = useCustomMutation<FormData, Responce>({
-    api: "v1/manage/countries",
-    method: "POST",
+    api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
+    method: isEdit ? "PUT" : "POST",
     options: {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["v1/manage/countries"],
+          queryKey: ["v1/manage/countries", id],
         });
       },
     },

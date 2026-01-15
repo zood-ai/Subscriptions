@@ -1,8 +1,11 @@
-interface CountryProps {
+import CountryData from "./CountryData";
+
+interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default async function CountryPage({ params }: CountryProps) {
-  const countryId = (await params).id;
-  return <h1>Country Page With Id - {countryId}</h1>;
+export default async function Type({ params }: Props) {
+  const { id } = await params;
+
+  return <CountryData id={id} />;
 }
