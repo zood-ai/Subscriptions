@@ -8,13 +8,14 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
-import { Country } from "@/types/countries";
+import { Country } from '@/types/countries';
 
 const baseSchema = {
   name: z.string().min(1, 'Name is required'),
   email: z.email('Invalid email'),
   phone: z.string().min(1, 'Phone is required'),
   business_name: z.string().min(1, 'Business name is required'),
+  package_id: z.string().min(1, 'Package is required'),
   business_type_id: z.string().min(1, 'Business type is required'),
   business_location_id: z.string().min(1, 'Country is required'),
 };
@@ -49,6 +50,7 @@ interface FormState {
   email: string;
   phone: string;
   password?: string;
+  package_id: string;
   business_name: string;
   business_type_id: string;
   business_location_id: string;
@@ -80,6 +82,7 @@ export default function Form({
       phone: data?.phone ?? '',
       password: '',
       business_name: data?.business_name ?? '',
+      package_id: data?.package_id ?? '',
       business_type_id: data?.business_type_id ?? '',
       business_location_id: data?.business_location_id ?? '',
     },
@@ -118,45 +121,41 @@ export default function Form({
       <div className="space-y-6">
         {/* Full Name */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Full Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register("name")}
+          {...register('name')}
           required
         />
 
         {/* Email */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="email"
           Label="Email"
           error={errors?.email?.message}
           value={formValues.email}
-          {...register("email")}
+          {...register('email')}
           required
         />
 
         {/* Phone */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Phone"
           error={errors?.phone?.message}
           value={formValues.phone}
-          {...register("phone")}
+          {...register('phone')}
           required
         />
 
         {/* Password */}
         <Input
           Label="Password"
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="password"
           error={errors?.password?.message}
           value={formValues.password}
-          {...register("password")}
+          {...register('password')}
           required
         />
 
@@ -165,12 +164,11 @@ export default function Form({
 
         {/* Business Name */}
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Business Name"
           error={errors?.business_name?.message}
           value={formValues.business_name}
-          {...register("business_name")}
+          {...register('business_name')}
           required
         />
 
@@ -196,12 +194,33 @@ export default function Form({
           )}
         />
 
+        {/* Packages */}
+        <Controller
+          name="package_id"
+          control={control}
+          render={({ field }) => (
+            <SingleSelect<{
+              id: string;
+              name: string;
+            }>
+              label="Package"
+              errorText={errors?.package_id?.message}
+              value={String(field.value)}
+              onChange={(value) => field.onChange(value)}
+              endPoint="v1/super-admin/packages"
+              labelKey="name"
+              valueKey="id"
+              required
+            />
+          )}
+        />
+
         {/* Country */}
         <Controller
           name="business_location_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<Country, "name_en">
+            <SingleSelect<Country, 'name_en'>
               label="Country"
               placeholder="Select country"
               errorText={errors?.business_location_id?.message}
@@ -224,7 +243,7 @@ export default function Form({
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? "Applying..." : "Apply"}
+          {isPending ? 'Applying...' : 'Apply'}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>

@@ -19,8 +19,12 @@ interface ActivationCodeData {
 const columns: Column<ActivationCodeData>[] = [
   { key: 'code', header: 'Code' },
   { key: 'duration', header: 'Duration' },
-  { key: 'created_at', header: 'Created At' },
-  { key: 'is_used', header: 'Is Used' },
+  { key: 'created_at', header: 'Created At', type: 'date' },
+  {
+    key: 'is_used',
+    header: 'Is Used',
+    render: (value) => <div>{value === 0 ? 'Not used' : 'Used'}</div>,
+  },
 ];
 
 const filters: StatusFiltersTab[] = [
@@ -57,6 +61,9 @@ export default function Table() {
     <div className="py-10 mainPaddingX">
       <CustomTable
         endPoint="v1/activationcode/list"
+        filters={{
+          showCode: true,
+        }}
         columns={columns}
         statusFilters={filters}
         actions={actions}

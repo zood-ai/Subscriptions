@@ -110,6 +110,7 @@ const PageHeader: React.FC<Props> = ({
             )}
             {businessActiveForm && (
               <CustomModal
+                title="Active"
                 btnTrigger={<Button variant="secondary">Active</Button>}
               >
                 {businessActiveForm}
