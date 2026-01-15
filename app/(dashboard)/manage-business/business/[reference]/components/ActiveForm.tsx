@@ -7,7 +7,6 @@ import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
 import { Controller } from 'react-hook-form';
-import { useModal } from '@/context/ModalContext';
 
 const formSchema = z.object({
   business_reference: z.number().int(),
@@ -28,7 +27,6 @@ export default function Form({
   reference?: string;
   data?: FormState;
 }) {
-  const { close } = useModal();
   const {
     handleSubmit,
     formState: { errors },
@@ -50,7 +48,6 @@ export default function Form({
           queryClient.invalidateQueries({
             queryKey: ['business', reference],
           });
-          close();
         }
       },
     },

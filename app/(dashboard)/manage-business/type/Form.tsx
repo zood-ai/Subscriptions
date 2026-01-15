@@ -2,7 +2,6 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
-import { useRouter } from 'next/navigation';
 import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -18,10 +17,6 @@ interface CreateResponse {
   id: string;
 }
 
-interface FormState {
-  name: string;
-}
-
 export default function Form({
   id = '',
   isEdit = false,
@@ -29,10 +24,8 @@ export default function Form({
 }: {
   id?: string;
   isEdit?: boolean;
-  data?: FormState;
+  data?: FormData;
 }) {
-  const router = useRouter();
-
   const {
     register,
     handleSubmit,

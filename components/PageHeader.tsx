@@ -63,7 +63,6 @@ const PageHeader: React.FC<Props> = ({
           <>
             {blockEndPoint && (
               <CustomModal
-                modalType="block"
                 title={isBlocked ? 'Unblock' : 'Block'}
                 btnTrigger={
                   <Button variant="secondary">
@@ -87,7 +86,6 @@ const PageHeader: React.FC<Props> = ({
             )}
             {businessActiveForm && (
               <CustomModal
-                modalType="active"
                 title="Active"
                 btnTrigger={<Button variant="secondary">Active</Button>}
               >
@@ -96,7 +94,6 @@ const PageHeader: React.FC<Props> = ({
             )}
             {deleteEndPoint && (
               <CustomModal
-                modalType="delete"
                 title="Delete"
                 btnTrigger={
                   <Button variant="danger">
@@ -123,7 +120,6 @@ const PageHeader: React.FC<Props> = ({
         {/* Both */}
         {Form && (
           <CustomModal
-            modalType="create"
             title={isEdit ? 'Update' : 'Create'}
             btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
           >

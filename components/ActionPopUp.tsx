@@ -76,8 +76,6 @@ const ActionPopUp = ({
     mutate(data);
   };
 
-  console.log({ errors });
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       {message && (
