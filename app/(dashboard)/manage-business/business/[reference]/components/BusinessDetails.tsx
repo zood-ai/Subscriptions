@@ -1,10 +1,10 @@
-'use client';
-import { DetailCard } from '@/components/DetailCard';
-import { useRouter } from 'next/navigation';
-import { BusinessResponse } from '@/types/business';
-import { Column, CustomTable } from '@/components/CustomTable';
-import useCustomQuery from '@/lib/Query';
-import LoadingComponent from '@/components/layout/loading';
+"use client";
+import { DetailCard } from "@/components/DetailCard";
+import { useRouter } from "next/navigation";
+import { BusinessResponse } from "@/types/business";
+import { Column, CustomTable } from "@/components/CustomTable";
+import useCustomQuery from "@/lib/Query";
+import LoadingComponent from "@/components/layout/loading";
 import {
   customersColumns,
   devicesColumns,
@@ -25,16 +25,16 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     queryKey: ['business', reference],
     options: {
       onError: () => {
-        router.push('/manage-business/business');
+        router.push("/manage-business/business");
       },
     },
   });
   const items = [
-    { title: 'Name', value: data?.business.name },
-    { title: 'Reference', value: data?.business.reference },
-    { title: 'Owner email', value: data?.business.owner_email },
-    { title: 'Created at', value: data?.business.created_at },
-    { title: 'End at', value: data?.business.end_at },
+    { title: "Name", value: data?.business.name },
+    { title: "Reference", value: data?.business.reference },
+    { title: "Owner email", value: data?.business.owner_email },
+    { title: "Created at", value: data?.business.created_at },
+    { title: "End at", value: data?.business.end_at },
   ];
 
   const tables = [
@@ -81,14 +81,12 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       <PageHeader
         isEdit
         title={data?.business.name}
-        businessActiveForm={
-          <ActiveForm reference={reference} data={formData} />
-        }
-        businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
+        businessActiveForm={<ActiveForm reference={reference} data={formData} />}
+        blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
       />
-      <div className="py-[40px] mainPaddingX">
+      <div className="py-10 mainPaddingX">
         <DetailCard items={items} />
         <div className="space-y-[25px] pt-[25px]">
           {tables.map((el) => (

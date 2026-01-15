@@ -2,11 +2,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "@/assets/logo.svg";
-import { Monitor, Package, Briefcase, X, ChevronDown } from "lucide-react";
+import {
+  Monitor,
+  Package,
+  Briefcase,
+  X,
+  ChevronDown,
+  Globe,
+} from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
-
 
 interface MenuItemProps {
   id: string;
@@ -20,7 +26,7 @@ interface MenuItemProps {
   }[];
 }
 
-interface SidebarProps {
+interface SideBarProps {
   isMobileView?: boolean;
   isMobileMenuOpen?: boolean;
   onClose?: () => void;
@@ -53,13 +59,19 @@ const menuItems: MenuItemProps[] = [
     path: "/activation-code",
     icon: CheckCircle,
   },
+  {
+    id: "countries",
+    label: "Countries",
+    path: "/countries",
+    icon: Globe,
+  },
 ];
 
-export default function Sidebar({
+export default function SideBar({
   isMobileView = false,
   isMobileMenuOpen = false,
   onClose,
-}: SidebarProps) {
+}: SideBarProps) {
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 

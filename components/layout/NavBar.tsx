@@ -1,13 +1,21 @@
-'use client';
-import { User, Menu } from 'lucide-react';
-import { useState } from 'react';
-import Sidebar from './Sidbar';
-
+"use client";
+import { User, Menu, LogOut } from "lucide-react";
+import { useState } from "react";
+import SideBar from "./SideBar";
+import CustomPopUp from "../CustomPopUp";
+import { Button } from "../ui/button";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 export default function NavBar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const router = useRouter();
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleLogout = () => {
+    Cookies.remove("token");
+    router.push("/login");
   };
 
   return (
@@ -19,8 +27,23 @@ export default function NavBar() {
               <Menu className="h-5 w-5 text-muted-foreground" />
             </button>
           </div>
-          <div className="w-full flex justify-end">
-            <User className="text-muted-foreground bg-[#FAFAFA] cursor-pointer" />
+          <div className="flex justify-end w-full">
+            <CustomPopUp
+              btnTrigger={
+                <button className="rounded-full p-2 hover:bg-muted cursor-pointer transition">
+                  <User className="h-5 w-5 text-muted-foreground" />
+                </button>
+              }
+            >
+              <Button
+                variant="danger"
+                onClick={handleLogout}
+                className="w-full cursor-pointer bg-white justify-start gap-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-600"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </CustomPopUp>
           </div>
         </div>
       </header>
@@ -30,7 +53,7 @@ export default function NavBar() {
           onClick={() => setIsMobileMenuOpen(false)}
         />
       )}
-      <Sidebar
+      <SideBar
         isMobileView
         isMobileMenuOpen={isMobileMenuOpen}
         onClose={() => setIsMobileMenuOpen(false)}

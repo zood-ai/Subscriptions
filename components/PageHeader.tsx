@@ -13,7 +13,7 @@ interface Props {
   deleteEndPoint?: string;
   Form?: React.ReactNode;
   businessActiveForm?: React.ReactNode;
-  businessBlockEndPoint?: string;
+  blockEndPoint?: string;
   isBlocked?: boolean;
   backUrl?: string;
   className?: string;
@@ -25,7 +25,7 @@ const PageHeader: React.FC<Props> = ({
   deleteEndPoint = '',
   Form,
   businessActiveForm,
-  businessBlockEndPoint,
+  blockEndPoint,
   isBlocked,
   backUrl = '',
   className = '',
@@ -93,7 +93,7 @@ const PageHeader: React.FC<Props> = ({
         {/* in Edit Only */}
         {isEdit && (
           <>
-            {businessBlockEndPoint && (
+            {blockEndPoint && (
               <CustomModal
                 modalType="block"
                 title={isBlocked ? 'Unblock' : 'Block'}
@@ -104,7 +104,7 @@ const PageHeader: React.FC<Props> = ({
                 }
               >
                 <ActionPopUp
-                  endPoint={businessBlockEndPoint}
+                  endPoint={blockEndPoint}
                   method="POST"
                   message={
                     isBlocked
