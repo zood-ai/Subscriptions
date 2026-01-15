@@ -1,6 +1,6 @@
 import { ChartDataPoint } from '@/types/dashboard';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { COLORS } from '../constants';
+import { COLORS } from '@/constants/global';
 
 const PieChar = ({
   isLoading = false,

@@ -103,7 +103,6 @@ export default function Form({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
-        {/* Full Name */}
         <Input
           type="text"
           Label="Full Name"
@@ -113,7 +112,6 @@ export default function Form({
           required
         />
 
-        {/* Email */}
         <Textarea
           Label="Discreption"
           error={errors?.discreption?.message}
