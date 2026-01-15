@@ -1,25 +1,25 @@
-'use client';
-import { Input } from '@/components/ui/input';
-import SingleSelect from '@/components/SingleSelect';
-import { Button } from '@/components/ui/button';
-import useCustomMutation from '@/lib/Mutation';
-import { useRouter } from 'next/navigation';
-import { Controller, useForm, useWatch } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useState } from 'react';
-
+"use client";
+import { Input } from "@/components/ui/input";
+import SingleSelect from "@/components/SingleSelect";
+import { Button } from "@/components/ui/button";
+import useCustomMutation from "@/lib/Mutation";
+import { useRouter } from "next/navigation";
+import { Controller, useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useState } from "react";
+import { Country } from "@/types/countries";
 const formSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, "Name is required"),
   email: z
     .string()
-    .min(1, 'Email is required')
-    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-  phone: z.string().min(1, 'Phone is required'),
-  business_name: z.string().min(1, 'Business name is required'),
-  business_type_id: z.string().min(1, 'Business type is required'),
-  business_location_id: z.string().min(1, 'Country is required'),
+    .min(1, "Email is required")
+    .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Invalid email format"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  phone: z.string().min(1, "Phone is required"),
+  business_name: z.string().min(1, "Business name is required"),
+  business_type_id: z.string().min(1, "Business type is required"),
+  business_location_id: z.string().min(1, "Country is required"),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -51,13 +51,13 @@ export default function Form() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      password: '',
-      business_name: '',
-      business_type_id: '',
-      business_location_id: '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      business_name: "",
+      business_type_id: "",
+      business_location_id: "70c4bc20-1fe4-48b2-87c5-26407fe09cde",
     },
   });
 
@@ -67,8 +67,8 @@ export default function Form() {
     FormData,
     CustomerRegistrationResponse
   >({
-    api: 'v1/auth/Register',
-    method: 'POST',
+    api: "v1/auth/Register",
+    method: "POST",
     options: {
       onSuccess: (data) => {
         if (data?.data?.user?.business_reference) {
@@ -93,7 +93,7 @@ export default function Form() {
           Label="Full Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register('name')}
+          {...register("name")}
           required
         />
 
@@ -103,7 +103,7 @@ export default function Form() {
           Label="Email"
           error={errors?.email?.message}
           value={formValues.email}
-          {...register('email')}
+          {...register("email")}
           required
         />
 
@@ -113,7 +113,7 @@ export default function Form() {
           Label="Phone"
           error={errors?.phone?.message}
           value={formValues.phone}
-          {...register('phone')}
+          {...register("phone")}
           required
         />
 
@@ -123,7 +123,7 @@ export default function Form() {
           type="password"
           error={errors?.password?.message}
           value={formValues.password}
-          {...register('password')}
+          {...register("password")}
           required
         />
 
@@ -136,7 +136,7 @@ export default function Form() {
           Label="Business Name"
           error={errors?.business_name?.message}
           value={formValues.business_name}
-          {...register('business_name')}
+          {...register("business_name")}
           required
         />
 
@@ -167,13 +167,13 @@ export default function Form() {
           name="business_location_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<{ name_en: string; id: string }, 'name_en'>
+            <SingleSelect<Country, "name_en">
               label="Country"
               placeholder="Select country"
               errorText={errors?.business_location_id?.message}
               value={formValues.business_location_id}
               onChange={(value) => field.onChange(value)}
-              endPoint="v1/manage/countries"
+              endPoint="v1/super-admin/countries"
               labelKey="name_en"
               valueKey="id"
               required
@@ -240,7 +240,7 @@ export default function Form() {
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? 'Applying...' : 'Apply'}
+          {isPending ? "Applying..." : "Apply"}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>

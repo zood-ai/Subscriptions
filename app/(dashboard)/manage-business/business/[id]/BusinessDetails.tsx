@@ -1,27 +1,27 @@
-'use client';
-import { DetailCard } from '@/components/DetailCard';
-import { useRouter } from 'next/navigation';
-import { BusinessResponse } from '@/types/business';
-import { Column, CustomTable } from '@/components/CustomTable';
-import useCustomQuery from '@/lib/Query';
-import LoadingComponent from '@/components/layout/loading';
+"use client";
+import { DetailCard } from "@/components/DetailCard";
+import { useRouter } from "next/navigation";
+import { BusinessResponse } from "@/types/business";
+import { Column, CustomTable } from "@/components/CustomTable";
+import useCustomQuery from "@/lib/Query";
+import LoadingComponent from "@/components/layout/loading";
 import {
   customersColumns,
   devicesColumns,
   suppliersColumns,
   usersColumns,
-} from './constants';
-import PageHeader from '@/components/PageHeader';
-import ActiveForm from './ActiveForm';
+} from "./constants";
+import PageHeader from "@/components/PageHeader";
+import ActiveForm from "./ActiveForm";
 
 const BusinessDetails = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data, isFetching } = useCustomQuery<BusinessResponse>({
     api: `v1/super-admin/business/${id}`,
-    queryKey: ['business', id],
+    queryKey: ["business", id],
     options: {
       onError: () => {
-        router.push('/manage-business/business');
+        router.push("/manage-business/business");
       },
     },
   });
@@ -37,26 +37,26 @@ const BusinessDetails = ({ id }: { id: string }) => {
 
   const tables = [
     {
-      id: 'suppliers',
-      title: 'Suppliers',
+      id: "suppliers",
+      title: "Suppliers",
       endPoint: `v1/super-admin/business/${id}/suppliers`,
       columns: suppliersColumns,
     },
     {
-      id: 'devices',
-      title: 'Devices',
+      id: "devices",
+      title: "Devices",
       endPoint: `v1/super-admin/business/${id}/devices`,
       columns: devicesColumns,
     },
     {
-      id: 'users',
-      title: 'Users',
+      id: "users",
+      title: "Users",
       endPoint: `v1/super-admin/business/${id}/users`,
       columns: usersColumns,
     },
     {
-      id: 'customers',
-      title: 'Customers',
+      id: "customers",
+      title: "Customers",
       endPoint: `v1/super-admin/business/${id}/customers`,
       columns: customersColumns,
     },
@@ -76,11 +76,11 @@ const BusinessDetails = ({ id }: { id: string }) => {
         isEdit
         title={data?.business.name}
         businessActiveForm={<ActiveForm id={id} data={formData} />}
-        businessBlockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
+        blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
       />
-      <div className="py-[40px] mainPaddingX">
+      <div className="py-10 mainPaddingX">
         <DetailCard items={items} />
         {tables.map((el) => (
           <CustomTable

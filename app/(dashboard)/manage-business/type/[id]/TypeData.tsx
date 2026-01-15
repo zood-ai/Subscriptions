@@ -1,28 +1,28 @@
-'use client';
-import { DetailCard } from '@/components/DetailCard';
-import { useRouter } from 'next/navigation';
-import { BusinessData, BusinessType } from '@/types/business';
-import { Column, CustomTable } from '@/components/CustomTable';
-import useCustomQuery from '@/lib/Query';
-import LoadingComponent from '@/components/layout/loading';
-import PageHeader from '@/components/PageHeader';
-import Form from '../Form';
+"use client";
+import { DetailCard } from "@/components/DetailCard";
+import { useRouter } from "next/navigation";
+import { BusinessData, BusinessType } from "@/types/business";
+import { Column, CustomTable } from "@/components/CustomTable";
+import useCustomQuery from "@/lib/Query";
+import LoadingComponent from "@/components/layout/loading";
+import PageHeader from "@/components/PageHeader";
+import Form from "../Form";
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data, isFetching } = useCustomQuery<BusinessType>({
     api: `v1/super-admin/businessTypes/${id}`,
-    queryKey: ['businessTypes', id],
+    queryKey: ["businessTypes", id],
     options: {
       onError: () => {
-        router.push('/manage-business/type');
+        router.push("/manage-business/type");
       },
     },
   });
 
   const items = [
-    { title: 'Name', value: data?.businessType?.name },
-    { title: 'Created at', value: data?.businessType?.created_at },
+    { title: "Name", value: data?.businessType?.name },
+    { title: "Created at", value: data?.businessType?.created_at },
   ];
 
   const columns: Column<BusinessData>[] = [
@@ -37,7 +37,7 @@ const TypeData = ({ id }: { id: string }) => {
   }
 
   const formData = {
-    name: data?.businessType?.name || '',
+    name: data?.businessType?.name || "",
   };
   return (
     <>
@@ -48,12 +48,12 @@ const TypeData = ({ id }: { id: string }) => {
         backUrl="/manage-business/type"
         Form={<Form id={id} isEdit data={formData} />}
       />
-      <div className="py-[40px] mainPaddingX">
+      <div className="py-10 mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
           showFilters={false}
           data={data?.businesses ?? []}
-          title={'Business'}
+          title={"Business"}
           columns={columns}
           onClickRow={(data) => {
             router.push(`/manage-business/business/${data.reference}`);
