@@ -19,8 +19,8 @@ const CustomModal: React.FC<CustomModalProps> = ({
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const { openedModal, close, open } = useModal();
-  const iD = useId();
-  const isOpen = openedModal === iD;
+  const id = useId();
+  const isOpen = openedModal === id;
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -48,7 +48,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
   return (
     <div>
-      <div role="button" onClick={() => open(iD)}>
+      <div role="button" onClick={() => open(id)}>
         {btnTrigger}
       </div>
       {isOpen && (

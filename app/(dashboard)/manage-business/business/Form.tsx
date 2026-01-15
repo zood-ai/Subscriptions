@@ -84,7 +84,6 @@ export default function Form({
       business_location_id: data?.business_location_id ?? '',
     },
   });
-  console.log({ errors });
 
   const formValues = useWatch({ control });
 
