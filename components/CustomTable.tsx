@@ -233,14 +233,15 @@ export function CustomTable<T extends { id: string }>({
                       <button className="cursor-pointer flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
                         <Filter className="h-4 w-4" />
                         Filter
-                        {Object.entries(allFilters).length > 2 && (
+                        {Object.entries(allFilters).length > 3 && (
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              setAllFilters({
+                              setAllFilters((prev) => ({
                                 page: 1,
+                                sort: prev.sort ?? 'desc',
                                 [statusFilterKey]: '',
-                              });
+                              }));
                             }}
                             className="bg-gray-100 cursor-pointer rounded-full p-1"
                           >
