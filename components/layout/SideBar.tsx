@@ -9,8 +9,8 @@ import {
   X,
   Store,
   ChevronDown,
+  Globe,
 } from "lucide-react";
-
 import Image from "next/image";
 import { useState } from "react";
 import { CheckCircle } from "lucide-react";
@@ -27,7 +27,7 @@ interface MenuItemProps {
   }[];
 }
 
-interface SidebarProps {
+interface SideBarProps {
   isMobileView?: boolean;
   isMobileMenuOpen?: boolean;
   onClose?: () => void;
@@ -61,6 +61,12 @@ const menuItems: MenuItemProps[] = [
     icon: CheckCircle,
   },
   {
+    id: "countries",
+    label: "Countries",
+    path: "/countries",
+    icon: Globe,
+  },
+  {
     id: "marketplace",
     label: "Marketplace",
     path: "/marketplace",
@@ -75,11 +81,11 @@ const menuItems: MenuItemProps[] = [
   },
 ];
 
-export default function Sidebar({
+export default function SideBar({
   isMobileView = false,
   isMobileMenuOpen = false,
   onClose,
-}: SidebarProps) {
+}: SideBarProps) {
   const pathname = usePathname();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
 
