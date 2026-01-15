@@ -2,7 +2,7 @@
 import {
   CustomTable,
   type Column,
-  type FilterTab,
+  type StatusFiltersTab,
   type ActionOption,
 } from '@/components/CustomTable';
 import Form from './Form';
@@ -25,7 +25,7 @@ const columns: Column<ActivationCodeData>[] = [
   { key: 'is_used', header: 'Is Used' },
 ];
 
-const filters: FilterTab[] = [
+const filters: StatusFiltersTab[] = [
   { label: 'All', value: 'all' },
   { label: 'Used', value: '1' },
   { label: 'Not Used', value: '0' },
@@ -63,9 +63,9 @@ export default function ActivationCodes() {
         <CustomTable
           endPoint="v1/activationcode/list"
           columns={columns}
-          filters={filters}
+          statusFilters={filters}
           actions={actions}
-          filterKey="is_used"
+          statusFilterKey="is_used"
         />
       </div>
     </>
