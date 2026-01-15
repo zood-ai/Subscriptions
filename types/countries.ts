@@ -1,13 +1,13 @@
-interface Data {
-  name: string;
+export interface Country {
+  name_en: string;
   id: string;
   updated_at: string;
   created_at: string;
 }
 
-export interface Responce {
+export interface CountryResponse {
   status: boolean;
   code: number;
   message: string;
-  data: Data;
+  data: Country;
 }

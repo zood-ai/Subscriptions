@@ -8,7 +8,7 @@ import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
-
+import { Country } from "@/types/countries";
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
   email: z
@@ -172,7 +172,7 @@ export default function Form() {
           name="business_location_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<{ name_en: string; id: string }, "name_en">
+            <SingleSelect<Country, "name_en">
               label="Country"
               placeholder="Select country"
               errorText={errors?.business_location_id?.message}
