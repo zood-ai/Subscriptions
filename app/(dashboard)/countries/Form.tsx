@@ -44,7 +44,7 @@ export default function Form({
     options: {
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: ["v1/manage/countries", id],
+          queryKey: ["countries", id],
         });
       },
     },
