@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date | string) {
-  return dayjs(new Date(date)).format('DD/MM/YYYY h:mm A');
+  return dayjs(new Date(date)).format('h:mm A D MMM YYYY');
 }
 
 export const ObjectCleaner = (

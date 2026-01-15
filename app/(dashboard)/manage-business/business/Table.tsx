@@ -12,14 +12,30 @@ import { useRouter } from 'next/navigation';
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
   {
+    key: 'end_at',
+    header: 'is Active?',
+    render: (_, item) => (
+      <div className="text-nowrap">
+        {new Date() < new Date(item.end_at) ? (
+          <Badge variant="success" label="Active" />
+        ) : (
+          <Badge variant="danger" label="Expired" />
+        )}
+      </div>
+    ),
+  },
+  {
     key: 'active',
     header: 'is Blocked?',
-    render: (value) =>
-      value === 0 ? (
-        <Badge variant="danger" label="Blcoked" />
-      ) : (
-        <Badge variant="success" label="Active" />
-      ),
+    render: (value) => (
+      <div className="text-nowrap">
+        {value === 0 ? (
+          <Badge variant="danger" label="Blocked" />
+        ) : (
+          <Badge variant="success" label="No" />
+        )}
+      </div>
+    ),
   },
   { key: 'reference', header: 'Reference' },
   { key: 'owner_email', header: 'Owner email' },
