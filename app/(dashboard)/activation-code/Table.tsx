@@ -61,6 +61,9 @@ export default function Table() {
     <div className="py-10 mainPaddingX">
       <CustomTable
         endPoint="v1/activationcode/list"
+        filters={{
+          showCode: true,
+        }}
         columns={columns}
         statusFilters={filters}
         actions={actions}

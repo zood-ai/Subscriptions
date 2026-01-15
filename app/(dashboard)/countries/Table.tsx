@@ -33,6 +33,9 @@ export default function Table() {
       <CustomTable
         endPoint="v1/super-admin/countries"
         columns={columns}
+        filters={{
+          showName: true,
+        }}
         onClickRow={(row) => {
           router.push(`/countries/${row.id}`);
         }}

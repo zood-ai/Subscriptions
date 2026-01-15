@@ -50,6 +50,9 @@ export default function Packages() {
         <CustomTable
           endPoint="v1/super-admin/packages"
           columns={columns}
+          filters={{
+            showName: true,
+          }}
           statusFilters={filters}
           actions={actions}
           onClickRow={(data) => {

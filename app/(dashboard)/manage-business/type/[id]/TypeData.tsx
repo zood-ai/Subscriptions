@@ -55,9 +55,11 @@ const TypeData = ({ id }: { id: string }) => {
       <div className="py-10 mainPaddingX">
         <DetailCard items={items} />
         <CustomTable
-          showStatusFilters={false}
           data={data?.businesses ?? []}
-          title={"Business"}
+          filters={{
+            showName: true,
+          }}
+          title={'Business'}
           columns={columns}
           onClickRow={(data) => {
             router.push(`/manage-business/business/${data.reference}`);

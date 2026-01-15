@@ -73,6 +73,9 @@ const PackageDetails = ({ id }: { id: string }) => {
         {tables.map((el) => (
           <CustomTable
             key={el.id}
+            filters={{
+              showName: true,
+            }}
             title={el.title}
             endPoint={el.endPoint}
             columns={el.columns}

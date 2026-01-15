@@ -103,6 +103,9 @@ const BusinessDetails = ({ id }: { id: string }) => {
             key={el.id}
             title={el.title}
             endPoint={el.endPoint}
+            filters={{
+              showName: true,
+            }}
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             columns={el.columns as Column<any>[]}
           />

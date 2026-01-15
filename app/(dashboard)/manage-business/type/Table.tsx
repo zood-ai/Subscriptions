@@ -36,6 +36,9 @@ export default function Table() {
         endPoint="v1/super-admin/businessTypes"
         statusFilterKey="isDeleted"
         statusFilters={filters}
+        filters={{
+          showName: true,
+        }}
         columns={columns}
         actions={actions}
         onClickRow={(data) => {
