@@ -10,7 +10,7 @@ import {
   devicesColumns,
   suppliersColumns,
   usersColumns,
-} from './constants';
+} from './columns';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
 import SupplierForm from '../supplier/Form';
