@@ -8,7 +8,7 @@ import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
 import { useRouter } from 'next/navigation';
-import { deviceTypes } from '@/constants/business';
+import { deviceTypes } from '@/constants/global';
 
 const formSchema = z.object({
   type: z.string().optional(),

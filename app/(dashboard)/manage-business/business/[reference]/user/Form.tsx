@@ -9,7 +9,7 @@ import { z } from 'zod';
 import { queryClient } from '@/app/ReactQueryProvider';
 import SingleSelect from '@/components/SingleSelect';
 import { useRouter } from 'next/navigation';
-import { allLanguages } from '@/constants/business';
+import { allLanguages } from '@/constants/global';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),

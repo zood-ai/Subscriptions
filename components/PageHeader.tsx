@@ -7,6 +7,7 @@ import { Button } from './ui/button';
 import ActionPopUp, { Input } from './ActionPopUp';
 import { Badge } from './ui/badge';
 import { cn } from '@/lib/utils';
+import { isBlockedInputs } from '@/constants/global';
 interface Props {
   title?: string;
   isEdit?: boolean;
@@ -26,43 +27,10 @@ const PageHeader: React.FC<Props> = ({
   Form,
   businessActiveForm,
   blockEndPoint,
-  isBlocked,
+  isBlocked = false,
   backUrl = '',
   className = '',
 }) => {
-  const businessBlockInputs: Input[] = isBlocked
-    ? [
-        {
-          key: 'reason',
-          label: 'Reason',
-          value: '',
-          type: 'text',
-          isHidden: true,
-        },
-        {
-          key: 'active',
-          label: 'Active',
-          value: '1',
-          type: 'text',
-          isHidden: true,
-        },
-      ]
-    : [
-        {
-          key: 'reason',
-          label: 'Reason',
-          value: '',
-          isRequired: true,
-          type: 'text',
-        },
-        {
-          key: 'active',
-          label: 'Active',
-          value: '0',
-          type: 'text',
-          isHidden: true,
-        },
-      ];
   return (
     <div
       className={cn(
@@ -111,7 +79,7 @@ const PageHeader: React.FC<Props> = ({
                       ? 'Are you sure you want to Unblock this business?'
                       : ''
                   }
-                  inputs={businessBlockInputs}
+                  inputs={isBlockedInputs(isBlocked)}
                   btnTitle={isBlocked ? 'Unblock' : 'Block'}
                   backUrl={backUrl}
                 />

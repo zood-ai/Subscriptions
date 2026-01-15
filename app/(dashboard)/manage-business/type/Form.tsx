@@ -14,7 +14,7 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-interface CreateBusinessTypeResponse {
+interface CreateResponse {
   id: string;
 }
 
@@ -49,18 +49,20 @@ export default function Form({
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
-    CreateBusinessTypeResponse
+    CreateResponse
   >({
     api: isEdit
       ? `v1/super-admin/businessTypes/${id}`
       : 'v1/super-admin/businessTypes',
     method: isEdit ? 'PUT' : 'POST',
     options: {
-      onSuccess: () => {
+      onSuccess: (data) => {
         if (isEdit) {
           queryClient.invalidateQueries({
             queryKey: ['businessTypes', id],
           });
+        } else {
+          router.push(`/manage-business/type/${data.id}`);
         }
       },
     },
