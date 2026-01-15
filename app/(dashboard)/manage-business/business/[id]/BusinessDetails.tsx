@@ -10,9 +10,10 @@ import {
   devicesColumns,
   suppliersColumns,
   usersColumns,
-} from "./constants";
-import PageHeader from "@/components/PageHeader";
-import ActiveForm from "./ActiveForm";
+} from './constants';
+import PageHeader from '@/components/PageHeader';
+import ActiveForm from './ActiveForm';
+import Form from '../Form';
 
 const BusinessDetails = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const BusinessDetails = ({ id }: { id: string }) => {
     { title: 'Created at', value: data?.business.created_at },
     { title: 'End at', value: data?.business.end_at },
     { title: 'Block Reason', value: data?.business?.reason },
+    { title: 'Owner name', value: data?.business.owner_name },
   ];
 
   const tables = [
@@ -67,6 +69,15 @@ const BusinessDetails = ({ id }: { id: string }) => {
   }
 
   const formData = {
+    name: data?.business.owner_name ?? '',
+    email: data?.business.owner_email ?? '',
+    phone: data?.business.phone ?? '',
+    business_name: data?.business.name ?? '',
+    business_type_id: data?.business.type ?? '',
+    business_location_id:
+      data?.business.location ?? '70c4bc20-1fe4-48b2-87c5-26407fe09cde',
+  };
+  const acitveFormData = {
     business_reference: data?.business.reference ?? 1,
     months: 12,
   };
@@ -75,7 +86,9 @@ const BusinessDetails = ({ id }: { id: string }) => {
       <PageHeader
         isEdit
         title={data?.business.name}
-        businessActiveForm={<ActiveForm id={id} data={formData} />}
+        Form={<Form id={id} isEdit data={formData} />}
+        deleteEndPoint={`v1/super-admin/business/${id}`}
+        businessActiveForm={<ActiveForm id={id} data={acitveFormData} />}
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${id}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"

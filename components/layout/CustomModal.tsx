@@ -1,15 +1,13 @@
 'use client';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
 import { useModal } from '@/context/ModalContext';
-import { ModalTypes } from '@/context/ModalContext';
 
 interface CustomModalProps {
   btnTrigger: React.ReactElement;
   children: React.ReactNode;
   title?: string;
-  modalType: ModalTypes;
   className?: string;
 }
 
@@ -18,12 +16,12 @@ const CustomModal: React.FC<CustomModalProps> = ({
   children,
   title,
   className,
-  modalType,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const mouseDownPositionRef = useRef<{ x: number; y: number } | null>(null);
   const { openedModal, close, open } = useModal();
-  const isOpen = openedModal === modalType;
+  const id = useId();
+  const isOpen = openedModal === id;
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
@@ -67,7 +65,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
   return (
     <div>
-      <div role="button" onClick={() => open(modalType)}>
+      <div role="button" onClick={() => open(id)}>
         {btnTrigger}
       </div>
       {isOpen && (

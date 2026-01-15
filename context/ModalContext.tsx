@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-export type ModalTypes = 'create' | 'filter' | 'delete' | 'block' | 'active';
+export type ModalTypes = string;
 
 interface ModalContextType {
   openedModal: ModalTypes | null;

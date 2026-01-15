@@ -9,3 +9,13 @@ export function cn(...inputs: ClassValue[]) {
 export function formatDate(date: Date | string) {
   return dayjs(new Date(date)).format('DD/MM/YYYY h:mm A');
 }
+
+export const ObjectCleaner = (
+  obj: Record<string, number | string | boolean>
+) => {
+  return Object.fromEntries(
+    Object.entries(obj).filter(
+      ([, value]) => value !== undefined && value !== null && value !== ''
+    )
+  );
+};
