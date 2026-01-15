@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import SingleSelect from '@/components/SingleSelect';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
-import { useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useQueryClient } from '@tanstack/react-query';
@@ -61,23 +61,19 @@ export default function Form() {
           {...register('code')}
           required
         />
-        <SingleSelect
-          label="Duration Period"
+        <Controller
           name="duration"
-          className="placeholder:text-opacity-50 z-1000000"
-          placeholder="Select Code Duration Period"
-          errorText={errors?.duration?.message}
-          value={formValues.duration}
-          onChange={(value) => {
-            const event = {
-              target: { name: 'duration', value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register('duration').onChange(event);
-          }}
-          options={activationCodePeriods}
-          loading={false}
-          required
-          showSearch
+          control={control}
+          render={({ field }) => (
+            <SingleSelect
+              label="Duration Period"
+              errorText={errors?.duration?.message}
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
+              options={activationCodePeriods}
+              required
+            />
+          )}
         />
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
