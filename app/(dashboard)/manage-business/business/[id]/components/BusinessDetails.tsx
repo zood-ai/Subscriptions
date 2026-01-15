@@ -10,10 +10,10 @@ import {
   devicesColumns,
   suppliersColumns,
   usersColumns,
-} from './constants';
+} from './columns';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
-import Form from '../Form';
+import Form from '../../Form';
 import { formatDate } from '@/lib/utils';
 
 const BusinessDetails = ({ id }: { id: string }) => {
