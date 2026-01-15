@@ -81,13 +81,14 @@ export function CustomTable<T extends { id: string }>({
   titleClassName = '',
   pagination = true,
 }: CustomTableProps<T>) {
+  const { close: closeModal } = useModal();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
   >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
+
   const currentPage = allFilters.page as number;
-  const { close: closeModal } = useModal();
   const sortOptions: SortOption[] = [
     { label: 'Descending', value: 'desc' },
     { label: 'Ascending', value: 'asc' },
