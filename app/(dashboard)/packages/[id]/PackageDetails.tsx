@@ -1,5 +1,5 @@
 'use client';
-import { DetailCard } from '@/components/DetailCard';
+import { DetailCard, DetailItem } from '@/components/DetailCard';
 import { useRouter } from 'next/navigation';
 import { CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
@@ -8,6 +8,7 @@ import { usersColumns } from './columns';
 import PageHeader from '@/components/PageHeader';
 import { PackageData } from '@/types/packages';
 import Form from '../Form';
+import { formatDate } from '@/lib/utils';
 
 const PackageDetails = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const PackageDetails = ({ id }: { id: string }) => {
     },
   });
 
-  const items = [
+  const items: DetailItem[] = [
     { title: 'Name', value: data?.name },
     { title: 'Discreption', value: data?.discreption },
     { title: 'Price', value: data?.price ?? 1 },
@@ -33,7 +34,7 @@ const PackageDetails = ({ id }: { id: string }) => {
       }`,
     },
     { title: 'Project', value: data?.project },
-    { title: 'Created at', value: data?.created_at, type: 'date' },
+    { title: 'Created at', value: formatDate(data?.created_at ?? '') },
   ];
 
   const tables = [

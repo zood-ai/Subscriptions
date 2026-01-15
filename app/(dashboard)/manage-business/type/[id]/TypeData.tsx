@@ -1,5 +1,5 @@
 "use client";
-import { DetailCard } from "@/components/DetailCard";
+import { DetailCard, DetailItem } from "@/components/DetailCard";
 import { useRouter } from "next/navigation";
 import { BusinessData, BusinessType } from "@/types/business";
 import { Column, CustomTable } from "@/components/CustomTable";
@@ -7,6 +7,7 @@ import useCustomQuery from "@/lib/Query";
 import LoadingComponent from "@/components/layout/loading";
 import PageHeader from "@/components/PageHeader";
 import Form from "../Form";
+import { formatDate } from "@/lib/utils";
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
@@ -20,9 +21,12 @@ const TypeData = ({ id }: { id: string }) => {
     },
   });
 
-  const items = [
-    { title: "Name", value: data?.businessType?.name },
-    { title: "Created at", value: data?.businessType?.created_at },
+  const items: DetailItem[] = [
+    { title: 'Name', value: data?.businessType?.name },
+    {
+      title: 'Created at',
+      value: formatDate(data?.businessType?.created_at ?? ''),
+    },
   ];
 
   const columns: Column<BusinessData>[] = [

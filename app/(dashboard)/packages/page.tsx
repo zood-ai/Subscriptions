@@ -2,7 +2,7 @@
 import {
   CustomTable,
   type Column,
-  type FilterTab,
+  type StatusFiltersTab,
   type ActionOption,
 } from '@/components/CustomTable';
 import PageHeader from '@/components/PageHeader';
@@ -23,11 +23,10 @@ const columns: Column<PackageData>[] = [
     ),
   },
   { key: 'price', header: 'Price' },
-  { key: 'created_at', header: 'Created at', type: 'date' },
+  { key: 'created_at', header: 'Created at' },
 ];
 
-const filters: FilterTab[] = [
-  { label: 'All', value: 'all' },
+const filters: StatusFiltersTab[] = [
   { label: 'Zood Light', value: 'zood-light' },
   { label: 'Accountant', value: 'accountant' },
 ];
@@ -51,12 +50,12 @@ export default function Packages() {
         <CustomTable
           endPoint="v1/super-admin/packages"
           columns={columns}
-          filters={filters}
+          statusFilters={filters}
           actions={actions}
           onClickRow={(data) => {
             router.push(`/packages/${data.id}`);
           }}
-          filterKey="project"
+          statusFilterKey="project"
         />
       </div>
     </>
