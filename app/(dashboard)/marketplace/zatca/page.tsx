@@ -34,7 +34,6 @@ export default function Businesses() {
           columns={columns}
           filters={{
             showName: true,
-            showReference: true,
           }}
           actions={actions}
           onClickRow={(data) => {}}
