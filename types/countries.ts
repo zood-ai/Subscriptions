@@ -1,11 +1,5 @@
-export interface CountryResponceData {
-  data: {
-    name_en: string;
-    id: string;
-    name: string;
-    updated_at: string;
-    created_at: string;
-  };
+export interface CountryResponseData {
+  data: Country;
 }
 
 export interface Country {

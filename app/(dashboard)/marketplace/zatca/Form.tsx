@@ -97,7 +97,6 @@ export default function Form() {
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Connection Name"
           error={errors?.name?.message}
@@ -113,21 +112,14 @@ export default function Form() {
               <SingleSelect
                 label="Business"
                 name="business"
-                className="placeholder:text-opacity-50 z-1000000"
                 placeholder="Select Business"
                 errorText={errors?.business?.name?.message}
                 endPoint="v1/super-admin/business"
                 value={field.value}
-                onChange={(value) => {
-                  const event = {
-                    target: { name: "business.name", value },
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  register("business.name").onChange(event);
-                }}
+                onChange={(value) => field.onChange(value)}
                 labelKey="name"
                 valueKey="reference"
                 required
-                showSearch
               />
             );
           }}
@@ -142,22 +134,14 @@ export default function Form() {
                 <SingleSelect
                   label="Zatca Device"
                   name="credentials.device_id"
-                  className="placeholder:text-opacity-50 z-1000000"
                   placeholder="Select Code Duration Period"
                   errorText={errors?.credentials?.device_id?.message}
                   value={field.value}
-                  onChange={(value) => {
-                    const event = {
-                      target: { name: "credentials.device_id", value },
-                    } as React.ChangeEvent<HTMLInputElement>;
-                    register("credentials.device_id").onChange(event);
-                  }}
+                  onChange={(value) => field.onChange(value)}
                   endPoint={`v1/select/devices?filter[is_deleted]=false&type=1&zatca_connection=0&reference=${formValues.business}`}
                   labelKey="name"
                   valueKey="id"
-                  loading={false}
                   required
-                  showSearch
                 />
               );
             }}
@@ -165,7 +149,6 @@ export default function Form() {
         )}
 
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Company Tax Registeration Number"
           error={errors?.credentials?.company_id?.message}
@@ -174,7 +157,6 @@ export default function Form() {
           required
         />
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Company Unit Name"
           error={errors?.credentials?.company_unit_name?.message}
@@ -183,7 +165,6 @@ export default function Form() {
           required
         />
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Company Category"
           error={errors?.credentials?.company_category?.message}
@@ -192,7 +173,6 @@ export default function Form() {
           required
         />
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="OTP"
           error={errors?.credentials?.otp?.message}
@@ -201,7 +181,6 @@ export default function Form() {
           required
         />
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="EGD Unit Common Name"
           error={errors?.credentials?.egd_unit_common_name?.message}
@@ -217,20 +196,12 @@ export default function Form() {
               <SingleSelect
                 label="Environment"
                 name="credentials.env"
-                className="placeholder:text-opacity-50 z-1000000"
                 placeholder="Select Environment"
                 errorText={errors?.credentials?.env?.message}
                 value={field.value}
-                onChange={(value) => {
-                  const event = {
-                    target: { name: "credentials.env", value },
-                  } as React.ChangeEvent<HTMLInputElement>;
-                  register("credentials.env").onChange(event);
-                }}
+                onChange={(value) => field.onChange(value)}
                 options={zatcaEnvironment}
-                loading={false}
                 required
-                showSearch
               />
             );
           }}

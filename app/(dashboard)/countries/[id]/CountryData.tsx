@@ -1,7 +1,7 @@
 "use client";
 import { DetailCard, DetailItem } from "@/components/DetailCard";
 import { useRouter } from "next/navigation";
-import { CountryResponceData } from "@/types/countries";
+import { CountryResponseData } from "@/types/countries";
 import useCustomQuery from "@/lib/Query";
 import LoadingComponent from "@/components/layout/loading";
 import PageHeader from "@/components/PageHeader";
@@ -10,7 +10,7 @@ import { formatDate } from "@/lib/utils";
 
 const CountryData = ({ id }: { id: string }) => {
   const router = useRouter();
-  const { data, isFetching } = useCustomQuery<CountryResponceData>({
+  const { data, isFetching } = useCustomQuery<CountryResponseData>({
     api: `v1/manage/countries/${id}`,
     queryKey: ["countries", id],
     options: {

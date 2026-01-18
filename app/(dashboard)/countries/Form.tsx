@@ -6,7 +6,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
-import { CountryResponceData } from "@/types/countries";
+import { CountryResponseData } from "@/types/countries";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -42,7 +42,7 @@ export default function Form({
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
-    CountryResponceData
+    CountryResponseData
   >({
     api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
     method: isEdit ? "PUT" : "POST",
