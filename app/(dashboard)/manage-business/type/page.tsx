@@ -16,7 +16,6 @@ const columns: Column<BusinessType['businessType']>[] = [
 ];
 
 const filters: StatusFiltersTab[] = [
-  { label: 'All', value: 'all' },
   { label: 'Active', value: 'true' },
   { label: 'Deleted', value: 'false' },
 ];
@@ -41,6 +40,9 @@ export default function BusinessTypes() {
           endPoint="v1/super-admin/businessTypes"
           statusFilterKey="isDeleted"
           statusFilters={filters}
+          filters={{
+            showName:true
+          }}
           columns={columns}
           actions={actions}
           onClickRow={(data) => {
