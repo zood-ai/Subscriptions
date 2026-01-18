@@ -27,7 +27,12 @@ const createSchema = z.object({
 
 const editSchema = z.object({
   ...baseSchema,
-  password: z.string().optional(),
+  password: z.string()
+    .optional()
+    .refine(
+      (val) => !val || val.length >= 6,
+      { message: 'Password must be at least 6 characters' }
+    ),
 });
 
 interface BusinessRegistration {
@@ -113,6 +118,7 @@ export default function Form({
   });
 
   const onSubmit = (data: FormData) => {
+    if (isEdit && !data.password) delete data.password
     mutate(data);
   };
 
@@ -156,7 +162,7 @@ export default function Form({
           error={errors?.password?.message}
           value={formValues.password}
           {...register('password')}
-          required
+          required={!isEdit}
         />
 
         {/* Divider */}

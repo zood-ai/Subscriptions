@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import SingleSelect from './SingleSelect';
 
 export interface AllowedFilters {
   showName?: boolean;
   showReference?: boolean;
   showCode?: boolean;
+  showEndAT?: true,
+  showBusinessType?: true,
 }
 
 interface TableFiltersProps {
@@ -55,6 +58,24 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
             Label="Code"
             value={(allFilters?.code as string) ?? ''}
             onChange={(e) => handleChnage('code', e.target.value)}
+          />
+        )}
+        {filters.showBusinessType && (
+          <SingleSelect
+            label="Business Type"
+            value={(allFilters?.type as string) ?? ''}
+            onChange={(value) => handleChnage('type', value)}
+            endPoint="v1/super-admin/businessTypes"
+            labelKey='name'
+            valueKey='id'
+          />
+        )}
+        {filters.showEndAT && (
+          <Input
+            type="date"
+            Label="End at"
+            value={(allFilters?.end_at as string) ?? ''}
+            onChange={(e) => handleChnage('end_at', e.target.value)}
           />
         )}
       </div>
