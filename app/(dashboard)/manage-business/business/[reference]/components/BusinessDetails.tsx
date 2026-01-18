@@ -101,6 +101,9 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 endPoint={el.endPoint}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 columns={el.columns as Column<any>[]}
+                filters={{
+                  showName: true,
+                }}
                 onClickRow={(data) => {
                   router.push(
                     `/manage-business/business/${reference}/${el.type}/${data.id}`

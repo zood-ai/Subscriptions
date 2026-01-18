@@ -16,8 +16,7 @@ const columns: Column<BusinessType['businessType']>[] = [
 ];
 
 const filters: StatusFiltersTab[] = [
-  { label: 'Active', value: 'true' },
-  { label: 'Deleted', value: 'false' },
+  { label: 'Deleted', value: 'true' },
 ];
 
 const actions: ActionOption[] = [
@@ -41,7 +40,7 @@ export default function BusinessTypes() {
           statusFilterKey="isDeleted"
           statusFilters={filters}
           filters={{
-            showName:true
+            showName: true
           }}
           columns={columns}
           actions={actions}

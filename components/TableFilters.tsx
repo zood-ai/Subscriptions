@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import SingleSelect from './SingleSelect';
 
 export interface AllowedFilters {
   showName?: boolean;
   showReference?: boolean;
   showCode?: boolean;
+  showIsUsed?: boolean;
 }
 
 interface TableFiltersProps {
@@ -55,6 +57,15 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
             Label="Code"
             value={(allFilters?.code as string) ?? ''}
             onChange={(e) => handleChnage('code', e.target.value)}
+          />
+        )}
+        {filters.showIsUsed && (
+          <SingleSelect
+            label="Is Used?"
+            value={(allFilters?.is_used as string) ?? ''}
+            onChange={(value) => handleChnage('is_used', value)}
+            options={[{ label: 'All', value: '' }, { label: 'Yes', value: '1' }, { label: 'No', value: '0' }]}
+            required
           />
         )}
       </div>
