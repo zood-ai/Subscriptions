@@ -3,7 +3,7 @@ import { Input } from "@/components/ui/input";
 import SingleSelect from "@/components/SingleSelect";
 import { Button } from "@/components/ui/button";
 import useCustomMutation from "@/lib/Mutation";
-import { useForm, useWatch } from "react-hook-form";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useQueryClient } from "@tanstack/react-query";
@@ -46,8 +46,8 @@ export default function Form() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     control,
+    formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -105,46 +105,62 @@ export default function Form() {
           {...register("name")}
           required
         />
-
-        <SingleSelect
-          label="Business"
-          name="business"
-          className="placeholder:text-opacity-50 z-1000000"
-          placeholder="Select Business"
-          errorText={errors?.business?.name?.message}
-          endPoint="v1/super-admin/business"
-          value={formValues.business?.name}
-          onChange={(value) => {
-            const event = {
-              target: { name: "business.name", value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register("business.name").onChange(event);
+        <Controller
+          control={control}
+          name="business.name"
+          render={({ field }) => {
+            return (
+              <SingleSelect
+                label="Business"
+                name="business"
+                className="placeholder:text-opacity-50 z-1000000"
+                placeholder="Select Business"
+                errorText={errors?.business?.name?.message}
+                endPoint="v1/super-admin/business"
+                value={field.value}
+                onChange={(value) => {
+                  const event = {
+                    target: { name: "business.name", value },
+                  } as React.ChangeEvent<HTMLInputElement>;
+                  register("business.name").onChange(event);
+                }}
+                labelKey="name"
+                valueKey="reference"
+                required
+                showSearch
+              />
+            );
           }}
-          labelKey="name"
-          valueKey="reference"
-          required
-          showSearch
         />
+
         {formValues.business?.name && (
-          <SingleSelect
-            label="Zatca Device"
-            name="duration"
-            className="placeholder:text-opacity-50 z-1000000"
-            placeholder="Select Code Duration Period"
-            errorText={errors?.credentials?.device_id?.message}
-            value={formValues?.credentials?.device_id}
-            onChange={(value) => {
-              const event = {
-                target: { name: "credentials.device_id", value },
-              } as React.ChangeEvent<HTMLInputElement>;
-              register("credentials.device_id").onChange(event);
+          <Controller
+            control={control}
+            name="credentials.device_id"
+            render={({ field }) => {
+              return (
+                <SingleSelect
+                  label="Zatca Device"
+                  name="credentials.device_id"
+                  className="placeholder:text-opacity-50 z-1000000"
+                  placeholder="Select Code Duration Period"
+                  errorText={errors?.credentials?.device_id?.message}
+                  value={field.value}
+                  onChange={(value) => {
+                    const event = {
+                      target: { name: "credentials.device_id", value },
+                    } as React.ChangeEvent<HTMLInputElement>;
+                    register("credentials.device_id").onChange(event);
+                  }}
+                  endPoint={`v1/select/devices?filter[is_deleted]=false&type=1&zatca_connection=0&reference=${formValues.business}`}
+                  labelKey="name"
+                  valueKey="id"
+                  loading={false}
+                  required
+                  showSearch
+                />
+              );
             }}
-            endPoint={`v1/select/devices?filter[is_deleted]=false&type=1&zatca_connection=0&reference=${formValues.business}`}
-            labelKey="name"
-            valueKey="id"
-            loading={false}
-            required
-            showSearch
           />
         )}
 
@@ -193,23 +209,31 @@ export default function Form() {
           {...register("credentials.egd_unit_common_name")}
           required
         />
-        <SingleSelect
-          label="Environment"
+        <Controller
+          control={control}
           name="credentials.env"
-          className="placeholder:text-opacity-50 z-1000000"
-          placeholder="Select Environment"
-          errorText={errors?.credentials?.env?.message}
-          value={formValues.credentials?.env}
-          onChange={(value) => {
-            const event = {
-              target: { name: "credentials.env", value },
-            } as React.ChangeEvent<HTMLInputElement>;
-            register("credentials.env").onChange(event);
+          render={({ field }) => {
+            return (
+              <SingleSelect
+                label="Environment"
+                name="credentials.env"
+                className="placeholder:text-opacity-50 z-1000000"
+                placeholder="Select Environment"
+                errorText={errors?.credentials?.env?.message}
+                value={field.value}
+                onChange={(value) => {
+                  const event = {
+                    target: { name: "credentials.env", value },
+                  } as React.ChangeEvent<HTMLInputElement>;
+                  register("credentials.env").onChange(event);
+                }}
+                options={zatcaEnvironment}
+                loading={false}
+                required
+                showSearch
+              />
+            );
           }}
-          options={zatcaEnvironment}
-          loading={false}
-          required
-          showSearch
         />
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
