@@ -1,13 +1,12 @@
-'use client';
-import { Button } from '@/components/ui/button';
-import useCustomMutation from '@/lib/Mutation';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { queryClient } from '@/app/ReactQueryProvider';
-import SingleSelect from '@/components/SingleSelect';
-import { Controller } from 'react-hook-form';
-import { activationCodePeriods } from '@/constants/global';
+"use client";
+import { Button } from "@/components/ui/button";
+import useCustomMutation from "@/lib/Mutation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import SingleSelect from "@/components/SingleSelect";
+import { Controller } from "react-hook-form";
+import { activationCodePeriods } from "@/constants/global";
 
 const formSchema = z.object({
   business_reference: z.number().int(),
@@ -22,7 +21,7 @@ interface FormState {
 }
 
 export default function Form({
-  reference = '',
+  reference = "",
   data,
 }: {
   reference?: string;
@@ -41,17 +40,9 @@ export default function Form({
   });
 
   const { mutate, isPending, error } = useCustomMutation<FormData>({
-    api: 'v1/auth/extendBusiness',
-    method: 'POST',
-    options: {
-      onSuccess: () => {
-        if (reference) {
-          queryClient.invalidateQueries({
-            queryKey: ['business', reference],
-          });
-        }
-      },
-    },
+    api: "v1/auth/extendBusiness",
+    method: "POST",
+    invalidateQueryKeys: reference ? ["business", reference] : [],
   });
 
   const onSubmit = (data: FormData) => {
@@ -83,7 +74,7 @@ export default function Form({
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? `Activing...` : 'Active'}
+          {isPending ? `Activing...` : "Active"}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>
