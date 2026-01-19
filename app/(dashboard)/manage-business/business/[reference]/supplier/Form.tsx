@@ -1,15 +1,14 @@
-'use client';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import useCustomMutation from '@/lib/Mutation';
-import { useForm, useWatch } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { queryClient } from '@/app/ReactQueryProvider';
-import { useRouter } from 'next/navigation';
+"use client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import useCustomMutation from "@/lib/Mutation";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
+  name: z.string().min(1, "Name is required"),
   supplierCode: z.string().optional(),
   contactName: z.string().optional(),
   phone: z.string().optional(),
@@ -33,7 +32,7 @@ interface FormState {
 }
 
 export default function Form({
-  id = '',
+  id = "",
   isEdit = false,
   reference,
   data,
@@ -52,12 +51,12 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || '',
-      supplierCode: data?.supplierCode || '',
-      contactName: data?.contactName || '',
-      phone: data?.phone || '',
-      primaryEmail: data?.primaryEmail || '',
-      additionalEmail: data?.additionalEmail || '',
+      name: data?.name || "",
+      supplierCode: data?.supplierCode || "",
+      contactName: data?.contactName || "",
+      phone: data?.phone || "",
+      primaryEmail: data?.primaryEmail || "",
+      additionalEmail: data?.additionalEmail || "",
     },
   });
 
@@ -70,16 +69,13 @@ export default function Form({
     api: isEdit
       ? `v1/super-admin/business/${reference}/suppliers/${id}`
       : `v1/super-admin/business/${reference}/suppliers`,
-    method: isEdit ? 'PUT' : 'POST',
+    method: isEdit ? "PUT" : "POST",
+    invalidateQueryKeys: isEdit ? ["suppliers", id] : [],
     options: {
       onSuccess: (data) => {
-        if (isEdit) {
-          queryClient.invalidateQueries({
-            queryKey: ['suppliers', id],
-          });
-        } else {
+        if (!isEdit) {
           router.push(
-            `/manage-business/business/${reference}/supplier/${data.id}`
+            `/manage-business/business/${reference}/supplier/${data.id}`,
           );
         }
       },
@@ -90,7 +86,7 @@ export default function Form({
     mutate(data);
   };
 
-  const btnText = isEdit ? 'Update' : 'Create';
+  const btnText = isEdit ? "Update" : "Create";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -100,7 +96,7 @@ export default function Form({
           Label="Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register('name')}
+          {...register("name")}
           required
         />
 
@@ -109,7 +105,7 @@ export default function Form({
           Label="Supplier Code"
           error={errors?.supplierCode?.message}
           value={formValues.supplierCode}
-          {...register('supplierCode')}
+          {...register("supplierCode")}
         />
 
         <Input
@@ -117,7 +113,7 @@ export default function Form({
           Label="Contact Name"
           error={errors?.contactName?.message}
           value={formValues.contactName}
-          {...register('contactName')}
+          {...register("contactName")}
         />
 
         <Input
@@ -125,7 +121,7 @@ export default function Form({
           Label="Phone"
           error={errors?.phone?.message}
           value={formValues.phone}
-          {...register('phone')}
+          {...register("phone")}
         />
 
         <Input
@@ -133,7 +129,7 @@ export default function Form({
           Label="Primary Email"
           error={errors?.primaryEmail?.message}
           value={formValues.primaryEmail}
-          {...register('primaryEmail')}
+          {...register("primaryEmail")}
         />
 
         <Input
@@ -141,7 +137,7 @@ export default function Form({
           Label="Additional Email"
           error={errors?.additionalEmail?.message}
           value={formValues.additionalEmail}
-          {...register('additionalEmail')}
+          {...register("additionalEmail")}
         />
       </div>
 

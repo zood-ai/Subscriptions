@@ -77,12 +77,8 @@ export default function Form() {
   const { mutate, isPending, error } = useCustomMutation<FormData>({
     api: "v1/activationcode/store",
     method: "POST",
+    invalidateQueryKeys: ["activation-code"],
     options: {
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: ["v1/activationcode/list"],
-        });
-      },
       onError: (error) => {
         console.error("Error applying activation code: ", error);
       },
