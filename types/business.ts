@@ -41,7 +41,7 @@ export interface BusinessData {
   has_dot_pay: number;
   is_blocked: number;
   licenses: string;
-  plan: string | null;
+  package_id: string | null;
   type: string;
   created_at: string;
   updated_at: string;

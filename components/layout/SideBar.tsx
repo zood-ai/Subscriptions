@@ -7,6 +7,7 @@ import {
   Package,
   Briefcase,
   X,
+  Store,
   ChevronDown,
   Globe,
 } from 'lucide-react';
@@ -64,6 +65,19 @@ const menuItems: MenuItemProps[] = [
     label: 'Countries',
     path: '/countries',
     icon: Globe,
+  },
+  {
+    id: "marketplace",
+    label: "Marketplace",
+    path: "/marketplace",
+    icon: Store,
+    children: [
+      {
+        id: "zatca",
+        label: "Zatca",
+        path: "/marketplace/zatca",
+      },
+    ],
   },
 ];
 

@@ -18,6 +18,7 @@ import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
 import { formatDate } from '@/lib/utils';
+import Form from "../../Form";
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -73,18 +74,29 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     return <LoadingComponent />;
   }
 
-  const formData = {
+  const aciveFormData = {
     business_reference: data?.business.reference ?? 1,
     months: 12,
   };
+
+  const formData = {
+    name: data?.business?.owner_name ?? '',
+    email: data?.business?.owner_email ?? '',
+    phone: data?.business?.phone ?? '',
+    password: '',
+    business_name: data?.business?.name ?? '',
+    package_id: JSON.parse(data?.business?.details ?? '{}').package_id,
+    business_type_id: data?.business?.type ?? '',
+    business_location_id: data?.business?.location ?? '',
+  }
+
   return (
     <>
       <PageHeader
         isEdit
+        Form={<Form isEdit id={reference} data={formData} />}
         title={data?.business.name}
-        businessActiveForm={
-          <ActiveForm reference={reference} data={formData} />
-        }
+        businessActiveForm={<ActiveForm reference={reference} data={aciveFormData} />}
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"

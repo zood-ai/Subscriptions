@@ -8,6 +8,8 @@ export interface AllowedFilters {
   showReference?: boolean;
   showCode?: boolean;
   showIsUsed?: boolean;
+  showEndAT?: true;
+  showBusinessType?: true;
 }
 
 interface TableFiltersProps {
@@ -59,13 +61,35 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
             onChange={(e) => handleChnage('code', e.target.value)}
           />
         )}
+        {filters.showBusinessType && (
+          <SingleSelect
+            label="Business Type"
+            value={(allFilters?.type as string) ?? ''}
+            onChange={(value) => handleChnage('type', value)}
+            endPoint="v1/super-admin/businessTypes"
+            labelKey="name"
+            valueKey="id"
+          />
+        )}
         {filters.showIsUsed && (
           <SingleSelect
             label="Is Used?"
             value={(allFilters?.is_used as string) ?? ''}
             onChange={(value) => handleChnage('is_used', value)}
-            options={[{ label: 'All', value: '' }, { label: 'Yes', value: '1' }, { label: 'No', value: '0' }]}
+            options={[
+              { label: 'All', value: '' },
+              { label: 'Yes', value: '1' },
+              { label: 'No', value: '0' },
+            ]}
             required
+          />
+        )}
+        {filters.showEndAT && (
+          <Input
+            type="date"
+            Label="End at"
+            value={(allFilters?.end_at as string) ?? ''}
+            onChange={(e) => handleChnage('end_at', e.target.value)}
           />
         )}
       </div>

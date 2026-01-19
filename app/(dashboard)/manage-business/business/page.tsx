@@ -57,7 +57,8 @@ const columns: Column<BusinessData>[] = [
 
 const filters: StatusFiltersTab[] = [
   { label: 'Active', value: 'active' },
-  { label: 'Inactive', value: 'inactive' },
+  { label: 'Expiring soon', value: 'expiring' },
+  { label: 'Expired', value: 'expired' },
 ];
 
 const actions: ActionOption[] = [
@@ -83,6 +84,8 @@ export default function Businesses() {
           filters={{
             showName: true,
             showReference: true,
+            showEndAT: true,
+            showBusinessType: true,
           }}
           actions={actions}
           onClickRow={(data) => {
