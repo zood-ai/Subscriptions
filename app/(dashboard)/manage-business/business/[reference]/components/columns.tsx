@@ -4,6 +4,7 @@ import {
   businessDevicesData,
   businessSuppliersData,
   businessUsersData,
+  businessBranchesData,
 } from '@/types/business';
 
 const suppliersColumns: Column<businessSuppliersData>[] = [
@@ -31,4 +32,21 @@ const customersColumns: Column<businessCustomersData>[] = [
   { key: 'notes', header: 'Notes' },
 ];
 
-export { suppliersColumns, devicesColumns, usersColumns, customersColumns };
+const branchesColumns: Column<businessBranchesData>[] = [
+  { key: 'name', header: 'Name' },
+  { key: 'reference', header: 'Reference' },
+  {
+    key: 'tax_group',
+    header: 'Tax Group',
+    render: (_, item) => item.tax_group?.name || 'N/A',
+  },
+  { key: 'created_at', header: 'Created At', type: 'date' },
+];
+
+export {
+  suppliersColumns,
+  devicesColumns,
+  usersColumns,
+  customersColumns,
+  branchesColumns,
+};

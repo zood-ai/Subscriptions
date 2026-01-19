@@ -59,12 +59,51 @@ export interface BusinessData {
   invoices_count?: number;
 }
 
+export interface businessBranchesData {
+  id: string;
+  name: string;
+  name_localized?: string;
+  reference: string;
+  tax_group_id?: string;
+  tax_group?: {
+    id: string;
+    name: string;
+  };
+  tax_name?: string;
+  tax_number?: string;
+  phone?: string;
+  opening_from?: string;
+  opening_to?: string;
+  inventory_end_of_day_time?: string;
+  address?: string;
+  latitude?: string;
+  longitude?: string;
+  image?: string;
+  receipt_header?: string;
+  receipt_footer?: string;
+  receives_online_orders?: boolean;
+  auto_end_of_day?: boolean;
+  registered_address?: {
+    streetName: string;
+    buildingNumber: string;
+    additionalNumber: string;
+    city: string;
+    citySubdivisionName: string;
+    district: string;
+    postalCode: string;
+    commercialRegesterationNumber: string;
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface BusinessResponse {
   business: BusinessData;
   suppliers: businessSuppliersData;
   devices: businessDevicesData;
   users: businessUsersData;
   customers: businessCustomersData;
+  branches: businessBranchesData;
 }
 
 export interface BusinessType {
