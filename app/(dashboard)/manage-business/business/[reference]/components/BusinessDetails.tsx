@@ -18,7 +18,7 @@ import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
 import { formatDate } from '@/lib/utils';
-import Form from "../../Form";
+import Form from '../../Form';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -88,7 +88,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     package_id: JSON.parse(data?.business?.details ?? '{}').package_id,
     business_type_id: data?.business?.type ?? '',
     business_location_id: data?.business?.location ?? '',
-  }
+  };
 
   return (
     <>
@@ -96,7 +96,10 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
         isEdit
         Form={<Form isEdit id={reference} data={formData} />}
         title={data?.business.name}
-        businessActiveForm={<ActiveForm reference={reference} data={aciveFormData} />}
+        businessActiveForm={
+          <ActiveForm reference={reference} data={aciveFormData} />
+        }
+        deleteEndPoint={`v1/super-admin/business/${reference}`}
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
