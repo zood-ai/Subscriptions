@@ -65,7 +65,7 @@ export default function Form({
       ? `v1/super-admin/business/${reference}/customers/${id}`
       : `v1/super-admin/business/${reference}/customers`,
     method: isEdit ? "PUT" : "POST",
-    queryKeys: isEdit ? ["customers", id] : ["customers"],
+    invalidateQueryKeys: isEdit ? ["customers", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {

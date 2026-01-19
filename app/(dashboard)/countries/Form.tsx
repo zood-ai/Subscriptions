@@ -46,13 +46,10 @@ export default function Form({
   >({
     api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
     method: isEdit ? "PUT" : "POST",
+    invalidateQueryKeys: isEdit ? ["countries", id] : [],
     options: {
       onSuccess: (data) => {
-        if (isEdit) {
-          queryClient.invalidateQueries({
-            queryKey: ["countries", id],
-          });
-        } else {
+        if (!isEdit) {
           router.push(`/countries/${data.data.id}`);
         }
       },

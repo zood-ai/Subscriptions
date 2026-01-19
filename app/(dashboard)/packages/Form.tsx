@@ -66,7 +66,7 @@ export default function Form({
   >({
     api: isEdit ? `v1/super-admin/packages/${id}` : "v1/super-admin/packages",
     method: isEdit ? "PUT" : "POST",
-    queryKeys: isEdit ? ["packages", id] : ["packages"],
+    invalidateQueryKeys: isEdit ? ["packages", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
