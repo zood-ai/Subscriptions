@@ -100,7 +100,7 @@ export default function Form({
   >({
     api: isEdit ? `v1/super-admin/business/${id}` : "v1/auth/Register",
     method: isEdit ? "PUT" : "POST",
-    queryKeys: isEdit ? ["business", id] : [],
+    invalidateQueryKeys: isEdit ? ["business", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit && data?.data?.user?.business_reference) {

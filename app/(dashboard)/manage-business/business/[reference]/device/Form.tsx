@@ -66,7 +66,7 @@ export default function Form({
       ? `v1/super-admin/business/${reference}/devices/${id}`
       : `v1/super-admin/business/${reference}/devices`,
     method: isEdit ? "PUT" : "POST",
-    queryKeys: isEdit ? ["devices", reference, id] : ["devices", reference],
+    invalidateQueryKeys: isEdit ? ["devices", reference, id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {

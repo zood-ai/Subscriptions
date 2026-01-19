@@ -70,7 +70,7 @@ export default function Form({
       ? `v1/super-admin/business/${reference}/suppliers/${id}`
       : `v1/super-admin/business/${reference}/suppliers`,
     method: isEdit ? "PUT" : "POST",
-    queryKeys: isEdit ? ["suppliers", id] : ["suppliers"],
+    invalidateQueryKeys: isEdit ? ["suppliers", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {

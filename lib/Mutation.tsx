@@ -13,14 +13,14 @@ interface UseCustomMutationProps<TBody, R> {
   api: string;
   method?: HttpMethod;
   options?: Omit<UseMutationOptions<R, AxiosResponse, TBody>, "mutationFn">;
-  queryKeys?: string[];
+  invalidateQueryKeys?: string[];
 }
 
 const useCustomMutation = <TBody = void, TResponse = void>({
   api,
   method = "POST",
   options,
-  queryKeys = [],
+  invalidateQueryKeys = [],
 }: UseCustomMutationProps<TBody, TResponse>) => {
   const { close } = useModal();
   const queryClient = new QueryClient();
@@ -38,10 +38,8 @@ const useCustomMutation = <TBody = void, TResponse = void>({
     ...options,
     onSuccess: (...rest) => {
       close();
-      if (queryKeys.length > 0) {
-        queryKeys.forEach((key) => {
-          queryClient.invalidateQueries({ queryKey: [key] });
-        });
+      if (invalidateQueryKeys.length > 0) {
+        queryClient.invalidateQueries({ queryKey: [invalidateQueryKeys] });
       }
       if (options?.onSuccess) options?.onSuccess?.(...rest);
     },

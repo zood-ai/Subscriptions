@@ -49,7 +49,7 @@ export default function Form({
       ? `v1/super-admin/businessTypes/${id}`
       : "v1/super-admin/businessTypes",
     method: isEdit ? "PUT" : "POST",
-    queryKeys: isEdit ? ["businessTypes", id] : ["businessTypes"],
+    invalidateQueryKeys: isEdit ? ["businessTypes", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {

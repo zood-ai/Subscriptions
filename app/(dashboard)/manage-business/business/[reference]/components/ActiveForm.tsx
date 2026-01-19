@@ -42,7 +42,7 @@ export default function Form({
   const { mutate, isPending, error } = useCustomMutation<FormData>({
     api: "v1/auth/extendBusiness",
     method: "POST",
-    queryKeys: reference ? ["business", reference] : [],
+    invalidateQueryKeys: reference ? ["business", reference] : [],
   });
 
   const onSubmit = (data: FormData) => {
