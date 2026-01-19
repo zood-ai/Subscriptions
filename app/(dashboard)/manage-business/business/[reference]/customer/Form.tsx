@@ -1,17 +1,16 @@
-'use client';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import useCustomMutation from '@/lib/Mutation';
-import { useForm, useWatch } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { queryClient } from '@/app/ReactQueryProvider';
-import { useRouter } from 'next/navigation';
-import { Textarea } from '@/components/ui/textarea';
+"use client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import useCustomMutation from "@/lib/Mutation";
+import { useForm, useWatch } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  phoneNumber: z.string().min(1, 'Phone Number is required'),
+  name: z.string().min(1, "Name is required"),
+  phoneNumber: z.string().min(1, "Phone Number is required"),
   email: z.string().optional(),
   customerNotes: z.string().optional(),
 });
@@ -30,7 +29,7 @@ interface FormState {
 }
 
 export default function Form({
-  id = '',
+  id = "",
   isEdit = false,
   reference,
   data,
@@ -49,10 +48,10 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || '',
-      phoneNumber: data?.phoneNumber || '',
-      email: data?.email || '',
-      customerNotes: data?.customerNotes || '',
+      name: data?.name || "",
+      phoneNumber: data?.phoneNumber || "",
+      email: data?.email || "",
+      customerNotes: data?.customerNotes || "",
     },
   });
 
@@ -65,16 +64,13 @@ export default function Form({
     api: isEdit
       ? `v1/super-admin/business/${reference}/customers/${id}`
       : `v1/super-admin/business/${reference}/customers`,
-    method: isEdit ? 'PUT' : 'POST',
+    method: isEdit ? "PUT" : "POST",
+    queryKeys: isEdit ? ["customers", id] : ["customers"],
     options: {
       onSuccess: (data) => {
-        if (isEdit) {
-          queryClient.invalidateQueries({
-            queryKey: ['customers', id],
-          });
-        } else {
+        if (!isEdit) {
           router.push(
-            `/manage-business/business/${reference}/customer/${data.id}`
+            `/manage-business/business/${reference}/customer/${data.id}`,
           );
         }
       },
@@ -85,7 +81,7 @@ export default function Form({
     mutate(data);
   };
 
-  const btnText = isEdit ? 'Update' : 'Create';
+  const btnText = isEdit ? "Update" : "Create";
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -95,7 +91,7 @@ export default function Form({
           Label="Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register('name')}
+          {...register("name")}
           required
         />
 
@@ -104,7 +100,7 @@ export default function Form({
           Label="Phone Number"
           error={errors?.phoneNumber?.message}
           value={formValues.phoneNumber}
-          {...register('phoneNumber')}
+          {...register("phoneNumber")}
           required
         />
 
@@ -113,14 +109,14 @@ export default function Form({
           Label="Email"
           error={errors?.email?.message}
           value={formValues.email}
-          {...register('email')}
+          {...register("email")}
         />
 
         <Textarea
           Label="Customer Notes"
           error={errors?.customerNotes?.message}
           value={formValues.customerNotes}
-          {...register('customerNotes')}
+          {...register("customerNotes")}
         />
       </div>
 
