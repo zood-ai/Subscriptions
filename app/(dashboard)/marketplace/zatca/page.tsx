@@ -3,26 +3,15 @@ import {
   CustomTable,
   type Column,
   type ActionOption,
+  type StatusFiltersTab,
 } from "@/components/CustomTable";
-import { useRouter } from "next/navigation";
-import { Country } from "@/types/countries";
-import Form from "./Form";
 import PageHeader from "@/components/PageHeader";
+import { Badge } from "@/components/ui/badge";
+import { BusinessData } from "@/types/business";
+import { useRouter } from "next/navigation";
+import Form from "./Form";
 
-const columns: Column<Country>[] = [
-  {
-    key: "name_en",
-    header: "Name",
-    render: (value, item) => {
-      return <span>{item?.name || item.name_en}</span>;
-    },
-  },
-  {
-    key: "created_at",
-    header: "Created At",
-    type: "date",
-  },
-];
+const columns: Column<BusinessData>[] = [{ key: "name", header: "Name" }];
 
 const actions: ActionOption[] = [
   {
@@ -34,22 +23,20 @@ const actions: ActionOption[] = [
   },
 ];
 
-export default function CountriesPage() {
+export default function Businesses() {
   const router = useRouter();
   return (
     <>
-      <PageHeader title="Country" Form={<Form />} />
+      <PageHeader title="Zatca" Form={<Form />} />
       <div className="py-10 mainPaddingX">
         <CustomTable
-          endPoint="v1/super-admin/countries"
+          endPoint="v1/super-admin/business"
           columns={columns}
           filters={{
             showName: true,
           }}
-          onClickRow={(row) => {
-            router.push(`/countries/${row.id}`);
-          }}
           actions={actions}
+          onClickRow={(data) => {}}
           statusFilterKey="status"
         />
       </div>
