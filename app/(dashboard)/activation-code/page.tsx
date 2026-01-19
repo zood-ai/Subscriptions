@@ -21,8 +21,18 @@ interface ActivationCodeData {
 const columns: Column<ActivationCodeData>[] = [
   { key: 'code', header: 'Code' },
   { key: 'duration', header: 'Duration' },
+  {
+    key: 'is_used',
+    header: 'Is Used',
+    render: (value) => (
+      <span
+        className={`${value === 0 ? 'text-red-500' : 'text-green-500'} font-semibold`}
+      >
+        {value === 0 ? 'No' : 'Yes'}
+      </span>
+    ),
+  },
   { key: 'created_at', header: 'Created At', type: 'date' },
-  { key: 'is_used', header: 'Is Used', render: (value) => <span>{value === 0 ? 'No' : 'Yes'}</span> },
 ];
 
 const filters: StatusFiltersTab[] = [
