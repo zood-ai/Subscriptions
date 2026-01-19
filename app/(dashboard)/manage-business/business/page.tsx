@@ -11,20 +11,30 @@ import { BusinessData } from '@/types/business';
 import { useRouter } from 'next/navigation';
 import Form from './Form';
 
+const days = 30 * 24 * 60 * 60 * 1000;
+
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
   {
     key: 'end_at',
     header: 'is Active?',
-    render: (_, item) => (
-      <div className="text-nowrap">
-        {new Date() < new Date(item.end_at) ? (
-          <Badge variant="success" label="Active" />
-        ) : (
-          <Badge variant="danger" label="Expired" />
-        )}
-      </div>
-    ),
+    render: (_, item) => {
+      const now = new Date();
+      const endAt = new Date(item.end_at);
+      const expiringSoonAt = new Date(endAt.getTime() - days);
+
+      return (
+        <div className="text-nowrap">
+          {now > endAt ? (
+            <Badge variant="danger" label="Expired" />
+          ) : now >= expiringSoonAt ? (
+            <Badge variant="warning" label="Expiring Soon" />
+          ) : (
+            <Badge variant="success" label="Active" />
+          )}
+        </div>
+      );
+    },
   },
   {
     key: 'active',

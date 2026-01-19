@@ -12,12 +12,10 @@ import Form from './Form';
 
 const columns: Column<BusinessType['businessType']>[] = [
   { key: 'name', header: 'Name' },
-  { key: 'created_at', header: 'Created at' },
+  { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
-const filters: StatusFiltersTab[] = [
-  { label: 'Deleted', value: 'true' },
-];
+const filters: StatusFiltersTab[] = [{ label: 'Deleted', value: 'true' }];
 
 const actions: ActionOption[] = [
   {
@@ -40,7 +38,7 @@ export default function BusinessTypes() {
           statusFilterKey="isDeleted"
           statusFilters={filters}
           filters={{
-            showName: true
+            showName: true,
           }}
           columns={columns}
           actions={actions}

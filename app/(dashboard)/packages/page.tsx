@@ -23,7 +23,7 @@ const columns: Column<PackageData>[] = [
     ),
   },
   { key: 'price', header: 'Price' },
-  { key: 'created_at', header: 'Created at' },
+  { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
 const filters: StatusFiltersTab[] = [
