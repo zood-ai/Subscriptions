@@ -1,11 +1,12 @@
-"use client";
-import { DetailCard } from "@/components/DetailCard";
-import { useRouter } from "next/navigation";
-import { BusinessResponse } from "@/types/business";
-import { Column, CustomTable } from "@/components/CustomTable";
-import useCustomQuery from "@/lib/Query";
-import LoadingComponent from "@/components/layout/loading";
+'use client';
+import { DetailCard } from '@/components/DetailCard';
+import { useRouter } from 'next/navigation';
+import { BusinessResponse } from '@/types/business';
+import { Column, CustomTable } from '@/components/CustomTable';
+import useCustomQuery from '@/lib/Query';
+import LoadingComponent from '@/components/layout/loading';
 import {
+  branchesColumns,
   customersColumns,
   devicesColumns,
   suppliersColumns,
@@ -13,11 +14,12 @@ import {
 } from './columns';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
+import BranchForm from '../branches/Form';
 import SupplierForm from '../supplier/Form';
 import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
-import Form from "../../Form";
+import Form from '../../Form';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -26,19 +28,26 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     queryKey: ['business', reference],
     options: {
       onError: () => {
-        router.push("/manage-business/business");
+        router.push('/manage-business/business');
       },
     },
   });
   const items = [
-    { title: "Name", value: data?.business.name },
-    { title: "Reference", value: data?.business.reference },
-    { title: "Owner email", value: data?.business.owner_email },
-    { title: "Created at", value: data?.business.created_at },
-    { title: "End at", value: data?.business.end_at },
+    { title: 'Name', value: data?.business.name },
+    { title: 'Reference', value: data?.business.reference },
+    { title: 'Owner email', value: data?.business.owner_email },
+    { title: 'Created at', value: data?.business.created_at },
+    { title: 'End at', value: data?.business.end_at },
   ];
 
   const tables = [
+    {
+      type: 'branche',
+      title: 'Branches',
+      endPoint: `v1/super-admin/business/${reference}/branches`,
+      columns: branchesColumns,
+      form: <BranchForm reference={reference} />,
+    },
     {
       type: 'supplier',
       title: 'Suppliers',
@@ -87,7 +96,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     package_id: JSON.parse(data?.business?.details ?? '{}').package_id,
     business_type_id: data?.business?.type ?? '',
     business_location_id: data?.business?.location ?? '',
-  }
+  };
 
   return (
     <>
@@ -95,7 +104,9 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
         isEdit
         Form={<Form isEdit id={reference} data={formData} />}
         title={data?.business.name}
-        businessActiveForm={<ActiveForm reference={reference} data={aciveFormData} />}
+        businessActiveForm={
+          <ActiveForm reference={reference} data={aciveFormData} />
+        }
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
