@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import useCustomMutation from "@/lib/Mutation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { CountryResponseData } from "@/types/countries";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, "Country Name is required"),
+  name_en: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -25,7 +25,6 @@ export default function Form({
   data?: FormData;
 }) {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -35,6 +34,7 @@ export default function Form({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: data?.name || "",
+      name_en: "Moemen Mohammed Adam",
     },
   });
 
@@ -46,7 +46,7 @@ export default function Form({
   >({
     api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
     method: isEdit ? "PUT" : "POST",
-    invalidateQueryKeys: isEdit ? ["countries", id] : [],
+    invalidateQueryKeys: isEdit ? ["countries", id] : ["countries"],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {

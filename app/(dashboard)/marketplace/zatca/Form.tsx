@@ -6,7 +6,6 @@ import useCustomMutation from "@/lib/Mutation";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   service: z.string(),
@@ -42,7 +41,6 @@ const zatcaEnvironment = [
   },
 ];
 export default function Form() {
-  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
