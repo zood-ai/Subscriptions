@@ -34,7 +34,7 @@ export default function Form({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: data?.name || "",
-      name_en: "Moemen Mohammed Adam",
+      name_en: data?.name_en || "",
     },
   });
 
@@ -46,7 +46,7 @@ export default function Form({
   >({
     api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
     method: isEdit ? "PUT" : "POST",
-    invalidateQueryKeys: isEdit ? ["countries", id] : ["countries"],
+    invalidateQueryKeys: isEdit ? ["countries", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
