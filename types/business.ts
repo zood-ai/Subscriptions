@@ -1,25 +1,25 @@
-export interface businessSuppliersData {
+export interface BusinessSuppliersData {
   id: string;
   name: string;
   phone: string;
   primary_email: string;
 }
 
-export interface businessDevicesData {
+export interface BusinessDevicesData {
   id: string;
   name: string;
   code: string;
   reference: string;
 }
 
-export interface businessUsersData {
+export interface BusinessUsersData {
   id: string;
   name: string;
   email: string;
   phone: string;
 }
 
-export interface businessCustomersData {
+export interface BusinessCustomersData {
   id: string;
   name: string;
   email: string;
@@ -59,7 +59,7 @@ export interface BusinessData {
   invoices_count?: number;
 }
 
-export interface businessBranchesData {
+export interface BusinessBranchesData {
   id: string;
   name: string;
   name_localized?: string;
@@ -99,11 +99,11 @@ export interface businessBranchesData {
 
 export interface BusinessResponse {
   business: BusinessData;
-  suppliers: businessSuppliersData;
-  devices: businessDevicesData;
-  users: businessUsersData;
-  customers: businessCustomersData;
-  branches: businessBranchesData;
+  suppliers: BusinessSuppliersData;
+  devices: BusinessDevicesData;
+  users: BusinessUsersData;
+  customers: BusinessCustomersData;
+  branches: BusinessBranchesData;
 }
 
 export interface BusinessType {

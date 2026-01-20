@@ -1,38 +1,38 @@
 import { type Column } from '@/components/CustomTable';
 import {
-  businessCustomersData,
-  businessDevicesData,
-  businessSuppliersData,
-  businessUsersData,
-  businessBranchesData,
+  BusinessCustomersData,
+  BusinessDevicesData,
+  BusinessSuppliersData,
+  BusinessUsersData,
+  BusinessBranchesData,
 } from '@/types/business';
 
-const suppliersColumns: Column<businessSuppliersData>[] = [
+const suppliersColumns: Column<BusinessSuppliersData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'phone', header: 'Phone' },
   { key: 'primary_email', header: 'Primary email' },
 ];
 
-const devicesColumns: Column<businessDevicesData>[] = [
+const devicesColumns: Column<BusinessDevicesData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'code', header: 'Code' },
   { key: 'reference', header: 'Reference' },
 ];
 
-const usersColumns: Column<businessUsersData>[] = [
+const usersColumns: Column<BusinessUsersData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'email', header: 'Email' },
   { key: 'phone', header: 'Phone' },
 ];
 
-const customersColumns: Column<businessCustomersData>[] = [
+const customersColumns: Column<BusinessCustomersData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'email', header: 'Email' },
   { key: 'phone', header: 'Phone' },
   { key: 'notes', header: 'Notes' },
 ];
 
-const branchesColumns: Column<businessBranchesData>[] = [
+const branchesColumns: Column<BusinessBranchesData>[] = [
   { key: 'name', header: 'Name' },
   { key: 'reference', header: 'Reference' },
   {
