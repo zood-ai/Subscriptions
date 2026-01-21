@@ -15,7 +15,7 @@ interface SelectWithEndpointProps<T> {
   endPoint: string;
   labelKey: keyof T;
   valueKey: keyof T;
-  responseDataKey?: string;
+  itemResponseDataKey: string;
   placeholder?: string;
   customStyles: StylesConfig<Option, false>;
   label?: string;
@@ -44,7 +44,10 @@ const SelectWithEndpoint = <T,>({
   endPoint,
   labelKey,
   valueKey,
-  responseDataKey = 'data',
+  // this key is for items that we cant acces with data?.data
+  // for example data?.data?.businessType then itemResponseDataKey=businessType
+  // itemResponseDataKey="" this equal data?.data
+  itemResponseDataKey = '',
   placeholder = 'Select an option',
   customStyles,
   label,
@@ -75,12 +78,12 @@ const SelectWithEndpoint = <T,>({
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
 
   useCustomQuery<{ [key: string]: T }>({
-    queryKey: [endPoint, controlledValue],
+    queryKey: [endPoint, controlledValue, itemResponseDataKey],
     api: `${endPoint}/${controlledValue}`,
     enabled: !!controlledValue,
     options: {
       onSuccess: (data) => {
-        const item = data[responseDataKey] as T;
+        const item = data[itemResponseDataKey] as T;
         setSelectedOption({
           value: String(item[valueKey]),
           label: String(item[labelKey]),
@@ -92,7 +95,7 @@ const SelectWithEndpoint = <T,>({
 
   // Load options with pagination and search
   const loadOptions: LoadOptions<Option, any, Additional> = useCallback(
-    async (search, loadedOptions, additional) => {
+    async (search, _, additional) => {
       try {
         const page = additional?.page || 1;
         const separator = endPoint.includes('?') ? '&' : '?';
@@ -102,10 +105,9 @@ const SelectWithEndpoint = <T,>({
           url += `&search=${encodeURIComponent(search)}`;
         }
 
-        const res = await axiosInstance(url);
-        const responseData = res.data;
-
-        const items: T[] = responseData[responseDataKey] || [];
+        const { data } = await axiosInstance(url);
+        const responseData = data?.data;
+        const items: T[] = responseData || [];
 
         const options: Option[] = items.map((item: T) => ({
           value: String(item[valueKey]),
@@ -141,7 +143,7 @@ const SelectWithEndpoint = <T,>({
         };
       }
     },
-    [endPoint, labelKey, valueKey, isDefault, optionDefault, responseDataKey]
+    [endPoint, labelKey, valueKey, isDefault, optionDefault]
   );
 
   const handleChange = (opt: Option | null) => {

@@ -188,6 +188,7 @@ export default function Form({
               value={String(field.value)}
               onChange={(value) => field.onChange(value)}
               endPoint="v1/super-admin/businessTypes"
+              itemResponseDataKey="businessType"
               labelKey="name"
               valueKey="id"
               required
@@ -211,6 +212,7 @@ export default function Form({
               endPoint="v1/super-admin/packages"
               labelKey="name"
               valueKey="id"
+              itemResponseDataKey=""
               required
             />
           )}
@@ -230,6 +232,7 @@ export default function Form({
               endPoint="v1/super-admin/countries"
               labelKey="name_en"
               valueKey="id"
+              itemResponseDataKey="data"
               required
             />
           )}

@@ -38,7 +38,7 @@ interface WithEndPoint<T> extends CommonProps {
   labelKey: keyof T;
   valueKey: keyof T;
   loading?: never;
-  pageSize?: number;
+  itemResponseDataKey: string;
 }
 
 type SingleSelectProps<T> = WithOptions | WithEndPoint<T>;
