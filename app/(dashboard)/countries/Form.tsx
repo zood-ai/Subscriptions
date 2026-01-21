@@ -70,6 +70,7 @@ export default function Form({
           error={errors?.name?.message}
           value={formValues.name}
           {...register("name")}
+          required
         />
         <Input
           className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
