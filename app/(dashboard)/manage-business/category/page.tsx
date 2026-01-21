@@ -5,17 +5,14 @@ import {
   type ActionOption,
 } from "@/components/CustomTable";
 import { useRouter } from "next/navigation";
-import { Country } from "@/types/countries";
+import { Category } from "@/types/categories";
 import Form from "./Form";
 import PageHeader from "@/components/PageHeader";
 
-const columns: Column<Country>[] = [
+const columns: Column<Category>[] = [
   {
-    key: "name_en",
+    key: "name",
     header: "Name",
-    render: (value, item) => {
-      return <span>{item?.name || item.name_en}</span>;
-    },
   },
   {
     key: "created_at",
