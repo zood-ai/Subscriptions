@@ -42,7 +42,7 @@ const CategoryData = ({ id }: { id: string }) => {
         isEdit
         deleteEndPoint={`v1/manage/categories/${id}`}
         title={data?.data?.name}
-        backUrl="/categories"
+        backUrl="/manage-business/category"
         Form={<Form id={id} isEdit data={formData} />}
       />
       <div className="py-10 mainPaddingX">
