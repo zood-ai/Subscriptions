@@ -4,13 +4,13 @@ import { Button } from "@/components/ui/button";
 import useCustomMutation from "@/lib/Mutation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { CountryResponseData } from "@/types/countries";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, "Country Name is required"),
+  name_en: z.string().optional(),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -25,7 +25,6 @@ export default function Form({
   data?: FormData;
 }) {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
@@ -35,6 +34,7 @@ export default function Form({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: data?.name || "",
+      name_en: data?.name_en || "",
     },
   });
 
@@ -70,7 +70,17 @@ export default function Form({
           error={errors?.name?.message}
           value={formValues.name}
           {...register("name")}
+          required
         />
+        <Input
+          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          type="text"
+          Label="Country Name (EN)"
+          error={errors?.name_en?.message}
+          value={formValues.name_en}
+          {...register("name_en")}
+        />
+
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button

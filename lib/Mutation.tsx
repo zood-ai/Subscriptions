@@ -1,5 +1,5 @@
 import {
-  QueryClient,
+  useQueryClient,
   useMutation,
   UseMutationOptions,
 } from "@tanstack/react-query";
@@ -23,7 +23,7 @@ const useCustomMutation = <TBody = void, TResponse = void>({
   invalidateQueryKeys = [],
 }: UseCustomMutationProps<TBody, TResponse>) => {
   const { close } = useModal();
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   return useMutation<TResponse, AxiosResponse, TBody>({
     mutationFn: async (body) => {
@@ -39,7 +39,7 @@ const useCustomMutation = <TBody = void, TResponse = void>({
     onSuccess: (...rest) => {
       close();
       if (invalidateQueryKeys.length > 0) {
-        queryClient.invalidateQueries({ queryKey: [invalidateQueryKeys] });
+        queryClient.invalidateQueries({ queryKey: invalidateQueryKeys });
       }
       if (options?.onSuccess) options?.onSuccess?.(...rest);
     },
