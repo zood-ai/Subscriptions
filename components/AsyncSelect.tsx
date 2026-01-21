@@ -105,9 +105,10 @@ const SelectWithEndpoint = <T,>({
           url += `&search=${encodeURIComponent(search)}`;
         }
 
-        const { data } = await axiosInstance(url);
-        const responseData = data?.data;
-        const items: T[] = responseData || [];
+        const res = await axiosInstance(url);
+        const responseData = res.data;
+
+        const items: T[] = responseData.data || [];
 
         const options: Option[] = items.map((item: T) => ({
           value: String(item[valueKey]),
