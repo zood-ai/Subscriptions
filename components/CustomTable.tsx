@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import type React from "react";
-import { useState } from "react";
-import { ChevronDown, Filter, X, ArrowUpDown } from "lucide-react";
-import { cn, formatDate, ObjectCleaner } from "@/lib/utils";
+import type React from 'react';
+import { useState } from 'react';
+import { ChevronDown, Filter, X, ArrowUpDown } from 'lucide-react';
+import { cn, formatDate, ObjectCleaner } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Checkbox } from "@/components/ui/checkbox";
-import TableSkeleton from "./TableSkeleton";
-import type { MetaData } from "@/types/global";
-import useCustomQuery from "@/lib/Query";
-import CustomModal from "./layout/CustomModal";
-import TableFilters, { AllowedFilters } from "./TableFilters";
-import { useModal } from "@/context/ModalContext";
+} from '@/components/ui/dropdown-menu';
+import { Checkbox } from '@/components/ui/checkbox';
+import TableSkeleton from './TableSkeleton';
+import type { MetaData } from '@/types/global';
+import useCustomQuery from '@/lib/Query';
+import CustomModal from './layout/CustomModal';
+import TableFilters, { AllowedFilters } from './TableFilters';
+import { useModal } from '@/context/ModalContext';
 
 export interface Column<T> {
   key: keyof T;
   header: string;
   render?: (value: T[keyof T], item: T) => React.ReactNode;
-  type?: "date";
+  type?: 'date';
 }
 
 export interface StatusFiltersTab {
@@ -68,9 +68,9 @@ type CustomTableProps<T extends { id: string }> = BaseProps<T> &
 
 export function CustomTable<T extends { id: string }>({
   data = [],
-  endPoint = "",
+  endPoint = '',
   showStatusFilters = true,
-  statusFilterKey = "status",
+  statusFilterKey = 'status',
   forceLoading = false,
   columns,
   statusFilters = [],
@@ -78,7 +78,7 @@ export function CustomTable<T extends { id: string }>({
   actions = [],
   onClickRow,
   title,
-  titleClassName = "",
+  titleClassName = '',
   pagination = true,
 }: CustomTableProps<T>) {
   const { close: closeModal } = useModal();
@@ -86,22 +86,23 @@ export function CustomTable<T extends { id: string }>({
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
-  >({ page: 1, sort: "desc", [statusFilterKey]: "" });
+  >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
 
   const currentPage = allFilters.page as number;
   const sortOptions: SortOption[] = [
-    { label: "Descending", value: "desc" },
-    { label: "Ascending", value: "asc" },
+    { label: 'Descending', value: 'desc' },
+    { label: 'Ascending', value: 'asc' },
   ];
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
-    from: MetaData["from"];
-    last_page: MetaData["last_page"];
-    to: MetaData["to"];
-    total: MetaData["total"];
+    from: MetaData['from'];
+    last_page: MetaData['last_page'];
+    to: MetaData['to'];
+    total: MetaData['total'];
+    current_page: MetaData['current_page'];
   }>({
-    api: endPoint || "",
+    api: endPoint || '',
     enabled: endPoint && data.length === 0 ? true : false,
     filters: ObjectCleaner(allFilters),
     queryKey: [endPoint, allFilters],
@@ -113,6 +114,7 @@ export function CustomTable<T extends { id: string }>({
           last_page: data.last_page,
           to: data.to,
           total: data.total,
+          current_page: data.current_page,
         });
       },
     },
@@ -167,7 +169,7 @@ export function CustomTable<T extends { id: string }>({
       {title && (
         <h2
           className={cn(
-            "py-6.25 text-gray-500 text-xl font-medium",
+            'py-6.25 text-gray-500 text-xl font-medium',
             titleClassName
           )}
         >
@@ -181,16 +183,16 @@ export function CustomTable<T extends { id: string }>({
             (statusFilters && statusFilters?.length > 0)) && (
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <div className="flex items-center gap-2">
-                {[{ label: "All", value: "" }, ...statusFilters]?.map(
+                {[{ label: 'All', value: '' }, ...statusFilters]?.map(
                   (filter) => (
                     <button
                       key={filter.value}
                       onClick={() => handleFilterChange(filter.value)}
                       className={cn(
-                        "px-3 py-1.5 text-sm font-medium rounded-full transition-colors",
+                        'px-3 py-1.5 text-sm font-medium rounded-full transition-colors',
                         allFilters[statusFilterKey] === filter.value
-                          ? "text-blue-600 bg-blue-50 border border-blue-200"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          ? 'text-blue-600 bg-blue-50 border border-blue-200'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                       )}
                     >
                       {filter.label}
@@ -218,7 +220,7 @@ export function CustomTable<T extends { id: string }>({
                             }))
                           }
                           className={cn(
-                            allFilters["sort"] === option.value && "bg-muted"
+                            allFilters['sort'] === option.value && 'bg-muted'
                           )}
                         >
                           {option.label}
@@ -240,8 +242,8 @@ export function CustomTable<T extends { id: string }>({
                               e.stopPropagation();
                               setAllFilters((prev) => ({
                                 page: 1,
-                                sort: prev.sort ?? "desc",
-                                [statusFilterKey]: "",
+                                sort: prev.sort ?? 'desc',
+                                [statusFilterKey]: '',
                               }));
                             }}
                             className="bg-gray-100 cursor-pointer rounded-full p-1"
@@ -308,10 +310,10 @@ export function CustomTable<T extends { id: string }>({
                           checked={allSelected}
                           onCheckedChange={handleSelectAll}
                           className={cn(
-                            "h-4 w-4",
-                            someSelected && "data-[state=checked]:bg-primary"
+                            'h-4 w-4',
+                            someSelected && 'data-[state=checked]:bg-primary'
                           )}
-                          {...(someSelected && { "data-state": "checked" })}
+                          {...(someSelected && { 'data-state': 'checked' })}
                         />
                         {someSelected && (
                           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -356,9 +358,9 @@ export function CustomTable<T extends { id: string }>({
                       >
                         {column.render
                           ? column.render(item[column.key], item)
-                          : column.type === "date" && item[column.key]
-                            ? formatDate(new Date(item[column.key] as string))
-                            : String(item[column.key] ?? "-")}
+                          : column.type === 'date' && item[column.key]
+                          ? formatDate(new Date(item[column.key] as string))
+                          : String(item[column.key] ?? '-')}
                       </td>
                     ))}
                   </tr>
@@ -369,7 +371,7 @@ export function CustomTable<T extends { id: string }>({
           {pagination && paginationData && (
             <div className="flex justify-end items-center space-x-4.75 mx-5 mt-7.5 mb-5">
               <div className="flex items-center justify-center text-gray-500 font-[12px]">
-                {paginationData?.from} - {paginationData?.to} of{" "}
+                {paginationData?.from} - {paginationData?.to} of{' '}
                 {paginationData?.total}
               </div>
               <div className="flex justify-center items-center space-x-2 mx-3">
@@ -397,8 +399,8 @@ export function CustomTable<T extends { id: string }>({
                         onClick={() => goToPage(pageNumber)}
                         className={`cursor-pointer px-3 py-1 rounded ${
                           currentPage === pageNumber
-                            ? "bg-primary text-white"
-                            : "bg-gray-100"
+                            ? 'bg-primary text-white'
+                            : 'bg-gray-100'
                         }`}
                       >
                         {pageNumber}

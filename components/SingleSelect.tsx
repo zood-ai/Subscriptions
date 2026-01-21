@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client';
-import React, { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import Select, { components } from 'react-select';
 import { Label } from '@/components/ui/label';
 import { ChevronDown } from 'lucide-react';
@@ -8,6 +8,7 @@ import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
 
 import useCustomQuery from '@/lib/Query';
 import { cn } from '@/lib/utils';
+
 export type Option = { label: string; value: string | number; item?: unknown };
 
 interface WithOptions {
@@ -17,11 +18,11 @@ interface WithOptions {
   valueKey?: never;
 }
 
-interface WithEndPoint<L, V> {
+interface WithEndPoint<T> {
   options?: never;
   endPoint: string;
-  labelKey: L;
-  valueKey: V;
+  labelKey: keyof T;
+  valueKey: keyof T;
 }
 
 interface SingleSelectProps {
@@ -45,13 +46,13 @@ interface SingleSelectProps {
   optionDefaultLabel?: string;
 }
 
-type SelectProps<L, V> = SingleSelectProps & (WithOptions | WithEndPoint<L, V>);
+type SelectProps<T> = SingleSelectProps & (WithOptions | WithEndPoint<T>);
 
 type ApiResponse<T> = {
   data: T[];
 };
 
-const SingleSelect = <T, L = 'name', V = 'id'>({
+const SingleSelect = <T,>({
   options = [],
   placeholder = 'Select an option',
   label,
@@ -73,10 +74,10 @@ const SingleSelect = <T, L = 'name', V = 'id'>({
   isHidden = false,
   endPoint,
   // to choice what the key you need to become a label for the select option
-  labelKey = '' as L,
+  labelKey = '' as keyof T,
   // to choice what the key you need to become a value for the select option
-  valueKey = '' as V,
-}: SelectProps<L, V>) => {
+  valueKey = '' as keyof T,
+}: SelectProps<T>) => {
   const optionDefault: Option = {
     label: placeholder || optionDefaultLabel,
     value: '',
