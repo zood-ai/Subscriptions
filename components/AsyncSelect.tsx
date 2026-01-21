@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import { components } from 'react-select';
 import { Label } from '@/components/ui/label';
@@ -74,29 +74,22 @@ const SelectWithEndpoint = <T,>({
     }),
     [placeholder, optionDefaultLabel]
   );
-
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
+  const [paginationLoading, setPaginationLoading] = useState<boolean>(false);
 
-  useCustomQuery<{ [key: string]: T }>({
+  const { data, isLoading: isLoadingInitItem = false } = useCustomQuery<{
+    [key: string]: T;
+  }>({
     queryKey: [endPoint, controlledValue, itemResponseDataKey],
     api: `${endPoint}/${controlledValue}`,
     enabled: !!controlledValue,
-    options: {
-      onSuccess: (data) => {
-        const item = data[itemResponseDataKey] as T;
-        setSelectedOption({
-          value: String(item[valueKey]),
-          label: String(item[labelKey]),
-          item,
-        });
-      },
-    },
   });
 
   // Load options with pagination and search
   const loadOptions: LoadOptions<Option, any, Additional> = useCallback(
     async (search, _, additional) => {
       try {
+        setPaginationLoading(true);
         const page = additional?.page || 1;
         const separator = endPoint.includes('?') ? '&' : '?';
         let url = `${endPoint}${separator}page=${page}`;
@@ -135,6 +128,7 @@ const SelectWithEndpoint = <T,>({
         };
       } catch (error) {
         console.error('Error loading options:', error);
+        setPaginationLoading(false);
         return {
           options: [],
           hasMore: false,
@@ -142,6 +136,8 @@ const SelectWithEndpoint = <T,>({
             page: 1,
           },
         };
+      } finally {
+        setPaginationLoading(false);
       }
     },
     [endPoint, labelKey, valueKey, isDefault, optionDefault]
@@ -153,6 +149,17 @@ const SelectWithEndpoint = <T,>({
     onValueChange?.(opt);
     onChange?.(newValue || '');
   };
+
+  useEffect(() => {
+    if (data) {
+      const item = data[itemResponseDataKey] as T;
+      setSelectedOption({
+        value: String(item[valueKey]),
+        label: String(item[labelKey]),
+        item,
+      });
+    }
+  }, [data, itemResponseDataKey, labelKey, valueKey]);
 
   return (
     <div
@@ -182,6 +189,7 @@ const SelectWithEndpoint = <T,>({
         placeholder={placeholder}
         debounceTimeout={300}
         cacheUniqs={[endPoint]}
+        isLoading={isLoadingInitItem || paginationLoading}
         components={{
           DropdownIndicator: (props) => (
             <components.DropdownIndicator {...props}>
