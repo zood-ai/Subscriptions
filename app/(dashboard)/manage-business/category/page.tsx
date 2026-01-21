@@ -35,7 +35,7 @@ export default function CategoriesPage() {
   const router = useRouter();
   return (
     <>
-      <PageHeader title="Categories" Form={<Form />} />
+      <PageHeader title="Category" Form={<Form />} />
       <div className="py-10 mainPaddingX">
         <CustomTable
           endPoint="v1/super-admin/categories"
