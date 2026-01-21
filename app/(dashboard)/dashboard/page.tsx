@@ -104,8 +104,8 @@ export default function Dashboard() {
                   status: value as DashboardFilters['status'],
                 })
               }
-              className="w-fit"
-              parentClassName="w-fit"
+              className="min-w-[170px] w-fit"
+              parentClassName="min-w-[170px] w-fit"
               options={businessStatusOptions}
               loading={false}
               required

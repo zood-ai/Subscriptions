@@ -1,6 +1,6 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import SingleSelect from '@/components/SelectIndex';
+import SingleSelect from '@/components/SingleSelect';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
@@ -212,7 +212,6 @@ export default function Form({
               endPoint="v1/super-admin/packages"
               labelKey="name"
               valueKey="id"
-              itemResponseDataKey=""
               required
             />
           )}

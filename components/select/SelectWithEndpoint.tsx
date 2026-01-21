@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { ChevronDown } from 'lucide-react';
 import type { StylesConfig } from 'react-select';
 import { cn } from '@/lib/utils';
-import { Option } from './SelectIndex';
+import { Option } from '../SingleSelect';
 import axiosInstance from '@/guards/axiosInstance';
 import useCustomQuery from '@/lib/Query';
 
@@ -15,7 +15,7 @@ interface SelectWithEndpointProps<T> {
   endPoint: string;
   labelKey: keyof T;
   valueKey: keyof T;
-  itemResponseDataKey: string;
+  itemResponseDataKey?: string;
   placeholder?: string;
   customStyles: StylesConfig<Option, false>;
   label?: string;
@@ -152,7 +152,9 @@ const SelectWithEndpoint = <T,>({
 
   useEffect(() => {
     if (data) {
-      const item = data[itemResponseDataKey] as T;
+      const item = itemResponseDataKey
+        ? (data[itemResponseDataKey] as T)
+        : (data as T);
       setSelectedOption({
         value: String(item[valueKey]),
         label: String(item[labelKey]),

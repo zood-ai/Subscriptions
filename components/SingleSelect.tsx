@@ -1,31 +1,9 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-'use client';
-import { useMemo, useState, useEffect } from 'react';
-import Select, { components } from 'react-select';
-import { Label } from '@/components/ui/label';
-import { ChevronDown } from 'lucide-react';
+import SelectWithOptions from './select/SelectWithOptions';
+import SelectWithEndpoint from './select/SelectWithEndpoint';
 import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
-
-import useCustomQuery from '@/lib/Query';
-import { cn } from '@/lib/utils';
-
 export type Option = { label: string; value: string | number; item?: unknown };
 
-interface WithOptions {
-  options: Option[];
-  endPoint?: never;
-  labelKey?: never;
-  valueKey?: never;
-}
-
-interface WithEndPoint<T> {
-  options?: never;
-  endPoint: string;
-  labelKey: keyof T;
-  valueKey: keyof T;
-}
-
-interface SingleSelectProps {
+interface CommonProps {
   placeholder?: string;
   label?: string;
   name?: string;
@@ -33,10 +11,9 @@ interface SingleSelectProps {
   onFocus?: () => void;
   errorText?: string;
   required?: boolean;
-  value?: string | null;
+  value?: string | number | null;
   onChange?: (value: string | number) => void;
   onValueChange?: (option: Option | null) => void;
-  loading?: boolean;
   className?: string;
   parentClassName?: string;
   labelClassName?: string;
@@ -46,107 +23,40 @@ interface SingleSelectProps {
   optionDefaultLabel?: string;
 }
 
-type SelectProps<T> = SingleSelectProps & (WithOptions | WithEndPoint<T>);
+interface WithOptions extends CommonProps {
+  options: Option[];
+  endPoint?: never;
+  labelKey?: never;
+  valueKey?: never;
+  loading?: boolean;
+  pageSize?: never;
+}
 
-type ApiResponse<T> = {
-  data: T[];
-};
+interface WithEndPoint<T> extends CommonProps {
+  options?: never;
+  endPoint: string;
+  labelKey: keyof T;
+  valueKey: keyof T;
+  loading?: never;
+  itemResponseDataKey?: string;
+}
 
-const SingleSelect = <T,>({
-  options = [],
-  placeholder = 'Select an option',
-  label,
-  name,
-  disabled = false,
-  onFocus,
-  errorText,
-  required = false,
-  value: controlledValue,
-  onChange,
-  onValueChange,
-  loading = false,
-  parentClassName = '',
-  labelClassName = '',
-  showSearch = true,
-  className = '',
-  isDefault = false,
-  optionDefaultLabel = 'Choose one',
-  isHidden = false,
-  endPoint,
-  // to choice what the key you need to become a label for the select option
-  labelKey = '' as keyof T,
-  // to choice what the key you need to become a value for the select option
-  valueKey = '' as keyof T,
-}: SelectProps<T>) => {
-  const optionDefault: Option = {
-    label: placeholder || optionDefaultLabel,
-    value: '',
-  };
+type SingleSelectProps<T> = WithOptions | WithEndPoint<T>;
 
-  const {
-    data: fetchedData,
-    isLoading: isFetching,
-    error: fetchError,
-  } = useCustomQuery<ApiResponse<T>>({
-    queryKey: [endPoint || 'select-options'],
-    api: endPoint ?? '',
-    enabled: !!endPoint,
-  });
-  const fetchedOptions = useMemo(() => {
-    if (!fetchedData?.data || !Array.isArray(fetchedData?.data)) return [];
-    return fetchedData?.data?.map((item: T) => ({
-      label: item[labelKey as keyof T],
-      value: String(item[valueKey as keyof T]),
-      item,
-    }));
-  }, [fetchedData, labelKey, valueKey]);
-
-  const finalOptions = endPoint ? fetchedOptions : options;
-  const isLoading = endPoint ? isFetching : loading;
-
-  const [internalValue, setInternalValue] = useState<string | number | null>(
-    controlledValue ?? null
-  );
-  useEffect(() => {
-    if (controlledValue !== undefined) {
-      setInternalValue(controlledValue);
-    }
-  }, [controlledValue]);
-
-  const value = controlledValue !== undefined ? controlledValue : internalValue;
-
-  const fullOptions = useMemo(() => {
-    const opts = isDefault ? [optionDefault, ...finalOptions] : finalOptions;
-    return opts.filter((el) => el?.value !== undefined);
-  }, [finalOptions, isDefault, optionDefault]);
-
-  const selectedOption = useMemo(
-    () => fullOptions.find((o) => o.value === value) || null,
-    [fullOptions, value]
-  );
-
-  const handleChange = (opt: Option | null) => {
-    if (!opt) return;
-
-    const newValue = opt.value === '' ? null : opt.value;
-    setInternalValue(newValue);
-    onValueChange?.(opt);
-    onChange?.(newValue || '');
-  };
-
+function SingleSelect<T>(props: SingleSelectProps<T>) {
   const customStyles: StylesConfig<Option, false> = {
     control: (base, state): CSSObjectWithLabel => ({
       ...base,
-      display: isHidden ? 'hidden' : 'flex',
+      display: props.isHidden ? 'none' : 'flex',
+      cursor: props.disabled ? 'not-allowed' : 'pointer',
       minHeight: 50,
-      borderRadius: 9999, // rounded-full
+      borderRadius: 9999,
       borderColor: state.isFocused ? '#7272F6' : '#d1d5db',
       boxShadow: state.isFocused
         ? '0 0 0 2px rgba(114, 114, 246, 0.2)'
         : 'none',
       paddingLeft: 16,
       paddingRight: 16,
-      cursor: disabled ? 'not-allowed' : 'pointer',
       '&:hover': {
         borderColor: '#7272F6',
       },
@@ -191,87 +101,28 @@ const SingleSelect = <T,>({
         borderRadius: '3px',
       },
     }),
-    option: (base, state): CSSObjectWithLabel => ({
+    option: (base): CSSObjectWithLabel => ({
       ...base,
-      backgroundColor: state.isSelected
-        ? '#7272F6'
-        : state.isFocused
-        ? '#f3f4f6'
-        : 'white',
-      color: state.isSelected
-        ? 'white'
-        : state.data.value === ''
-        ? '#9ca3af'
-        : '#000',
       cursor: 'pointer',
       padding: '10px 12px',
       borderRadius: 4,
       fontSize: '13px',
-      '&:active': {
-        backgroundColor: '#5656E8',
-      },
+    }),
+    loadingIndicator: (base) => ({
+      ...base,
+      color: '#7272F6',
     }),
   };
 
-  return (
-    <div
-      className={cn(
-        'flex flex-col placeholder:text-opacity-50 w-full',
-        parentClassName
-      )}
-    >
-      {!isHidden && label && (
-        <div className="flex items-center mb-2">
-          <Label
-            className={`text-sm font-medium text-gray-700 ${labelClassName}`}
-          >
-            {label}
-          </Label>
-          {required && <span className="text-red-500 ml-1">*</span>}
-        </div>
-      )}
+  if ('options' in props && props.options) {
+    return <SelectWithOptions {...props} customStyles={customStyles} />;
+  }
 
-      <Select
-        options={fullOptions}
-        isDisabled={disabled}
-        value={selectedOption}
-        onFocus={onFocus}
-        onChange={(opt) => handleChange(opt as Option)}
-        placeholder={placeholder}
-        isLoading={isLoading}
-        menuPortalTarget={
-          typeof document !== 'undefined' ? document.body : null
-        }
-        menuPosition="fixed"
-        filterOption={(candidate, rawInput) => {
-          if (!showSearch) return true;
-          return candidate?.label
-            ?.toLowerCase()
-            ?.includes(rawInput?.toLowerCase());
-        }}
-        components={{
-          DropdownIndicator: (props) => (
-            <components.DropdownIndicator {...props}>
-              <ChevronDown className="h-4 w-4 text-gray-400" />
-            </components.DropdownIndicator>
-          ),
-          IndicatorSeparator: () => null,
-        }}
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        styles={customStyles as any}
-        className={`custom-select-container ${className}`}
-        classNamePrefix="custom-select"
-        name={name}
-        isSearchable={showSearch}
-      />
+  if ('endPoint' in props && props.endPoint) {
+    return <SelectWithEndpoint<T> {...props} customStyles={customStyles} />;
+  }
 
-      {(errorText || fetchError) && (
-        <p className="text-red-500 text-sm mt-1">
-          {errorText || fetchError?.data?.message || 'Failed to load options'}
-        </p>
-      )}
-    </div>
-  );
-};
+  return null;
+}
 
 export default SingleSelect;
