@@ -71,6 +71,15 @@ export default function Form({
           value={formValues.name}
           {...register("name")}
         />
+        <Input
+          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
+          type="text"
+          Label="Country Name (EN)"
+          error={errors?.name_en?.message}
+          value={formValues.name_en}
+          {...register("name_en")}
+        />
+
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button
