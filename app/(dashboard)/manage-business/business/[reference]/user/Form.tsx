@@ -1,21 +1,21 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import useCustomMutation from "@/lib/Mutation";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import SingleSelect from "@/components/SingleSelect";
-import { useRouter } from "next/navigation";
-import { allLanguages } from "@/constants/global";
+'use client';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import useCustomMutation from '@/lib/Mutation';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import Select from '@/components/Select';
+import { useRouter } from 'next/navigation';
+import { allLanguages } from '@/constants/global';
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  language: z.string().min(1, "Language is required"),
-  email: z.email().min(1, "Email is required"),
-  password: z.string().min(1, "Password is required"),
-  loginPin: z.string().min(1, "Login Pin is required"),
+  name: z.string().min(1, 'Name is required'),
+  language: z.string().min(1, 'Language is required'),
+  email: z.email().min(1, 'Email is required'),
+  password: z.string().min(1, 'Password is required'),
+  loginPin: z.string().min(1, 'Login Pin is required'),
   displayLocalizeName: z.boolean(),
 });
 
@@ -35,7 +35,7 @@ interface FormState {
 }
 
 export default function Form({
-  id = "",
+  id = '',
   isEdit = false,
   reference,
   data,
@@ -55,11 +55,11 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || "",
-      language: data?.language || "",
-      email: data?.email || "",
-      password: data?.password || "",
-      loginPin: data?.loginPin || "",
+      name: data?.name || '',
+      language: data?.language || '',
+      email: data?.email || '',
+      password: data?.password || '',
+      loginPin: data?.loginPin || '',
       displayLocalizeName: data?.displayLocalizeName || false,
     },
   });
@@ -73,8 +73,8 @@ export default function Form({
     api: isEdit
       ? `v1/super-admin/business/${reference}/users`
       : `v1/super-admin/business/${reference}/users/${id}`,
-    method: isEdit ? "PUT" : "POST",
-    invalidateQueryKeys: isEdit ? ["users", id] : [],
+    method: isEdit ? 'PUT' : 'POST',
+    invalidateQueryKeys: isEdit ? ['users', id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
@@ -88,7 +88,7 @@ export default function Form({
     mutate(data);
   };
 
-  const btnText = isEdit ? "Update" : "Create";
+  const btnText = isEdit ? 'Update' : 'Create';
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -98,7 +98,7 @@ export default function Form({
           Label="Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register("name")}
+          {...register('name')}
           required
         />
 
@@ -106,7 +106,7 @@ export default function Form({
           name="language"
           control={control}
           render={({ field }) => (
-            <SingleSelect
+            <Select
               label="Language"
               errorText={errors?.language?.message}
               value={String(field.value)}
@@ -122,7 +122,7 @@ export default function Form({
           Label="Email"
           error={errors?.email?.message}
           value={formValues.email}
-          {...register("email")}
+          {...register('email')}
           required
         />
 
@@ -131,7 +131,7 @@ export default function Form({
           Label="Password"
           error={errors?.password?.message}
           value={formValues.password}
-          {...register("password")}
+          {...register('password')}
           required
         />
 
@@ -140,7 +140,7 @@ export default function Form({
           Label="Login Pin"
           error={errors?.loginPin?.message}
           value={formValues.loginPin}
-          {...register("loginPin")}
+          {...register('loginPin')}
           required
         />
 
@@ -149,7 +149,7 @@ export default function Form({
             id="displayLocalizeName"
             checked={formValues.displayLocalizeName}
             onCheckedChange={(checked) =>
-              setValue("displayLocalizeName", checked as boolean)
+              setValue('displayLocalizeName', checked as boolean)
             }
           />
           <label

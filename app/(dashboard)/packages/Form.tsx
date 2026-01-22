@@ -1,27 +1,27 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import SingleSelect from "@/components/SingleSelect";
-import { Button } from "@/components/ui/button";
-import useCustomMutation from "@/lib/Mutation";
-import { useRouter } from "next/navigation";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Textarea } from "@/components/ui/textarea";
+'use client';
+import { Input } from '@/components/ui/input';
+import Select from '@/components/Select';
+import { Button } from '@/components/ui/button';
+import useCustomMutation from '@/lib/Mutation';
+import { useRouter } from 'next/navigation';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  discreption: z.string().min(1, "Discreption is required"),
+  name: z.string().min(1, 'Name is required'),
+  discreption: z.string().min(1, 'Discreption is required'),
   discount: z
     .number()
-    .min(0, "Discount is required")
-    .max(100, "Discount is at most 100"),
+    .min(0, 'Discount is required')
+    .max(100, 'Discount is at most 100'),
   duration: z
     .number()
-    .min(1, "Duration is required and at least 1")
-    .max(12, "Duration is required and at most 12"),
-  price: z.number().min(1, "Price must be bigger than 1"),
-  project: z.string().min(1, "Project is required"),
+    .min(1, 'Duration is required and at least 1')
+    .max(12, 'Duration is required and at most 12'),
+  price: z.number().min(1, 'Price must be bigger than 1'),
+  project: z.string().min(1, 'Project is required'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -31,7 +31,7 @@ interface PackageResponse {
 }
 
 export default function Form({
-  id = "",
+  id = '',
   isEdit = false,
   data,
 }: {
@@ -49,12 +49,12 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || "",
-      discreption: data?.discreption || "",
+      name: data?.name || '',
+      discreption: data?.discreption || '',
       discount: data?.discount ?? 0,
       duration: data?.duration ?? 1,
       price: data?.price ?? 1,
-      project: data?.project || "",
+      project: data?.project || '',
     },
   });
 
@@ -64,9 +64,9 @@ export default function Form({
     FormData,
     PackageResponse
   >({
-    api: isEdit ? `v1/super-admin/packages/${id}` : "v1/super-admin/packages",
-    method: isEdit ? "PUT" : "POST",
-    invalidateQueryKeys: isEdit ? ["packages", id] : [],
+    api: isEdit ? `v1/super-admin/packages/${id}` : 'v1/super-admin/packages',
+    method: isEdit ? 'PUT' : 'POST',
+    invalidateQueryKeys: isEdit ? ['packages', id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
@@ -86,14 +86,14 @@ export default function Form({
   const Durations = Array.from({ length: 12 }, (_, i) => {
     const month = i + 1;
     return {
-      label: `${month} ${month === 1 ? "Month" : "Months"}`,
+      label: `${month} ${month === 1 ? 'Month' : 'Months'}`,
       value: `${month}`,
     };
   });
 
   const Projects = [
-    { label: "Zood Light", value: "zood-light" },
-    { label: "Accountant", value: "accountant" },
+    { label: 'Zood Light', value: 'zood-light' },
+    { label: 'Accountant', value: 'accountant' },
   ];
 
   return (
@@ -104,7 +104,7 @@ export default function Form({
           Label="Full Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register("name")}
+          {...register('name')}
           required
         />
 
@@ -112,7 +112,7 @@ export default function Form({
           Label="Discreption"
           error={errors?.discreption?.message}
           value={formValues.discreption}
-          {...register("discreption")}
+          {...register('discreption')}
           required
         />
 
@@ -122,7 +122,7 @@ export default function Form({
           min={1}
           error={errors?.price?.message}
           value={formValues.price}
-          {...register("price", { valueAsNumber: true })}
+          {...register('price', { valueAsNumber: true })}
           required
         />
 
@@ -133,7 +133,7 @@ export default function Form({
           max={100}
           error={errors?.discount?.message}
           value={formValues.discount}
-          {...register("discount", { valueAsNumber: true })}
+          {...register('discount', { valueAsNumber: true })}
           required
         />
 
@@ -141,7 +141,7 @@ export default function Form({
           name="duration"
           control={control}
           render={({ field }) => (
-            <SingleSelect
+            <Select
               label="Duration"
               placeholder="Select Duration"
               errorText={errors?.duration?.message}
@@ -157,7 +157,7 @@ export default function Form({
           name="project"
           control={control}
           render={({ field }) => (
-            <SingleSelect
+            <Select
               label="Project"
               placeholder="Select Project"
               errorText={errors?.project?.message}
@@ -175,7 +175,7 @@ export default function Form({
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? "Applying..." : "Apply"}
+          {isPending ? 'Applying...' : 'Apply'}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>

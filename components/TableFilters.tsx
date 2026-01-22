@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import SingleSelect from './SingleSelect';
+import Select from './Select';
 
 export interface AllowedFilters {
   showName?: boolean;
@@ -62,7 +62,7 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           />
         )}
         {filters.showBusinessType && (
-          <SingleSelect
+          <Select
             label="Business Type"
             value={(allFilters?.type as string) ?? ''}
             onChange={(value) => handleChnage('type', value)}
@@ -72,7 +72,7 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           />
         )}
         {filters.showIsUsed && (
-          <SingleSelect
+          <Select
             label="Is Used?"
             value={(allFilters?.is_used as string) ?? ''}
             onChange={(value) => handleChnage('is_used', value)}

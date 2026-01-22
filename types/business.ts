@@ -55,7 +55,6 @@ export interface BusinessData {
   active: number;
   reason: string | null;
   phone: string;
-  business_category_id: string;
   users_count?: number;
   invoices_count?: number;
 }
@@ -111,6 +110,7 @@ export interface BusinessType {
   businessType: {
     id: string;
     name: string;
+    category_id: string;
     deleted_at: string | null;
     created_at: string;
     updated_at: string;

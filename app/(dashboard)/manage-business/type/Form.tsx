@@ -1,14 +1,16 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import useCustomMutation from "@/lib/Mutation";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
+'use client';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import useCustomMutation from '@/lib/Mutation';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { useRouter } from 'next/navigation';
+import Select from '@/components/Select';
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  name: z.string().min(1, 'Name is required'),
+  category_id: z.string().min(1, 'Business Category is required'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -18,7 +20,7 @@ interface CreateResponse {
 }
 
 export default function Form({
-  id = "",
+  id = '',
   isEdit = false,
   data,
 }: {
@@ -35,7 +37,8 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || "",
+      name: data?.name || '',
+      category_id: data?.category_id ?? '',
     },
   });
 
@@ -47,9 +50,9 @@ export default function Form({
   >({
     api: isEdit
       ? `v1/super-admin/businessTypes/${id}`
-      : "v1/super-admin/businessTypes",
-    method: isEdit ? "PUT" : "POST",
-    invalidateQueryKeys: isEdit ? ["businessTypes", id] : [],
+      : 'v1/super-admin/businessTypes',
+    method: isEdit ? 'PUT' : 'POST',
+    invalidateQueryKeys: isEdit ? ['businessTypes', id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
@@ -62,7 +65,7 @@ export default function Form({
     mutate(data);
   };
 
-  const btnText = isEdit ? "Update" : "Create";
+  const btnText = isEdit ? 'Update' : 'Create';
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
@@ -72,8 +75,29 @@ export default function Form({
           Label="Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register("name")}
+          {...register('name')}
           required
+        />
+
+        <Controller
+          name="category_id"
+          control={control}
+          render={({ field }) => (
+            <Select<{
+              id: string;
+              name: string;
+            }>
+              label="Category"
+              placeholder="Select category"
+              errorText={errors?.category_id?.message}
+              value={String(field.value)}
+              onChange={(value) => field.onChange(value)}
+              endPoint="v1/super-admin/categories"
+              labelKey="name"
+              valueKey="id"
+              required
+            />
+          )}
         />
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">

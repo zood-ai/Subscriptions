@@ -14,7 +14,7 @@ import AllStats from './components/Stats';
 import BarChar from './components/BarChar';
 import { CustomTable } from '@/components/CustomTable';
 import { useRouter } from 'next/navigation';
-import SingleSelect from '@/components/SingleSelect';
+import Select from '@/components/Select';
 import { Input } from '@/components/ui/input';
 import { topInvoicesColumns, topUserColumns } from './columns';
 import { businessStatusOptions } from '@/constants/global';
@@ -70,12 +70,12 @@ export default function Dashboard() {
   const businessTypesChartData: ChartDataPoint[] = useMemo(() => {
     if (!businessTypes) return [];
     return businessTypes
-      .slice(0, 10)
       .map((type) => ({
         name: type.name_localized || type.name,
         value: type.business_count,
       }))
-      .sort((a, b) => b.value - a.value);
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10);
   }, [businessTypes]);
 
   return (
@@ -94,7 +94,7 @@ export default function Dashboard() {
             <span className="font-medium text-gray-700">Filters:</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <SingleSelect
+            <Select
               name="status"
               placeholder="Select Code Duration Period"
               value={filters.status || 'all'}
@@ -104,8 +104,8 @@ export default function Dashboard() {
                   status: value as DashboardFilters['status'],
                 })
               }
-              className="w-fit"
-              parentClassName="w-fit"
+              className="min-w-[170px] w-fit"
+              parentClassName="min-w-[170px] w-fit"
               options={businessStatusOptions}
               loading={false}
               required

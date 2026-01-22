@@ -97,7 +97,6 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     package_id: JSON.parse(data?.business?.details ?? '{}').package_id,
     business_type_id: data?.business?.type ?? '',
     business_location_id: data?.business?.location ?? '',
-    business_category_id: data?.business?.business_category_id ?? '',
   };
 
   return (

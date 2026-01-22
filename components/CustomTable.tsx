@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
-import type React from "react";
-import { useState } from "react";
-import { ChevronDown, Filter, X, ArrowUpDown } from "lucide-react";
-import { cn, formatDate, ObjectCleaner } from "@/lib/utils";
+import type React from 'react';
+import { useState } from 'react';
+import { ChevronDown, Filter, X, ArrowUpDown } from 'lucide-react';
+import { cn, formatDate, ObjectCleaner } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Checkbox } from "@/components/ui/checkbox";
-import TableSkeleton from "./TableSkeleton";
-import type { MetaData } from "@/types/global";
-import useCustomQuery from "@/lib/Query";
-import CustomModal from "./layout/CustomModal";
-import TableFilters, { AllowedFilters } from "./TableFilters";
-import { useModal } from "@/context/ModalContext";
+} from '@/components/ui/dropdown-menu';
+import { Checkbox } from '@/components/ui/checkbox';
+import TableSkeleton from './TableSkeleton';
+import type { MetaData } from '@/types/global';
+import useCustomQuery from '@/lib/Query';
+import CustomModal from './layout/CustomModal';
+import TableFilters, { AllowedFilters } from './TableFilters';
+import { useModal } from '@/context/ModalContext';
 
 export interface Column<T> {
   key: keyof T;
   header: string;
   render?: (value: T[keyof T], item: T) => React.ReactNode;
-  type?: "date";
+  type?: 'date';
 }
 
 export interface StatusFiltersTab {
@@ -68,9 +68,9 @@ type CustomTableProps<T extends { id: string }> = BaseProps<T> &
 
 export function CustomTable<T extends { id: string }>({
   data = [],
-  endPoint = "",
+  endPoint = '',
   showStatusFilters = true,
-  statusFilterKey = "status",
+  statusFilterKey = 'status',
   forceLoading = false,
   columns,
   statusFilters = [],
@@ -78,7 +78,7 @@ export function CustomTable<T extends { id: string }>({
   actions = [],
   onClickRow,
   title,
-  titleClassName = "",
+  titleClassName = '',
   pagination = true,
 }: CustomTableProps<T>) {
   const { close: closeModal } = useModal();
@@ -86,22 +86,23 @@ export function CustomTable<T extends { id: string }>({
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
-  >({ page: 1, sort: "desc", [statusFilterKey]: "" });
+  >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
 
   const currentPage = allFilters.page as number;
   const sortOptions: SortOption[] = [
-    { label: "Descending", value: "desc" },
-    { label: "Ascending", value: "asc" },
+    { label: 'Descending', value: 'desc' },
+    { label: 'Ascending', value: 'asc' },
   ];
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
-    from: MetaData["from"];
-    last_page: MetaData["last_page"];
-    to: MetaData["to"];
-    total: MetaData["total"];
+    from: MetaData['from'];
+    last_page: MetaData['last_page'];
+    to: MetaData['to'];
+    total: MetaData['total'];
+    current_page: MetaData['current_page'];
   }>({
-    api: endPoint || "",
+    api: endPoint || '',
     enabled: endPoint && data.length === 0 ? true : false,
     filters: ObjectCleaner(allFilters),
     queryKey: [endPoint, allFilters],
@@ -113,6 +114,7 @@ export function CustomTable<T extends { id: string }>({
           last_page: data.last_page,
           to: data.to,
           total: data.total,
+          current_page: data.current_page,
         });
       },
     },
