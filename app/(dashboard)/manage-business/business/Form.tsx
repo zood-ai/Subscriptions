@@ -123,7 +123,7 @@ export default function Form({
         {/* Full Name */}
         <Input
           type="text"
-          Label="Full Name"
+          Label="Owner Full Name"
           error={errors?.name?.message}
           value={formValues.name}
           {...register('name')}

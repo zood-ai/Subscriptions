@@ -16,7 +16,6 @@ import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
 import CustomModal from './layout/CustomModal';
 import TableFilters, { AllowedFilters } from './TableFilters';
-import { useModal } from '@/context/ModalContext';
 
 export interface Column<T> {
   key: keyof T;
@@ -81,7 +80,6 @@ export function CustomTable<T extends { id: string }>({
   titleClassName = '',
   pagination = true,
 }: CustomTableProps<T>) {
-  const { close: closeModal } = useModal();
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
@@ -108,7 +106,6 @@ export function CustomTable<T extends { id: string }>({
     queryKey: [endPoint, allFilters],
     options: {
       onSuccess: (data) => {
-        closeModal();
         setPaginationData({
           from: data.from,
           last_page: data.last_page,
