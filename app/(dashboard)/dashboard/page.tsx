@@ -70,12 +70,12 @@ export default function Dashboard() {
   const businessTypesChartData: ChartDataPoint[] = useMemo(() => {
     if (!businessTypes) return [];
     return businessTypes
-      .slice(0, 10)
       .map((type) => ({
         name: type.name_localized || type.name,
         value: type.business_count,
       }))
-      .sort((a, b) => b.value - a.value);
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 10);
   }, [businessTypes]);
 
   return (
