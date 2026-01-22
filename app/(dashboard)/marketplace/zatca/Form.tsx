@@ -1,28 +1,28 @@
-"use client";
-import { Input } from "@/components/ui/input";
-import SingleSelect from "@/components/SingleSelect";
-import { Button } from "@/components/ui/button";
-import useCustomMutation from "@/lib/Mutation";
-import { Controller, useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+'use client';
+import { Input } from '@/components/ui/input';
+import Select from '@/components/Select';
+import { Button } from '@/components/ui/button';
+import useCustomMutation from '@/lib/Mutation';
+import { Controller, useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 const formSchema = z.object({
   service: z.string(),
-  name: z.string().min(0, "Name  is required"),
+  name: z.string().min(0, 'Name  is required'),
   business: z.object({
     name: z.string().optional(),
   }),
   credentials: z.object({
-    device_id: z.string().min(0, "Device is required"),
-    company_name: z.string().min(0, "Company Name is required"),
-    company_address: z.string().min(0, "Company Address is required"),
-    company_id: z.string().min(0, "Company ID is required"),
-    company_unit_name: z.string().min(0, "Company Unit Name is required"),
-    company_category: z.string().min(0, "Company Category is required"),
-    otp: z.string().min(1, "OTP is required"),
-    egd_unit_common_name: z.string().min(0, "EGD Unit Common Name is required"),
-    env: z.string().min(1, "Environment is required"),
+    device_id: z.string().min(0, 'Device is required'),
+    company_name: z.string().min(0, 'Company Name is required'),
+    company_address: z.string().min(0, 'Company Address is required'),
+    company_id: z.string().min(0, 'Company ID is required'),
+    company_unit_name: z.string().min(0, 'Company Unit Name is required'),
+    company_category: z.string().min(0, 'Company Category is required'),
+    otp: z.string().min(1, 'OTP is required'),
+    egd_unit_common_name: z.string().min(0, 'EGD Unit Common Name is required'),
+    env: z.string().min(1, 'Environment is required'),
     enable_tax_invoices: z.number().optional(),
     enable_simplified_invoices: z.number().optional(),
   }),
@@ -32,12 +32,12 @@ type FormData = z.infer<typeof formSchema>;
 
 const zatcaEnvironment = [
   {
-    label: "Simulation",
-    value: "simulation",
+    label: 'Simulation',
+    value: 'simulation',
   },
   {
-    label: "Production",
-    value: "production",
+    label: 'Production',
+    value: 'production',
   },
 ];
 export default function Form() {
@@ -49,21 +49,21 @@ export default function Form() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      service: "zatca",
-      name: "",
+      service: 'zatca',
+      name: '',
       business: {
-        name: "",
+        name: '',
       },
       credentials: {
-        device_id: "",
-        company_name: "",
-        company_address: "",
-        company_id: "",
-        company_unit_name: "",
-        company_category: "",
-        otp: "",
-        egd_unit_common_name: "",
-        env: "",
+        device_id: '',
+        company_name: '',
+        company_address: '',
+        company_id: '',
+        company_unit_name: '',
+        company_category: '',
+        otp: '',
+        egd_unit_common_name: '',
+        env: '',
         enable_tax_invoices: 0,
         enable_simplified_invoices: 1,
       },
@@ -73,12 +73,12 @@ export default function Form() {
   const formValues = useWatch({ control });
 
   const { mutate, isPending, error } = useCustomMutation<FormData>({
-    api: "v1/activationcode/store",
-    method: "POST",
-    invalidateQueryKeys: ["activation-code"],
+    api: 'v1/activationcode/store',
+    method: 'POST',
+    invalidateQueryKeys: ['activation-code'],
     options: {
       onError: (error) => {
-        console.error("Error applying activation code: ", error);
+        console.error('Error applying activation code: ', error);
       },
     },
   });
@@ -95,7 +95,7 @@ export default function Form() {
           Label="Connection Name"
           error={errors?.name?.message}
           value={formValues.name}
-          {...register("name")}
+          {...register('name')}
           required
         />
         <Controller
@@ -103,7 +103,7 @@ export default function Form() {
           name="business.name"
           render={({ field }) => {
             return (
-              <SingleSelect
+              <Select
                 label="Business"
                 name="business"
                 placeholder="Select Business"
@@ -125,7 +125,7 @@ export default function Form() {
             name="credentials.device_id"
             render={({ field }) => {
               return (
-                <SingleSelect
+                <Select
                   label="Zatca Device"
                   name="credentials.device_id"
                   placeholder="Select Code Duration Period"
@@ -147,7 +147,7 @@ export default function Form() {
           Label="Company Tax Registeration Number"
           error={errors?.credentials?.company_id?.message}
           value={formValues.credentials?.company_id}
-          {...register("credentials.company_id")}
+          {...register('credentials.company_id')}
           required
         />
         <Input
@@ -155,7 +155,7 @@ export default function Form() {
           Label="Company Unit Name"
           error={errors?.credentials?.company_unit_name?.message}
           value={formValues.credentials?.company_unit_name}
-          {...register("credentials.company_unit_name")}
+          {...register('credentials.company_unit_name')}
           required
         />
         <Input
@@ -163,7 +163,7 @@ export default function Form() {
           Label="Company Category"
           error={errors?.credentials?.company_category?.message}
           value={formValues.credentials?.company_category}
-          {...register("credentials.company_category")}
+          {...register('credentials.company_category')}
           required
         />
         <Input
@@ -171,7 +171,7 @@ export default function Form() {
           Label="OTP"
           error={errors?.credentials?.otp?.message}
           value={formValues.credentials?.otp}
-          {...register("credentials.otp")}
+          {...register('credentials.otp')}
           required
         />
         <Input
@@ -179,7 +179,7 @@ export default function Form() {
           Label="EGD Unit Common Name"
           error={errors?.credentials?.egd_unit_common_name?.message}
           value={formValues.credentials?.egd_unit_common_name}
-          {...register("credentials.egd_unit_common_name")}
+          {...register('credentials.egd_unit_common_name')}
           required
         />
         <Controller
@@ -187,7 +187,7 @@ export default function Form() {
           name="credentials.env"
           render={({ field }) => {
             return (
-              <SingleSelect
+              <Select
                 label="Environment"
                 name="credentials.env"
                 placeholder="Select Environment"
@@ -207,7 +207,7 @@ export default function Form() {
           disabled={isPending}
           className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
         >
-          {isPending ? "Applying..." : "Apply"}
+          {isPending ? 'Applying...' : 'Apply'}
         </Button>
         {error && (
           <p className="text-red-600 font-bold">{error.data?.message}</p>

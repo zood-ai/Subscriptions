@@ -1,22 +1,22 @@
-"use client";
-import { DetailCard, DetailItem } from "@/components/DetailCard";
-import { useRouter } from "next/navigation";
-import { BusinessData, BusinessType } from "@/types/business";
-import { Column, CustomTable } from "@/components/CustomTable";
-import useCustomQuery from "@/lib/Query";
-import LoadingComponent from "@/components/layout/loading";
-import PageHeader from "@/components/PageHeader";
-import Form from "../Form";
-import { formatDate } from "@/lib/utils";
+'use client';
+import { DetailCard, DetailItem } from '@/components/DetailCard';
+import { useRouter } from 'next/navigation';
+import { BusinessData, BusinessType } from '@/types/business';
+import { Column, CustomTable } from '@/components/CustomTable';
+import useCustomQuery from '@/lib/Query';
+import LoadingComponent from '@/components/layout/loading';
+import PageHeader from '@/components/PageHeader';
+import Form from '../Form';
+import { formatDate } from '@/lib/utils';
 
 const TypeData = ({ id }: { id: string }) => {
   const router = useRouter();
   const { data, isFetching } = useCustomQuery<BusinessType>({
     api: `v1/super-admin/businessTypes/${id}`,
-    queryKey: ["businessTypes", id],
+    queryKey: ['businessTypes', id],
     options: {
       onError: () => {
-        router.push("/manage-business/type");
+        router.push('/manage-business/type');
       },
     },
   });
@@ -36,12 +36,14 @@ const TypeData = ({ id }: { id: string }) => {
     { key: 'created_at', header: 'Created at', type: 'date' },
     { key: 'end_at', header: 'End at', type: 'date' },
   ];
+
   if (isFetching) {
     return <LoadingComponent />;
   }
 
   const formData = {
-    name: data?.businessType?.name || "",
+    name: data?.businessType?.name || '',
+    category_id: data?.businessType?.category_id ?? '',
   };
   return (
     <>
@@ -57,7 +59,7 @@ const TypeData = ({ id }: { id: string }) => {
         <CustomTable
           showStatusFilters={false}
           data={data?.businesses ?? []}
-          title={"Business"}
+          title={'Business'}
           columns={columns}
           onClickRow={(data) => {
             router.push(`/manage-business/business/${data.reference}`);
