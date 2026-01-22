@@ -5,11 +5,11 @@ import useCustomMutation from "@/lib/Mutation";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CountryResponseData } from "@/types/countries";
+import { CategoryResponseData } from "@/types/categories";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Country Name is required"),
+  name: z.string().min(1, "Category Name is required"),
   name_en: z.string().optional(),
 });
 
@@ -42,15 +42,15 @@ export default function Form({
 
   const { mutate, isPending, error } = useCustomMutation<
     FormData,
-    CountryResponseData
+    CategoryResponseData
   >({
-    api: isEdit ? `v1/manage/countries/${id}` : "v1/manage/countries",
+    api: isEdit ? `v1/manage/categories/${id}` : "v1/manage/categories",
     method: isEdit ? "PUT" : "POST",
-    invalidateQueryKeys: isEdit ? ["countries", id] : [],
+    invalidateQueryKeys: isEdit ? ["categories", id] : [],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
-          router.push(`/countries/${data.data.id}`);
+          router.push(`/categories/${data.data.id}`);
         }
       },
     },
@@ -65,7 +65,7 @@ export default function Form({
       <div className="space-y-6">
         <Input
           type="text"
-          Label="Country Name"
+          Label="Category Name"
           error={errors?.name?.message}
           value={formValues.name}
           {...register("name")}
@@ -73,7 +73,7 @@ export default function Form({
         />
         <Input
           type="text"
-          Label="Country Name (EN)"
+          Label="Category Name (EN)"
           error={errors?.name_en?.message}
           value={formValues.name_en}
           {...register("name_en")}
