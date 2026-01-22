@@ -5,7 +5,7 @@ import useCustomMutation from '@/lib/Mutation';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import SingleSelect from '@/components/SingleSelect';
+import Select from '@/components/Select';
 import { useRouter } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -172,7 +172,7 @@ export default function Form({
             name="tax_group_id"
             control={control}
             render={({ field }) => (
-              <SingleSelect
+              <Select
                 label="Tax Group"
                 errorText={errors?.tax_group_id?.message}
                 value={String(field.value)}
@@ -218,7 +218,7 @@ export default function Form({
             name="opening_from"
             control={control}
             render={({ field }) => (
-              <SingleSelect
+              <Select
                 label="Opening From"
                 errorText={errors?.opening_from?.message}
                 value={String(field.value)}
@@ -232,7 +232,7 @@ export default function Form({
             name="opening_to"
             control={control}
             render={({ field }) => (
-              <SingleSelect
+              <Select
                 label="Opening To"
                 errorText={errors?.opening_to?.message}
                 value={String(field.value)}
@@ -246,7 +246,7 @@ export default function Form({
             name="inventory_end_of_day_time"
             control={control}
             render={({ field }) => (
-              <SingleSelect
+              <Select
                 label="Inventory End of Day"
                 errorText={errors?.inventory_end_of_day_time?.message}
                 value={String(field.value)}

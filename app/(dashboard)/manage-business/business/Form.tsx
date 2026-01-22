@@ -1,6 +1,6 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import SingleSelect from '@/components/SingleSelect';
+import Select from '@/components/Select';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
@@ -181,7 +181,7 @@ export default function Form({
           name="business_type_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<{
+            <Select<{
               id: string;
               name: string;
             }>
@@ -202,7 +202,7 @@ export default function Form({
           name="business_category_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<{
+            <Select<{
               id: string;
               name: string;
             }>
@@ -224,7 +224,7 @@ export default function Form({
           name="package_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<{
+            <Select<{
               id: string;
               name: string;
             }>
@@ -245,7 +245,7 @@ export default function Form({
           name="business_location_id"
           control={control}
           render={({ field }) => (
-            <SingleSelect<Country>
+            <Select<Country>
               label="Country"
               placeholder="Select country"
               errorText={errors?.business_location_id?.message}

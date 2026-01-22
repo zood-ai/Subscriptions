@@ -14,7 +14,7 @@ import AllStats from './components/Stats';
 import BarChar from './components/BarChar';
 import { CustomTable } from '@/components/CustomTable';
 import { useRouter } from 'next/navigation';
-import SingleSelect from '@/components/SingleSelect';
+import Select from '@/components/Select';
 import { Input } from '@/components/ui/input';
 import { topInvoicesColumns, topUserColumns } from './columns';
 import { businessStatusOptions } from '@/constants/global';
@@ -94,7 +94,7 @@ export default function Dashboard() {
             <span className="font-medium text-gray-700">Filters:</span>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <SingleSelect
+            <Select
               name="status"
               placeholder="Select Code Duration Period"
               value={filters.status || 'all'}

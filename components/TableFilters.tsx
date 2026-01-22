@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import SingleSelect from './SingleSelect';
+import Select from './Select';
 
 export interface AllowedFilters {
   showName?: boolean;
   showReference?: boolean;
   showCode?: boolean;
-  showEndAT?: true,
-  showBusinessType?: true,
+  showEndAT?: true;
+  showBusinessType?: true;
 }
 
 interface TableFiltersProps {
@@ -61,13 +61,13 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           />
         )}
         {filters.showBusinessType && (
-          <SingleSelect
+          <Select
             label="Business Type"
             value={(allFilters?.type as string) ?? ''}
             onChange={(value) => handleChnage('type', value)}
             endPoint="v1/super-admin/businessTypes"
-            labelKey='name'
-            valueKey='id'
+            labelKey="name"
+            valueKey="id"
           />
         )}
         {filters.showEndAT && (

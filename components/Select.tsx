@@ -41,9 +41,9 @@ interface WithEndPoint<T> extends CommonProps {
   itemResponseDataKey?: string;
 }
 
-type SingleSelectProps<T> = WithOptions | WithEndPoint<T>;
+type SelectProps<T> = WithOptions | WithEndPoint<T>;
 
-function SingleSelect<T>(props: SingleSelectProps<T>) {
+function Select<T>(props: SelectProps<T>) {
   const customStyles: StylesConfig<Option, false> = {
     control: (base, state): CSSObjectWithLabel => ({
       ...base,
@@ -114,15 +114,15 @@ function SingleSelect<T>(props: SingleSelectProps<T>) {
     }),
   };
 
-  if ('options' in props && props.options) {
+  if (props?.options) {
     return <SelectWithOptions {...props} customStyles={customStyles} />;
   }
 
-  if ('endPoint' in props && props.endPoint) {
+  if (props?.endPoint) {
     return <SelectWithEndpoint<T> {...props} customStyles={customStyles} />;
   }
 
   return null;
 }
 
-export default SingleSelect;
+export default Select;

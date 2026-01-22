@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { ChevronDown } from 'lucide-react';
 import type { StylesConfig } from 'react-select';
 import { cn } from '@/lib/utils';
-import { Option } from '../SingleSelect';
+import { Option } from '../Select';
 
 interface SelectWithOptionsProps {
   options: Option[];
