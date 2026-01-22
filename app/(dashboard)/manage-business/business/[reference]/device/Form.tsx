@@ -5,7 +5,7 @@ import useCustomMutation from '@/lib/Mutation';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import SingleSelect from '@/components/SingleSelect';
+import Select from '@/components/Select';
 import { useRouter } from 'next/navigation';
 import { deviceTypes } from '@/constants/global';
 
@@ -91,7 +91,7 @@ export default function Form({
           name="type"
           control={control}
           render={({ field }) => (
-            <SingleSelect
+            <Select
               label="Type"
               errorText={errors?.type?.message}
               value={String(field.value)}
@@ -123,7 +123,7 @@ export default function Form({
           name="branch"
           control={control}
           render={({ field }) => (
-            <SingleSelect
+            <Select
               label="Branch"
               required
               errorText={errors?.branch?.message}

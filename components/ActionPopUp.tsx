@@ -4,7 +4,7 @@ import useCustomMutation, { HttpMethod } from '@/lib/Mutation';
 import { useRouter } from 'next/navigation';
 import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { Input } from './ui/input';
-import SingleSelect, { Option } from './SingleSelect';
+import Select, { Option } from './Select';
 
 interface InputWithOption {
   type?: never;
@@ -92,7 +92,7 @@ const ActionPopUp = ({
                 key={el.key}
                 control={control}
                 render={({ field }) => (
-                  <SingleSelect
+                  <Select
                     label={el.label}
                     placeholder={el.label}
                     errorText={errors?.[el.key]?.message}

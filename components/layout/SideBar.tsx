@@ -53,7 +53,7 @@ const menuItems: MenuItemProps[] = [
       },
       {
         id: 'category',
-        label: 'Business Categories',
+        label: 'Categories',
         path: '/manage-business/category',
       },
     ],
@@ -72,15 +72,15 @@ const menuItems: MenuItemProps[] = [
     icon: Globe,
   },
   {
-    id: "marketplace",
-    label: "Marketplace",
-    path: "/marketplace",
+    id: 'marketplace',
+    label: 'Marketplace',
+    path: '/marketplace',
     icon: Store,
     children: [
       {
-        id: "zatca",
-        label: "Zatca",
-        path: "/marketplace/zatca",
+        id: 'zatca',
+        label: 'Zatca',
+        path: '/marketplace/zatca',
       },
     ],
   },
@@ -106,18 +106,20 @@ export default function SideBar({
     <aside
       className={`
         fixed left-0 top-0 z-40 w-64 bg-white border-r
-        ${isMobileView
-          ? `inset-y-0 z-50 shadow-lg transition-transform duration-300 md:hidden
+        ${
+          isMobileView
+            ? `inset-y-0 z-50 shadow-lg transition-transform duration-300 md:hidden
              ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`
-          : 'hidden md:block h-screen'
+            : 'hidden md:block h-screen'
         }
       `}
     >
       <div
-        className={`flex items-center px-6 ${isMobileView
+        className={`flex items-center px-6 ${
+          isMobileView
             ? 'h-16 justify-between border-b'
             : 'h-20 justify-center my-4'
-          }`}
+        }`}
       >
         {isMobileView ? (
           <Link href="/" className="w-9 flex items-center justify-center">
@@ -155,10 +157,11 @@ export default function SideBar({
                 {hasChildren ? (
                   <button
                     onClick={() => toggleExpand(item.id)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors cursor-pointer ${isActive
+                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition-colors cursor-pointer ${
+                      isActive
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-gray-700 hover:bg-gray-100'
-                      }`}
+                    }`}
                     aria-expanded={isExpanded}
                   >
                     <div className="flex items-center gap-3 text-sm font-medium">
@@ -166,18 +169,20 @@ export default function SideBar({
                       <span>{item.label}</span>
                     </div>
                     <ChevronDown
-                      className={`h-4 w-4 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''
-                        }`}
+                      className={`h-4 w-4 transition-transform duration-200 ${
+                        isExpanded ? 'rotate-180' : ''
+                      }`}
                     />
                   </button>
                 ) : (
                   <Link
                     href={item.path}
                     onClick={isMobileView ? onClose : undefined}
-                    className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors rounded-lg ${isActive
+                    className={`flex items-center gap-3 px-3 py-2.5 text-sm font-medium transition-colors rounded-lg ${
+                      isActive
                         ? 'bg-indigo-50 text-indigo-600'
                         : 'text-gray-700 hover:bg-gray-100'
-                      }`}
+                    }`}
                   >
                     <Icon className="h-5 w-5" />
                     <span>{item.label}</span>
@@ -196,9 +201,10 @@ export default function SideBar({
                             className={`
                               flex items-center gap-3 px-3 py-2 text-sm transition-colors
                               rounded
-                              ${isChildActive
-                                ? 'bg-indigo-50 text-indigo-600 font-medium'
-                                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                              ${
+                                isChildActive
+                                  ? 'bg-indigo-50 text-indigo-600 font-medium'
+                                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                               }
                             `}
                           >

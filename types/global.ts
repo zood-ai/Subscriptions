@@ -3,6 +3,7 @@ export interface MetaData {
   last_page: number;
   to: number;
   total: number;
+  current_page: number;
 }
 
 export interface MutationProps<T = unknown> {
