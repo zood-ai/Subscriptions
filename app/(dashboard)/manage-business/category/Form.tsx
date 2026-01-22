@@ -64,7 +64,6 @@ export default function Form({
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Category Name"
           error={errors?.name?.message}
@@ -73,14 +72,12 @@ export default function Form({
           required
         />
         <Input
-          className="border-gray-300 focus:border-[#7272F6] placeholder:text-opacity-50 focus:ring-2 focus:ring-[#7272F6]/20 transition-all duration-200"
           type="text"
           Label="Category Name (EN)"
           error={errors?.name_en?.message}
           value={formValues.name_en}
           {...register("name_en")}
         />
-
       </div>
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button
