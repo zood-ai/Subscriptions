@@ -118,3 +118,8 @@ export const activationCodePeriods = [
     value: '12',
   },
 ];
+
+export const timeOptions = Array.from({ length: 24 }, (_, i) => ({
+  label: `${i.toString().padStart(2, '0')}:00`,
+  value: `${i.toString().padStart(2, '0')}:00`,
+}));

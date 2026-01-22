@@ -6,6 +6,7 @@ import { Column, CustomTable } from '@/components/CustomTable';
 import useCustomQuery from '@/lib/Query';
 import LoadingComponent from '@/components/layout/loading';
 import {
+  branchesColumns,
   customersColumns,
   devicesColumns,
   suppliersColumns,
@@ -13,6 +14,7 @@ import {
 } from './columns';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
+import BranchForm from '../branches/Form';
 import SupplierForm from '../supplier/Form';
 import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
@@ -40,6 +42,13 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
   ];
 
   const tables = [
+    {
+      type: 'branche',
+      title: 'Branches',
+      endPoint: `v1/super-admin/business/${reference}/branches`,
+      columns: branchesColumns,
+      form: <BranchForm reference={reference} />,
+    },
     {
       type: 'supplier',
       title: 'Suppliers',
@@ -88,6 +97,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     package_id: JSON.parse(data?.business?.details ?? '{}').package_id,
     business_type_id: data?.business?.type ?? '',
     business_location_id: data?.business?.location ?? '',
+    business_category_id: data?.business?.business_category_id ?? '',
   };
 
   return (

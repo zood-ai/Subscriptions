@@ -17,6 +17,7 @@ const baseSchema = {
   package_id: z.string().min(1, "Package is required"),
   business_type_id: z.string().min(1, "Business type is required"),
   business_location_id: z.string().min(1, "Country is required"),
+  business_category_id: z.string().min(1, "Business Category is required")
 };
 
 const createSchema = z.object({
@@ -58,6 +59,7 @@ interface FormState {
   business_name: string;
   business_type_id: string;
   business_location_id: string;
+  business_category_id: string;
 }
 
 export default function Form({
@@ -89,6 +91,7 @@ export default function Form({
       package_id: data?.package_id ?? "",
       business_type_id: data?.business_type_id ?? "",
       business_location_id: data?.business_location_id ?? "",
+      business_category_id: data?.business_category_id ?? ""
     },
   });
 
@@ -188,6 +191,26 @@ export default function Form({
               value={String(field.value)}
               onChange={(value) => field.onChange(value)}
               endPoint="v1/super-admin/businessTypes"
+              labelKey="name"
+              valueKey="id"
+              required
+            />
+          )}
+        />
+        <Controller
+          name="business_category_id"
+          control={control}
+          render={({ field }) => (
+            <SingleSelect<{
+              id: string;
+              name: string;
+            }>
+              label="Business Category"
+              placeholder="Select business category"
+              errorText={errors?.business_category_id?.message}
+              value={String(field.value)}
+              onChange={(value) => field.onChange(value)}
+              endPoint="v1/super-admin/categories"
               labelKey="name"
               valueKey="id"
               required
