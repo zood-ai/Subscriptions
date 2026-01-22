@@ -7,6 +7,7 @@ export interface AllowedFilters {
   showName?: boolean;
   showReference?: boolean;
   showCode?: boolean;
+  showIsUsed?: boolean;
   showEndAT?: true;
   showBusinessType?: true;
 }
@@ -68,6 +69,19 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
             endPoint="v1/super-admin/businessTypes"
             labelKey="name"
             valueKey="id"
+          />
+        )}
+        {filters.showIsUsed && (
+          <Select
+            label="Is Used?"
+            value={(allFilters?.is_used as string) ?? ''}
+            onChange={(value) => handleChnage('is_used', value)}
+            options={[
+              { label: 'All', value: '' },
+              { label: 'Yes', value: '1' },
+              { label: 'No', value: '0' },
+            ]}
+            required
           />
         )}
         {filters.showEndAT && (

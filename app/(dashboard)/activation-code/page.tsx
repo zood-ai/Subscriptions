@@ -21,8 +21,18 @@ interface ActivationCodeData {
 const columns: Column<ActivationCodeData>[] = [
   { key: 'code', header: 'Code' },
   { key: 'duration', header: 'Duration' },
-  { key: 'created_at', header: 'Created At' },
-  { key: 'is_used', header: 'Is Used' },
+  {
+    key: 'is_used',
+    header: 'Is Used',
+    render: (value) => (
+      <span
+        className={`${value === 0 ? 'text-red-500' : 'text-green-500'} font-semibold`}
+      >
+        {value === 0 ? 'No' : 'Yes'}
+      </span>
+    ),
+  },
+  { key: 'created_at', header: 'Created At', type: 'date' },
 ];
 
 const filters: StatusFiltersTab[] = [
@@ -62,6 +72,10 @@ export default function ActivationCodes() {
         <CustomTable
           endPoint="v1/activationcode/list"
           columns={columns}
+          filters={{
+            showName: true,
+            showIsUsed: true,
+          }}
           statusFilters={filters}
           actions={actions}
           statusFilterKey="is_used"

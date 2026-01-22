@@ -19,6 +19,7 @@ import SupplierForm from '../supplier/Form';
 import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
+import { formatDate } from '@/lib/utils';
 import Form from '../../Form';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
@@ -36,8 +37,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     { title: 'Name', value: data?.business.name },
     { title: 'Reference', value: data?.business.reference },
     { title: 'Owner email', value: data?.business.owner_email },
-    { title: 'Created at', value: data?.business.created_at },
-    { title: 'End at', value: data?.business.end_at },
+    { title: 'Created at', value: formatDate(data?.business.created_at ?? '') },
+    { title: 'End at', value: formatDate(data?.business.end_at ?? '') },
   ];
 
   const tables = [
@@ -107,6 +108,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
         businessActiveForm={
           <ActiveForm reference={reference} data={aciveFormData} />
         }
+        deleteEndPoint={`v1/super-admin/business/${reference}`}
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
         backUrl="/manage-business/business"
@@ -126,6 +128,9 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 endPoint={el.endPoint}
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 columns={el.columns as Column<any>[]}
+                filters={{
+                  showName: true,
+                }}
                 onClickRow={(data) => {
                   router.push(
                     `/manage-business/business/${reference}/${el.type}/${data.id}`

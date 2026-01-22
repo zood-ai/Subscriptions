@@ -181,8 +181,8 @@ export function CustomTable<T extends { id: string }>({
           {/* Filter Tabs Row */}
           {(showStatusFilters ||
             (statusFilters && statusFilters?.length > 0)) && (
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-wrap gap-y-2 items-center justify-between px-4 py-3 border-b border-border">
+              <div className="flex flex-wrap items-center gap-2">
                 {[{ label: 'All', value: '' }, ...statusFilters]?.map(
                   (filter) => (
                     <button
@@ -200,7 +200,7 @@ export function CustomTable<T extends { id: string }>({
                   )
                 )}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 {endPoint && sortOptions && sortOptions.length > 0 && (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-foreground rounded-full border border-border hover:bg-muted transition-colors">
@@ -359,8 +359,8 @@ export function CustomTable<T extends { id: string }>({
                         {column.render
                           ? column.render(item[column.key], item)
                           : column.type === 'date' && item[column.key]
-                          ? formatDate(new Date(item[column.key] as string))
-                          : String(item[column.key] ?? '-')}
+                            ? formatDate(new Date(item[column.key] as string))
+                            : String(item[column.key] ?? '-')}
                       </td>
                     ))}
                   </tr>
