@@ -35,7 +35,7 @@ export default function BusinessTypes() {
   const router = useRouter();
   return (
     <>
-      <PageHeader title="Business Types" Form={<Form />} />
+      <PageHeader title="Business Type" Form={<Form />} />
       <div className="py-[40px] mainPaddingX">
         <CustomTable
           endPoint="v1/super-admin/businessTypes"
