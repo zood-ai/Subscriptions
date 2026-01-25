@@ -228,7 +228,7 @@ export default function Form({
               errorText={errors?.business_location_id?.message}
               value={formValues.business_location_id}
               onChange={(value) => field.onChange(value)}
-              endPoint="v1/super-admin/countries"
+              endPoint="v1/manage/countries"
               labelKey="name_en"
               valueKey="id"
               itemResponseDataKey="data"

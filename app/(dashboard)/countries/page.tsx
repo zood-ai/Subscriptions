@@ -41,7 +41,7 @@ export default function CountriesPage() {
       <PageHeader title="Country" Form={<Form />} />
       <div className="py-10 mainPaddingX">
         <CustomTable
-          endPoint="v1/super-admin/countries"
+          endPoint="v1/manage/countries"
           columns={columns}
           filters={{
             showName: true,
