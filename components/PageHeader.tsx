@@ -4,8 +4,8 @@ import Link from 'next/link';
 import React from 'react';
 import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';
-import ActionPopUp, { Input } from './ActionPopUp';
-import { Badge } from './ui/badge';
+import ActionPopUp from './ActionPopUp';
+import { Badge, BadgeProps } from './ui/badge';
 import { cn } from '@/lib/utils';
 import { isBlockedInputs } from '@/constants/global';
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
   isBlocked?: boolean;
   backUrl?: string;
   className?: string;
+  badges?: (BadgeProps & { visible: boolean })[];
 }
 
 const PageHeader: React.FC<Props> = ({
@@ -30,6 +31,7 @@ const PageHeader: React.FC<Props> = ({
   isBlocked = false,
   backUrl = '',
   className = '',
+  badges = [],
 }) => {
   return (
     <div
@@ -48,13 +50,19 @@ const PageHeader: React.FC<Props> = ({
             Back
           </Link>
         )}
-        <div>
-          <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
-          <div>
-            {isBlocked && (
-              <Badge variant="danger" label="Blocked" className="mt-1" />
+        <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
+        <div className="flex gap-2">
+          {badges.length > 0 &&
+            badges.map((el, idx) =>
+              el.visible ? (
+                <Badge
+                  key={idx}
+                  variant={el.variant}
+                  label={el.label}
+                  className="mt-1"
+                />
+              ) : null
             )}
-          </div>
         </div>
       </div>
       <div className="flex gap-2">

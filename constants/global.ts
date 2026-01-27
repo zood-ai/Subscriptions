@@ -123,3 +123,5 @@ export const timeOptions = Array.from({ length: 24 }, (_, i) => ({
   label: `${i.toString().padStart(2, '0')}:00`,
   value: `${i.toString().padStart(2, '0')}:00`,
 }));
+
+export const expiringSoonDays = 30 * 24 * 60 * 60 * 1000;

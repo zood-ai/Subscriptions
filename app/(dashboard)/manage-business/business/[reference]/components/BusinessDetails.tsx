@@ -21,6 +21,7 @@ import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
 import { formatDate } from '@/lib/utils';
 import Form from '../../Form';
+import { expiringSoonDays } from '@/constants/global';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       },
     },
   });
+
   const items = [
     { title: 'Name', value: data?.business.name },
     { title: 'Reference', value: data?.business.reference },
@@ -99,6 +101,15 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     business_location_id: data?.business?.location ?? '',
   };
 
+  const isExpired = new Date() > new Date(data?.business?.end_at as string);
+  const isExpiringSoon =
+    !isExpired &&
+    new Date() >=
+      new Date(
+        new Date(data?.business?.end_at as string).getTime() - expiringSoonDays
+      );
+  const isActive = !isExpired && !isExpiringSoon;
+
   return (
     <>
       <PageHeader
@@ -111,6 +122,28 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
         deleteEndPoint={`v1/super-admin/business/${reference}`}
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
+        badges={[
+          {
+            label: 'Blocked',
+            variant: 'danger',
+            visible: data?.business.active === 0 ? true : false,
+          },
+          {
+            label: 'Active',
+            variant: 'success',
+            visible: isActive,
+          },
+          {
+            label: 'Expired',
+            variant: 'danger',
+            visible: isExpired,
+          },
+          {
+            label: 'Expiring Soon',
+            variant: 'warning',
+            visible: isExpiringSoon,
+          },
+        ]}
         backUrl="/manage-business/business"
       />
       <div className="py-10 mainPaddingX">

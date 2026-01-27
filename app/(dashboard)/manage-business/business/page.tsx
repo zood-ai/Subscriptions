@@ -10,8 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { BusinessData } from '@/types/business';
 import { useRouter } from 'next/navigation';
 import Form from './Form';
-
-const days = 30 * 24 * 60 * 60 * 1000;
+import { expiringSoonDays } from '@/constants/global';
 
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
@@ -21,7 +20,7 @@ const columns: Column<BusinessData>[] = [
     render: (_, item) => {
       const now = new Date();
       const endAt = new Date(item.end_at);
-      const expiringSoonAt = new Date(endAt.getTime() - days);
+      const expiringSoonAt = new Date(endAt.getTime() - expiringSoonDays);
 
       return (
         <div className="text-nowrap">
