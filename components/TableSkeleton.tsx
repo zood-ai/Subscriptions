@@ -41,6 +41,8 @@ const TableSkeleton: React.FC<TableSkeletonProps> = ({
           <div className="flex flex-wrap items-center gap-2">
             <Skeleton className="h-8 w-25 rounded-full" />
             <Skeleton className="h-8 w-20 rounded-full" />
+            <Skeleton className="h-8 w-20 rounded-full" />
+            <Skeleton className="h-8 w-20 rounded-full" />
           </div>
         </div>
 
