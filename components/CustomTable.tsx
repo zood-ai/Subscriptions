@@ -1,8 +1,15 @@
 'use client';
 
 import type React from 'react';
-import { useState } from 'react';
-import { ChevronDown, Filter, X, ArrowUpDown } from 'lucide-react';
+import { useState, useRef } from 'react';
+import {
+  ChevronDown,
+  Filter,
+  X,
+  ArrowUpDown,
+  Download,
+  Upload,
+} from 'lucide-react';
 import { cn, formatDate, ObjectCleaner } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -14,8 +21,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import TableSkeleton from './TableSkeleton';
 import type { MetaData } from '@/types/global';
 import useCustomQuery from '@/lib/Query';
+import useCustomMutation from '@/lib/Mutation';
 import CustomModal from './layout/CustomModal';
 import TableFilters, { AllowedFilters } from './TableFilters';
+import toast from 'react-hot-toast';
 
 export interface Column<T> {
   key: keyof T;
@@ -60,6 +69,8 @@ interface BaseProps<T extends { id: string }> {
   titleClassName?: string;
   onClickRow?: (data: T) => void;
   pagination?: boolean;
+  showExport?: boolean;
+  showImport?: boolean;
 }
 
 type CustomTableProps<T extends { id: string }> = BaseProps<T> &
@@ -79,18 +90,58 @@ export function CustomTable<T extends { id: string }>({
   title,
   titleClassName = '',
   pagination = true,
+  showExport = false,
+  showImport = false,
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
     Record<string, number | string | boolean>
   >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const currentPage = allFilters.page as number;
   const sortOptions: SortOption[] = [
     { label: 'Descending', value: 'desc' },
     { label: 'Ascending', value: 'asc' },
   ];
+
+  // Export Mutation
+  const { mutateAsync: exportData, isPending: isExporting } = useCustomMutation<
+    Record<string, number | string | boolean>,
+    Blob
+  >({
+    api: `${endPoint}/export`,
+    method: 'POST',
+    options: {
+      onSuccess: (data) => {
+        // Create download link
+        const url = window.URL.createObjectURL(data);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `export-${new Date().toISOString().split('T')[0]}.xlsx`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+    },
+  });
+
+  // Import Mutation
+  const { mutateAsync: importData, isPending: isImporting } =
+    useCustomMutation<FormData>({
+      api: `${endPoint}/import`,
+      method: 'POST',
+      options: {
+        onSuccess: () => {
+          // Reset file input
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        },
+      },
+    });
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
@@ -121,7 +172,6 @@ export function CustomTable<T extends { id: string }>({
     allData?.data?.length > 0 && selectedIds.length === allData?.data?.length;
   const someSelected =
     selectedIds.length > 0 && selectedIds.length < allData?.data?.length;
-  const hasSelection = selectedIds.length > 0;
 
   const handleSelectAll = () => {
     if (allSelected) {
@@ -155,6 +205,34 @@ export function CustomTable<T extends { id: string }>({
       ...prev,
       page: pageNumber,
     }));
+  };
+
+  const handleExport = () => {
+    if (!endPoint) return;
+    toast.promise(exportData(ObjectCleaner(allFilters)), {
+      loading: 'Preparing export...',
+      success: 'Export completed successfully ✅',
+      error: 'Failed to export data',
+    });
+  };
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !endPoint) return;
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    toast.promise(importData(formData), {
+      loading: 'Submitting import request...',
+      success:
+        'Import started. Data will appear once processing is complete ⏳',
+      error: 'Failed to import',
+    });
   };
 
   if (forceLoading || isLoading) {
@@ -226,6 +304,45 @@ export function CustomTable<T extends { id: string }>({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 )}
+                {showExport && endPoint && (
+                  <button
+                    onClick={handleExport}
+                    disabled={isExporting}
+                    className={cn(
+                      'flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full border border-border transition-colors',
+                      isExporting
+                        ? 'text-muted-foreground bg-muted cursor-not-allowed opacity-50'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                    )}
+                  >
+                    <Download className="h-4 w-4" />
+                    {isExporting ? 'Exporting...' : 'Export'}
+                  </button>
+                )}
+                {showImport && endPoint && (
+                  <>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".xlsx,.xls,.csv"
+                      onChange={handleFileChange}
+                      className="hidden"
+                    />
+                    <button
+                      onClick={handleImportClick}
+                      disabled={isImporting}
+                      className={cn(
+                        'flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full border border-border transition-colors',
+                        isImporting
+                          ? 'text-muted-foreground bg-muted cursor-not-allowed opacity-50'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      )}
+                    >
+                      <Upload className="h-4 w-4" />
+                      {isImporting ? 'Importing...' : 'Import'}
+                    </button>
+                  </>
+                )}
                 {showStatusFilters && (
                   <CustomModal
                     title="Filters"
@@ -265,35 +382,7 @@ export function CustomTable<T extends { id: string }>({
           )}
           {/* Selection Info Row */}
           {actions.length > 0 && (
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
-              <span className="text-sm font-semibold text-foreground">
-                {selectedIds.length} Selected
-              </span>
-              {hasSelection && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground bg-muted rounded-md hover:bg-muted/80 transition-colors">
-                    Actions
-                    <ChevronDown className="h-4 w-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start">
-                    {actions?.map((action) => (
-                      <DropdownMenuItem
-                        key={action.label}
-                        onClick={() => action.onClick(selectedIds)}
-                      >
-                        {action.label}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
-              {!hasSelection && (
-                <div className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground/50 bg-muted/50 rounded-md cursor-not-allowed">
-                  Actions
-                  <ChevronDown className="h-4 w-4" />
-                </div>
-              )}
-            </div>
+            <Actions actions={actions} selectedIds={selectedIds} />
           )}
           {/* Table */}
           <div className="overflow-x-auto">
@@ -366,62 +455,11 @@ export function CustomTable<T extends { id: string }>({
             </table>
           </div>
           {pagination && paginationData && (
-            <div className="flex justify-end items-center space-x-4.75 mx-5 mt-7.5 mb-5">
-              <div className="flex items-center justify-center text-gray-500 font-[12px]">
-                {paginationData?.from} - {paginationData?.to} of{' '}
-                {paginationData?.total}
-              </div>
-              <div className="flex justify-center items-center space-x-2 mx-3">
-                {currentPage > 3 && (
-                  <>
-                    <button
-                      onClick={() => goToPage(1)}
-                      className="cursor-pointer px-3 py-1 rounded bg-gray-100"
-                    >
-                      1
-                    </button>
-                    {currentPage > 3 && <span>...</span>}
-                  </>
-                )}
-
-                {Array.from({ length: 5 }, (_, i) => {
-                  const pageNumber = currentPage - 2 + i;
-                  if (
-                    pageNumber > 0 &&
-                    pageNumber <= paginationData?.last_page
-                  ) {
-                    return (
-                      <button
-                        key={pageNumber}
-                        onClick={() => goToPage(pageNumber)}
-                        className={`cursor-pointer px-3 py-1 rounded ${
-                          currentPage === pageNumber
-                            ? 'bg-primary text-white'
-                            : 'bg-gray-100'
-                        }`}
-                      >
-                        {pageNumber}
-                      </button>
-                    );
-                  }
-                  return null;
-                })}
-
-                {currentPage < paginationData?.last_page - 2 && (
-                  <>
-                    {currentPage < paginationData?.last_page - 3 && (
-                      <span>...</span>
-                    )}
-                    <button
-                      onClick={() => goToPage(paginationData?.last_page)}
-                      className="cursor-pointer px-3 py-1 rounded bg-gray-100"
-                    >
-                      {paginationData?.last_page}
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
+            <Pagination
+              paginationData={paginationData}
+              currentPage={currentPage}
+              goToPage={goToPage}
+            />
           )}
         </div>
       ) : (
@@ -432,3 +470,108 @@ export function CustomTable<T extends { id: string }>({
     </div>
   );
 }
+
+const Pagination = ({
+  paginationData,
+  currentPage,
+  goToPage,
+}: {
+  paginationData: MetaData;
+  currentPage: number;
+  goToPage: (pageNumber: number) => void;
+}) => {
+  return (
+    <div className="flex justify-end items-center space-x-4.75 mx-5 mt-7.5 mb-5">
+      <div className="flex items-center justify-center text-gray-500 font-[12px]">
+        {paginationData?.from} - {paginationData?.to} of {paginationData?.total}
+      </div>
+      <div className="flex justify-center items-center space-x-2 mx-3">
+        {currentPage > 3 && (
+          <>
+            <button
+              onClick={() => goToPage(1)}
+              className="cursor-pointer px-3 py-1 rounded bg-gray-100"
+            >
+              1
+            </button>
+            {currentPage > 3 && <span>...</span>}
+          </>
+        )}
+
+        {Array.from({ length: 5 }, (_, i) => {
+          const pageNumber = currentPage - 2 + i;
+          if (pageNumber > 0 && pageNumber <= paginationData?.last_page) {
+            return (
+              <button
+                key={pageNumber}
+                onClick={() => goToPage(pageNumber)}
+                className={`cursor-pointer px-3 py-1 rounded ${
+                  currentPage === pageNumber
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100'
+                }`}
+              >
+                {pageNumber}
+              </button>
+            );
+          }
+          return null;
+        })}
+
+        {currentPage < paginationData?.last_page - 2 && (
+          <>
+            {currentPage < paginationData?.last_page - 3 && <span>...</span>}
+            <button
+              onClick={() => goToPage(paginationData?.last_page)}
+              className="cursor-pointer px-3 py-1 rounded bg-gray-100"
+            >
+              {paginationData?.last_page}
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const Actions = ({
+  selectedIds,
+  actions,
+}: {
+  selectedIds: string[];
+  actions: ActionOption[];
+}) => {
+  const hasSelection = selectedIds.length > 0;
+
+  return (
+    <div className="flex items-center gap-3 px-4 py-3 border-b border-border">
+      <span className="text-sm font-semibold text-foreground">
+        {selectedIds.length} Selected
+      </span>
+      {hasSelection && (
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground bg-muted rounded-md hover:bg-muted/80 transition-colors">
+            Actions
+            <ChevronDown className="h-4 w-4" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start">
+            {actions?.map((action) => (
+              <DropdownMenuItem
+                key={action.label}
+                onClick={() => action.onClick(selectedIds)}
+              >
+                {action.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+      {!hasSelection && (
+        <div className="flex items-center gap-1 px-3 py-1.5 text-sm text-muted-foreground/50 bg-muted/50 rounded-md cursor-not-allowed">
+          Actions
+          <ChevronDown className="h-4 w-4" />
+        </div>
+      )}
+    </div>
+  );
+};

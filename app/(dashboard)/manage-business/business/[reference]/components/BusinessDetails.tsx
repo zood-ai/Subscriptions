@@ -131,6 +131,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 filters={{
                   showName: true,
                 }}
+                showExport
+                showImport
                 onClickRow={(data) => {
                   router.push(
                     `/manage-business/business/${reference}/${el.type}/${data.id}`
