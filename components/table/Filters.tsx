@@ -35,6 +35,8 @@ const Filters = ({
   showExport,
   showImport,
   showStatusFilters,
+  exportEndPoint = '',
+  importEndPoint = '',
 }: {
   statusFilters?: StatusFiltersTab[];
   filters?: AllowedFilters;
@@ -46,6 +48,8 @@ const Filters = ({
   endPoint?: string;
   showExport?: boolean;
   showImport?: boolean;
+  exportEndPoint?: string;
+  importEndPoint?: string;
   showStatusFilters?: boolean;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,7 +63,7 @@ const Filters = ({
     Record<string, number | string | boolean>,
     Blob
   >({
-    api: `${endPoint}/export`,
+    api: exportEndPoint ? exportEndPoint : `${endPoint}/export`,
     method: 'POST',
     options: {
       onSuccess: (data) => {
@@ -79,7 +83,7 @@ const Filters = ({
   // Import Mutation
   const { mutateAsync: importData, isPending: isImporting } =
     useCustomMutation<FormData>({
-      api: `${endPoint}/import`,
+      api: importEndPoint ? importEndPoint : `${endPoint}/import`,
       method: 'POST',
       options: {
         onSuccess: () => {

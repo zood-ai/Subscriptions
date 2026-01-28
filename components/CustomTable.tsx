@@ -51,6 +51,8 @@ interface BaseProps<T extends { id: string }> {
   pagination?: boolean;
   showExport?: boolean;
   showImport?: boolean;
+  exportEndPoint?: string;
+  importEndPoint?: string;
 }
 
 type CustomTableProps<T extends { id: string }> = BaseProps<T> &
@@ -72,6 +74,8 @@ export function CustomTable<T extends { id: string }>({
   pagination = true,
   showExport = false,
   showImport = false,
+  exportEndPoint = '',
+  importEndPoint = '',
 }: CustomTableProps<T>) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
@@ -166,6 +170,8 @@ export function CustomTable<T extends { id: string }>({
               endPoint={endPoint}
               showExport={showExport}
               showImport={showImport}
+              exportEndPoint={exportEndPoint}
+              importEndPoint={importEndPoint}
               showStatusFilters={showStatusFilters}
             />
           )}

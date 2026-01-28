@@ -55,6 +55,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'supplier',
       title: 'Suppliers',
       endPoint: `v1/super-admin/business/${reference}/suppliers`,
+      exportEndPoint: `v1/export/suppliers`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: suppliersColumns,
       form: <SupplierForm reference={reference} />,
     },
@@ -62,6 +64,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'device',
       title: 'Devices',
       endPoint: `v1/super-admin/business/${reference}/devices`,
+      exportEndPoint: `v1/super-admin/business/${reference}/branches`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: devicesColumns,
       form: <DeviceForm reference={reference} />,
     },
@@ -69,6 +73,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'user',
       title: 'Users',
       endPoint: `v1/super-admin/business/${reference}/users`,
+      exportEndPoint: `v1/super-admin/business/${reference}/branches`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: usersColumns,
       form: <UserForm reference={reference} />,
     },
@@ -76,6 +82,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'customer',
       title: 'Customers',
       endPoint: `v1/super-admin/business/${reference}/customers`,
+      exportEndPoint: `v1/super-admin/business/${reference}/branches`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: customersColumns,
       form: <CustomerForm reference={reference} />,
     },
@@ -164,8 +172,10 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 filters={{
                   showName: true,
                 }}
-                showExport
-                showImport
+                showExport={!!el.exportEndPoint}
+                showImport={!!el.importEndPoint}
+                exportEndPoint={el.exportEndPoint}
+                importEndPoint={el.importEndPoint}
                 onClickRow={(data) => {
                   router.push(
                     `/manage-business/business/${reference}/${el.type}/${data.id}`

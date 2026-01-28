@@ -50,10 +50,10 @@ const PageHeader: React.FC<Props> = ({
             Back
           </Link>
         )}
-        <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
-        <div className="flex gap-2">
-          {badges.length > 0 &&
-            badges.map((el, idx) =>
+        <div className="flex gap-x-4 gap-y-2 flex-wrap items-center">
+          <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
+          <div className="flex gap-2">
+            {badges.map((el, idx) =>
               el.visible ? (
                 <Badge
                   key={idx}
@@ -63,6 +63,7 @@ const PageHeader: React.FC<Props> = ({
                 />
               ) : null
             )}
+          </div>
         </div>
       </div>
       <div className="flex gap-2">
