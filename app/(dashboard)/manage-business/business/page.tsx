@@ -10,8 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { BusinessData } from '@/types/business';
 import { useRouter } from 'next/navigation';
 import Form from './Form';
-
-const days = 30 * 24 * 60 * 60 * 1000;
+import { isBusinessExpired, isBusinessExpiringSoon } from '@/constants/global';
 
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
@@ -19,15 +18,11 @@ const columns: Column<BusinessData>[] = [
     key: 'end_at',
     header: 'is Active?',
     render: (_, item) => {
-      const now = new Date();
-      const endAt = new Date(item.end_at);
-      const expiringSoonAt = new Date(endAt.getTime() - days);
-
       return (
         <div className="text-nowrap">
-          {now > endAt ? (
+          {isBusinessExpired(item.end_at as string) ? (
             <Badge variant="danger" label="Expired" />
-          ) : now >= expiringSoonAt ? (
+          ) : isBusinessExpiringSoon(item.end_at as string) ? (
             <Badge variant="warning" label="Expiring Soon" />
           ) : (
             <Badge variant="success" label="Active" />

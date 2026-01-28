@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import Select from './Select';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import Select from '../Select';
 
 export interface AllowedFilters {
   showName?: boolean;

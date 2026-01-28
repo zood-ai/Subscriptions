@@ -21,6 +21,11 @@ import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
 import { formatDate } from '@/lib/utils';
 import Form from '../../Form';
+import {
+  isBusinessActive,
+  isBusinessExpired,
+  isBusinessExpiringSoon,
+} from '@/constants/global';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -33,6 +38,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       },
     },
   });
+
   const items = [
     { title: 'Name', value: data?.business.name },
     { title: 'Reference', value: data?.business.reference },
@@ -53,6 +59,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'supplier',
       title: 'Suppliers',
       endPoint: `v1/super-admin/business/${reference}/suppliers`,
+      exportEndPoint: `v1/export/suppliers`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: suppliersColumns,
       form: <SupplierForm reference={reference} />,
     },
@@ -60,6 +68,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'device',
       title: 'Devices',
       endPoint: `v1/super-admin/business/${reference}/devices`,
+      exportEndPoint: `v1/super-admin/business/${reference}/branches`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: devicesColumns,
       form: <DeviceForm reference={reference} />,
     },
@@ -67,6 +77,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'user',
       title: 'Users',
       endPoint: `v1/super-admin/business/${reference}/users`,
+      exportEndPoint: `v1/super-admin/business/${reference}/branches`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: usersColumns,
       form: <UserForm reference={reference} />,
     },
@@ -74,6 +86,8 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       type: 'customer',
       title: 'Customers',
       endPoint: `v1/super-admin/business/${reference}/customers`,
+      exportEndPoint: `v1/super-admin/business/${reference}/branches`,
+      importEndPoint: `v1/super-admin/business/${reference}/branches`,
       columns: customersColumns,
       form: <CustomerForm reference={reference} />,
     },
@@ -111,6 +125,28 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
         deleteEndPoint={`v1/super-admin/business/${reference}`}
         blockEndPoint={`v1/super-admin/businessStatus/changeStatus/${reference}`}
         isBlocked={data?.business.active === 0 ? true : false}
+        badges={[
+          {
+            label: 'Blocked',
+            variant: 'danger',
+            visible: data?.business.active === 0 ? true : false,
+          },
+          {
+            label: 'Active',
+            variant: 'success',
+            visible: isBusinessActive(data?.business?.end_at as string),
+          },
+          {
+            label: 'Expired',
+            variant: 'danger',
+            visible: isBusinessExpired(data?.business?.end_at as string),
+          },
+          {
+            label: 'Expiring Soon',
+            variant: 'warning',
+            visible: isBusinessExpiringSoon(data?.business?.end_at as string),
+          },
+        ]}
         backUrl="/manage-business/business"
       />
       <div className="py-10 mainPaddingX">
@@ -131,6 +167,10 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 filters={{
                   showName: true,
                 }}
+                showExport={!!el.exportEndPoint}
+                showImport={!!el.importEndPoint}
+                exportEndPoint={el.exportEndPoint}
+                importEndPoint={el.importEndPoint}
                 onClickRow={(data) => {
                   router.push(
                     `/manage-business/business/${reference}/${el.type}/${data.id}`

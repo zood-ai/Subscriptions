@@ -1,16 +1,16 @@
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/utils";
 
-type AppBadgeVariant = "default" | "success" | "warning" | "danger" | "info";
+type BadgeVariant = "default" | "success" | "warning" | "danger" | "info";
 
-interface AppBadgeProps {
+export interface BadgeProps {
   label: string;
   labelClassName?: string;
-  variant?: AppBadgeVariant;
+  variant: BadgeVariant;
   className?: string;
 }
 
-const variantClasses: Record<AppBadgeVariant, string> = {
+const variantClasses: Record<BadgeVariant, string> = {
   default: "",
   success: "bg-green-100 text-green-700 border-green-200",
   warning: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -25,7 +25,7 @@ function Badge({
   labelClassName = "",
   asChild = false,
   ...props
-}: AppBadgeProps & { asChild?: boolean }) {
+}: BadgeProps & { asChild?: boolean }) {
   const Comp = asChild ? Slot : "span";
 
   return (
