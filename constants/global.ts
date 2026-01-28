@@ -125,3 +125,18 @@ export const timeOptions = Array.from({ length: 24 }, (_, i) => ({
 }));
 
 export const expiringSoonDays = 30 * 24 * 60 * 60 * 1000;
+
+export const isBusinessExpired = (end_at: string) => {
+  return new Date() > new Date(end_at as string);
+};
+
+export const isBusinessExpiringSoon = (end_at: string) => {
+  return (
+    !isBusinessExpired(end_at) &&
+    new Date() >= new Date(new Date(end_at).getTime() - expiringSoonDays)
+  );
+};
+
+export const isBusinessActive = (end_at: string) => {
+  return !isBusinessExpired(end_at) && !isBusinessExpiringSoon(end_at);
+};

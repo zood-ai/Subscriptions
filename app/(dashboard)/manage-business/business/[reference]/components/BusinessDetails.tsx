@@ -21,7 +21,11 @@ import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
 import { formatDate } from '@/lib/utils';
 import Form from '../../Form';
-import { expiringSoonDays } from '@/constants/global';
+import {
+  isBusinessActive,
+  isBusinessExpired,
+  isBusinessExpiringSoon,
+} from '@/constants/global';
 
 const BusinessDetails = ({ reference }: { reference: string }) => {
   const router = useRouter();
@@ -109,15 +113,6 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     business_location_id: data?.business?.location ?? '',
   };
 
-  const isExpired = new Date() > new Date(data?.business?.end_at as string);
-  const isExpiringSoon =
-    !isExpired &&
-    new Date() >=
-      new Date(
-        new Date(data?.business?.end_at as string).getTime() - expiringSoonDays
-      );
-  const isActive = !isExpired && !isExpiringSoon;
-
   return (
     <>
       <PageHeader
@@ -139,17 +134,17 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
           {
             label: 'Active',
             variant: 'success',
-            visible: isActive,
+            visible: isBusinessActive(data?.business?.end_at as string),
           },
           {
             label: 'Expired',
             variant: 'danger',
-            visible: isExpired,
+            visible: isBusinessExpired(data?.business?.end_at as string),
           },
           {
             label: 'Expiring Soon',
             variant: 'warning',
-            visible: isExpiringSoon,
+            visible: isBusinessExpiringSoon(data?.business?.end_at as string),
           },
         ]}
         backUrl="/manage-business/business"
