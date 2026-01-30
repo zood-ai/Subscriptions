@@ -171,11 +171,9 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 showImport={!!el.importEndPoint}
                 exportEndPoint={el.exportEndPoint}
                 importEndPoint={el.importEndPoint}
-                onClickRow={(data) => {
-                  router.push(
-                    `/manage-business/business/${reference}/${el.type}/${data.id}`
-                  );
-                }}
+                onClickRow={(data) =>
+                  `/manage-business/business/${reference}/${el.type}/${data.id}`
+                }
               />
             </>
           ))}

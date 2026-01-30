@@ -10,6 +10,7 @@ import { AllowedFilters } from './table/TableFilters';
 import Pagination from './table/Pagination';
 import Actions from './table/Actions';
 import Filters from './table/Filters';
+import Link from 'next-progressbar-link';
 
 export interface Column<T> {
   key: keyof T;
@@ -47,7 +48,7 @@ interface BaseProps<T extends { id: string }> {
   actions?: ActionOption[];
   title?: string;
   titleClassName?: string;
-  onClickRow?: (data: T) => void;
+  onClickRow?: (data: T) => string;
   pagination?: boolean;
   showExport?: boolean;
   showImport?: boolean;
@@ -217,35 +218,47 @@ export function CustomTable<T extends { id: string }>({
                 </tr>
               </thead>
               <tbody>
-                {allData?.data?.map((item) => (
-                  <tr
-                    key={item.id}
-                    className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
-                  >
-                    {actions.length > 0 && (
-                      <td className="w-12 px-4 py-4">
-                        <Checkbox
-                          checked={selectedIds.includes(item.id)}
-                          onCheckedChange={() => handleSelectRow(item.id)}
-                          className="h-4 w-4"
-                        />
-                      </td>
-                    )}
-                    {columns.map((column) => (
-                      <td
-                        key={String(column.key)}
-                        className="px-4 py-4 text-sm text-foreground cursor-pointer"
-                        onClick={() => onClickRow?.(item)}
-                      >
-                        {column.render
-                          ? column.render(item[column.key], item)
-                          : column.type === 'date' && item[column.key]
-                            ? formatDate(new Date(item[column.key] as string))
-                            : String(item[column.key] ?? '-')}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
+                {allData?.data?.map((item) => {
+                  const row = (
+                    <tr
+                      key={item.id}
+                      className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
+                    >
+                      {actions.length > 0 && (
+                        <td className="w-12 px-4 py-4">
+                          <Checkbox
+                            checked={selectedIds.includes(item.id)}
+                            onCheckedChange={() => handleSelectRow(item.id)}
+                            className="h-4 w-4"
+                          />
+                        </td>
+                      )}
+                      {columns.map((column) => (
+                        <td
+                          key={String(column.key)}
+                          className="px-4 py-4 text-sm text-foreground cursor-pointer"
+                        >
+                          {column.render
+                            ? column.render(item[column.key], item)
+                            : column.type === 'date' && item[column.key]
+                              ? formatDate(new Date(item[column.key] as string))
+                              : String(item[column.key] ?? '-')}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                  return onClickRow ? (
+                    <Link
+                      key={item.id}
+                      href={onClickRow(item)}
+                      className="contents"
+                    >
+                      {row}
+                    </Link>
+                  ) : (
+                    row
+                  );
+                })}
               </tbody>
             </table>
           </div>

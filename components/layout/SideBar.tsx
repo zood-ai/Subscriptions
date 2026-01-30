@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from 'next-progressbar-link';
 import { usePathname } from 'next/navigation';
 import Logo from '@/assets/logo.svg';
 import {

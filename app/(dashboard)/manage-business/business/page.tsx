@@ -83,9 +83,7 @@ export default function Businesses() {
             showBusinessType: true,
           }}
           actions={actions}
-          onClickRow={(data) => {
-            router.push(`/manage-business/business/${data.reference}`);
-          }}
+          onClickRow={(data) => `/manage-business/business/${data.reference}`}
           statusFilterKey="status"
         />
       </div>

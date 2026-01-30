@@ -1,31 +1,31 @@
-"use client";
+'use client';
 import {
   CustomTable,
   type Column,
   type ActionOption,
-} from "@/components/CustomTable";
-import { useRouter } from "next/navigation";
-import { Category } from "@/types/categories";
-import Form from "./Form";
-import PageHeader from "@/components/PageHeader";
+} from '@/components/CustomTable';
+import { useRouter } from 'next/navigation';
+import { Category } from '@/types/categories';
+import Form from './Form';
+import PageHeader from '@/components/PageHeader';
 
 const columns: Column<Category>[] = [
   {
-    key: "name",
-    header: "Name",
+    key: 'name',
+    header: 'Name',
   },
   {
-    key: "created_at",
-    header: "Created At",
-    type: "date",
+    key: 'created_at',
+    header: 'Created At',
+    type: 'date',
   },
 ];
 
 const actions: ActionOption[] = [
   {
-    label: "Delete",
+    label: 'Delete',
     onClick: (selectedIds) => {
-      console.log("Deleting items:", selectedIds);
+      console.log('Deleting items:', selectedIds);
       alert(`Deleting ${selectedIds.length} items`);
     },
   },
@@ -43,9 +43,7 @@ export default function CategoriesPage() {
           filters={{
             showName: true,
           }}
-          onClickRow={(row) => {
-            router.push(`/manage-business/category/${row.id}`);
-          }}
+          onClickRow={(row) => `/manage-business/category/${row.id}`}
           actions={actions}
           statusFilterKey="status"
         />

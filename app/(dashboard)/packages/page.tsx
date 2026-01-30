@@ -55,9 +55,7 @@ export default function Packages() {
           }}
           statusFilters={filters}
           actions={actions}
-          onClickRow={(data) => {
-            router.push(`/packages/${data.id}`);
-          }}
+          onClickRow={(data) => `/packages/${data.id}`}
           statusFilterKey="project"
         />
       </div>

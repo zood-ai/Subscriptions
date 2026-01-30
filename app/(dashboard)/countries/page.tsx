@@ -1,34 +1,34 @@
-"use client";
+'use client';
 import {
   CustomTable,
   type Column,
   type ActionOption,
-} from "@/components/CustomTable";
-import { useRouter } from "next/navigation";
-import { Country } from "@/types/countries";
-import Form from "./Form";
-import PageHeader from "@/components/PageHeader";
+} from '@/components/CustomTable';
+import { useRouter } from 'next/navigation';
+import { Country } from '@/types/countries';
+import Form from './Form';
+import PageHeader from '@/components/PageHeader';
 
 const columns: Column<Country>[] = [
   {
-    key: "name_en",
-    header: "Name",
+    key: 'name_en',
+    header: 'Name',
     render: (value, item) => {
       return <span>{item?.name || item.name_en}</span>;
     },
   },
   {
-    key: "created_at",
-    header: "Created At",
-    type: "date",
+    key: 'created_at',
+    header: 'Created At',
+    type: 'date',
   },
 ];
 
 const actions: ActionOption[] = [
   {
-    label: "Delete",
+    label: 'Delete',
     onClick: (selectedIds) => {
-      console.log("Deleting items:", selectedIds);
+      console.log('Deleting items:', selectedIds);
       alert(`Deleting ${selectedIds.length} items`);
     },
   },
@@ -46,9 +46,7 @@ export default function CountriesPage() {
           filters={{
             showName: true,
           }}
-          onClickRow={(row) => {
-            router.push(`/countries/${row.id}`);
-          }}
+          onClickRow={(row) => `/countries/${row.id}`}
           actions={actions}
           statusFilterKey="status"
         />
