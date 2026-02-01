@@ -4,6 +4,7 @@ import { QueryClient } from '@tanstack/react-query';
 import './globals.css';
 import { ReactQueryProvider } from './ReactQueryProvider';
 import { Toaster } from 'react-hot-toast';
+import { NavigationProvider, NavigationProgress } from 'next-progressbar-link';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,7 +40,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <NavigationProvider>
+          <NavigationProgress color="#7272F6" />
+          <ReactQueryProvider>{children}</ReactQueryProvider>
+        </NavigationProvider>
         <Toaster position="top-center" />
       </body>
     </html>
