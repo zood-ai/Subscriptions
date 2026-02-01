@@ -14,7 +14,7 @@ import {
 } from './columns';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
-import BranchForm from '../branches/Form';
+import BranchForm from '../branch/Form';
 import SupplierForm from '../supplier/Form';
 import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
@@ -49,7 +49,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
 
   const tables = [
     {
-      type: 'branche',
+      type: 'branch',
       title: 'Branches',
       endPoint: `v1/super-admin/business/${reference}/branches`,
       columns: branchesColumns,
@@ -171,11 +171,9 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
                 showImport={!!el.importEndPoint}
                 exportEndPoint={el.exportEndPoint}
                 importEndPoint={el.importEndPoint}
-                onClickRow={(data) => {
-                  router.push(
-                    `/manage-business/business/${reference}/${el.type}/${data.id}`
-                  );
-                }}
+                onClickRow={(data) =>
+                  `/manage-business/business/${reference}/${el.type}/${data.id}`
+                }
               />
             </>
           ))}

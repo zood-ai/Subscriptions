@@ -36,7 +36,6 @@ export default function Businesses() {
             showName: true,
           }}
           actions={actions}
-          onClickRow={(data) => {}}
           statusFilterKey="status"
         />
       </div>

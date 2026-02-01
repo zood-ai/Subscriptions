@@ -42,9 +42,7 @@ export default function BusinessTypes() {
           }}
           columns={columns}
           actions={actions}
-          onClickRow={(data) => {
-            router.push(`/manage-business/type/${data.id}`);
-          }}
+          onClickRow={(data) => `/manage-business/type/${data.id}`}
         />
       </div>
     </>

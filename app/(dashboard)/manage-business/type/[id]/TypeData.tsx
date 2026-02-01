@@ -61,9 +61,7 @@ const TypeData = ({ id }: { id: string }) => {
           data={data?.businesses ?? []}
           title={'Business'}
           columns={columns}
-          onClickRow={(data) => {
-            router.push(`/manage-business/business/${data.reference}`);
-          }}
+          onClickRow={(data) => `/manage-business/business/${data.reference}`}
         />
       </div>
     </>

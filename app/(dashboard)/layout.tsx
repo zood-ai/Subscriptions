@@ -1,6 +1,7 @@
-import SideBar from "@/components/layout/SideBar";
-import NavBar from "@/components/layout/NavBar";
-import { ModalProvider } from "@/context/ModalContext";
+import SideBar from '@/components/layout/SideBar';
+import NavBar from '@/components/layout/NavBar';
+import { ModalProvider } from '@/context/ModalContext';
+
 export default function RootLayout({
   children,
 }: Readonly<{

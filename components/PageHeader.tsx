@@ -1,6 +1,6 @@
 'use client';
 import { ChevronLeft, Trash2 } from 'lucide-react';
-import Link from 'next/link';
+import Link from 'next-progressbar-link';
 import React from 'react';
 import CustomModal from './layout/CustomModal';
 import { Button } from './ui/button';

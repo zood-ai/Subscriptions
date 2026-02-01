@@ -171,9 +171,9 @@ export default function Dashboard() {
           showStatusFilters={false}
           data={stats?.top_by_users ?? []}
           columns={topUserColumns}
-          onClickRow={(business) => {
-            router.push(`/manage-business/business/${business.reference}`);
-          }}
+          onClickRow={(business) =>
+            `/manage-business/business/${business.reference}`
+          }
         />
 
         <CustomTable
@@ -183,9 +183,9 @@ export default function Dashboard() {
           showStatusFilters={false}
           data={stats?.top_by_invoices ?? []}
           columns={topInvoicesColumns}
-          onClickRow={(business) => {
-            router.push(`/manage-business/business/${business.reference}`);
-          }}
+          onClickRow={(business) =>
+            `/manage-business/business/${business.reference}`
+          }
         />
       </div>
     </div>
