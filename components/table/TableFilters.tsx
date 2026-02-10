@@ -65,7 +65,7 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           <Select
             label="Business Type"
             value={(allFilters?.type as string) ?? ''}
-            onChange={(value) => handleChnage('type', value)}
+            onChange={(value) => handleChnage('businessType', value)}
             endPoint="v1/super-admin/businessTypes"
             labelKey="name"
             valueKey="id"
