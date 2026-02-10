@@ -160,126 +160,130 @@ export function CustomTable<T extends { id: string }>({
           {title}
         </h2>
       )}
-      {allData?.data?.length > 0 ? (
-        <div className="w-full rounded-2xl border border-border bg-card">
-          {/* Filter Tabs Row */}
-          {(showStatusFilters ||
-            (statusFilters && statusFilters?.length > 0)) && (
-            <Filters
-              statusFilters={statusFilters}
-              filters={filters}
-              allFilters={allFilters}
-              setAllFilters={setAllFilters}
-              statusFilterKey={statusFilterKey}
-              endPoint={endPoint}
-              showExport={showExport}
-              showImport={showImport}
-              exportEndPoint={exportEndPoint}
-              importEndPoint={importEndPoint}
-              showStatusFilters={showStatusFilters}
-            />
-          )}
-          {/* Selection Info Row */}
-          {actions.length > 0 && (
-            <Actions actions={actions} selectedIds={selectedIds} />
-          )}
-          {/* Table */}
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  {actions.length > 0 && (
-                    <th className="w-12 px-4 py-3 text-left">
-                      <div className="relative flex items-center justify-center">
-                        <Checkbox
-                          checked={allSelected}
-                          onCheckedChange={handleSelectAll}
-                          className={cn(
-                            'h-4 w-4',
-                            someSelected && 'data-[state=checked]:bg-primary'
-                          )}
-                          {...(someSelected && { 'data-state': 'checked' })}
-                        />
-                        {someSelected && (
-                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <div className="h-4 w-4 rounded-sm bg-primary flex items-center justify-center">
-                              <div className="w-2 h-0.5 bg-primary-foreground rounded-full" />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </th>
-                  )}
-                  {columns.map((column) => (
-                    <th
-                      key={String(column.key)}
-                      className="px-4 py-3 text-nowrap text-left text-sm font-semibold text-foreground"
-                    >
-                      {column.header}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {allData?.data?.map((item) => {
-                  return (
-                    <tr
-                      key={item.id}
-                      onClick={async () => {
-                        if (onClickRow) {
-                          setIsNavigating(true);
-                          router.push(onClickRow(item));
-                        }
-                      }}
-                      className={`border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors ${
-                        onClickRow ? 'cursor-pointer' : ''
-                      }`}
-                    >
-                      {actions.length > 0 && (
-                        <td
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                          className="w-12 px-4 py-4"
-                        >
+      <div className="w-full rounded-2xl border border-border bg-card">
+        {/* Filter Tabs Row */}
+        {(showStatusFilters ||
+          (statusFilters && statusFilters?.length > 0)) && (
+          <Filters
+            statusFilters={statusFilters}
+            filters={filters}
+            allFilters={allFilters}
+            setAllFilters={setAllFilters}
+            statusFilterKey={statusFilterKey}
+            endPoint={endPoint}
+            showExport={showExport}
+            showImport={showImport}
+            exportEndPoint={exportEndPoint}
+            importEndPoint={importEndPoint}
+            showStatusFilters={showStatusFilters}
+          />
+        )}
+        {/* Selection Info Row */}
+        {actions.length > 0 && (
+          <Actions actions={actions} selectedIds={selectedIds} />
+        )}
+        {allData?.data?.length > 0 ? (
+          <>
+            {/* Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    {actions.length > 0 && (
+                      <th className="w-12 px-4 py-3 text-left">
+                        <div className="relative flex items-center justify-center">
                           <Checkbox
-                            checked={selectedIds.includes(item.id)}
-                            onCheckedChange={() => handleSelectRow(item.id)}
-                            className="h-4 w-4"
+                            checked={allSelected}
+                            onCheckedChange={handleSelectAll}
+                            className={cn(
+                              'h-4 w-4',
+                              someSelected && 'data-[state=checked]:bg-primary'
+                            )}
+                            {...(someSelected && { 'data-state': 'checked' })}
                           />
-                        </td>
-                      )}
-                      {columns.map((column) => (
-                        <td
-                          key={String(column.key)}
-                          className="px-4 py-4 text-sm text-foreground"
-                        >
-                          {column.render
-                            ? column.render(item[column.key], item)
-                            : column.type === 'date' && item[column.key]
-                              ? formatDate(new Date(item[column.key] as string))
-                              : String(item[column.key] ?? '-')}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                          {someSelected && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <div className="h-4 w-4 rounded-sm bg-primary flex items-center justify-center">
+                                <div className="w-2 h-0.5 bg-primary-foreground rounded-full" />
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </th>
+                    )}
+                    {columns.map((column) => (
+                      <th
+                        key={String(column.key)}
+                        className="px-4 py-3 text-nowrap text-left text-sm font-semibold text-foreground"
+                      >
+                        {column.header}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {allData?.data?.map((item) => {
+                    return (
+                      <tr
+                        key={item.id}
+                        onClick={async () => {
+                          if (onClickRow) {
+                            setIsNavigating(true);
+                            router.push(onClickRow(item));
+                          }
+                        }}
+                        className={`border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors ${
+                          onClickRow ? 'cursor-pointer' : ''
+                        }`}
+                      >
+                        {actions.length > 0 && (
+                          <td
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
+                            className="w-12 px-4 py-4"
+                          >
+                            <Checkbox
+                              checked={selectedIds.includes(item.id)}
+                              onCheckedChange={() => handleSelectRow(item.id)}
+                              className="h-4 w-4"
+                            />
+                          </td>
+                        )}
+                        {columns.map((column) => (
+                          <td
+                            key={String(column.key)}
+                            className="px-4 py-4 text-sm text-foreground"
+                          >
+                            {column.render
+                              ? column.render(item[column.key], item)
+                              : column.type === 'date' && item[column.key]
+                                ? formatDate(
+                                    new Date(item[column.key] as string)
+                                  )
+                                : String(item[column.key] ?? '-')}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            {pagination && paginationData && (
+              <Pagination
+                paginationData={paginationData}
+                currentPage={currentPage}
+                goToPage={goToPage}
+              />
+            )}
+          </>
+        ) : (
+          <div className="text-gray-500 font-medium flex justify-center items-center p-12.5 w-full rounded-2xl">
+            No data to display
           </div>
-          {pagination && paginationData && (
-            <Pagination
-              paginationData={paginationData}
-              currentPage={currentPage}
-              goToPage={goToPage}
-            />
-          )}
-        </div>
-      ) : (
-        <div className="text-gray-500 font-medium flex justify-center items-center p-12.5 w-full rounded-2xl border border-border bg-card">
-          No data to display
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }

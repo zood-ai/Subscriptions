@@ -73,7 +73,7 @@ export default function ActivationCodes() {
           endPoint="v1/activationcode/list"
           columns={columns}
           filters={{
-            showName: true,
+            showCode: true,
             showIsUsed: true,
           }}
           statusFilters={filters}

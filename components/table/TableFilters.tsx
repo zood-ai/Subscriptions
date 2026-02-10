@@ -57,8 +57,8 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
           <Input
             type="text"
             Label="Code"
-            value={(allFilters?.code as string) ?? ''}
-            onChange={(e) => handleChnage('code', e.target.value)}
+            value={(allFilters?.name as string) ?? ''}
+            onChange={(e) => handleChnage('name', e.target.value)}
           />
         )}
         {filters.showBusinessType && (
