@@ -10,7 +10,8 @@ import { AllowedFilters } from './table/TableFilters';
 import Pagination from './table/Pagination';
 import Actions from './table/Actions';
 import Filters from './table/Filters';
-import Link from 'next-progressbar-link';
+import { useRouter } from 'next/navigation';
+import { useNavigationContext } from 'next-progressbar-link';
 
 export interface Column<T> {
   key: keyof T;
@@ -84,6 +85,8 @@ export function CustomTable<T extends { id: string }>({
     Record<string, number | string | boolean>
   >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
   const currentPage = allFilters.page as number;
+  const { setIsNavigating } = useNavigationContext();
+  const router = useRouter();
 
   const { data: allData = { data }, isFetching: isLoading } = useCustomQuery<{
     data: T[];
@@ -219,13 +222,26 @@ export function CustomTable<T extends { id: string }>({
               </thead>
               <tbody>
                 {allData?.data?.map((item) => {
-                  const row = (
+                  return (
                     <tr
                       key={item.id}
-                      className="border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors"
+                      onClick={async () => {
+                        if (onClickRow) {
+                          setIsNavigating(true);
+                          router.push(onClickRow(item));
+                        }
+                      }}
+                      className={`border-b border-border last:border-b-0 hover:bg-muted/30 transition-colors ${
+                        onClickRow ? 'cursor-pointer' : ''
+                      }`}
                     >
                       {actions.length > 0 && (
-                        <td className="w-12 px-4 py-4">
+                        <td
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                          className="w-12 px-4 py-4"
+                        >
                           <Checkbox
                             checked={selectedIds.includes(item.id)}
                             onCheckedChange={() => handleSelectRow(item.id)}
@@ -236,7 +252,7 @@ export function CustomTable<T extends { id: string }>({
                       {columns.map((column) => (
                         <td
                           key={String(column.key)}
-                          className="px-4 py-4 text-sm text-foreground cursor-pointer"
+                          className="px-4 py-4 text-sm text-foreground"
                         >
                           {column.render
                             ? column.render(item[column.key], item)
@@ -246,17 +262,6 @@ export function CustomTable<T extends { id: string }>({
                         </td>
                       ))}
                     </tr>
-                  );
-                  return onClickRow ? (
-                    <Link
-                      key={item.id}
-                      href={onClickRow(item)}
-                      className="contents"
-                    >
-                      {row}
-                    </Link>
-                  ) : (
-                    row
                   );
                 })}
               </tbody>
