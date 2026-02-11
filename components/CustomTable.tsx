@@ -12,6 +12,7 @@ import Actions from './table/Actions';
 import Filters from './table/Filters';
 import { useRouter } from 'next/navigation';
 import { useNavigationContext } from 'next-progressbar-link';
+import { Input } from './ActionPopUp';
 
 export interface Column<T> {
   key: keyof T;
@@ -27,7 +28,10 @@ export interface StatusFiltersTab {
 
 export interface ActionOption {
   label: string;
-  onClick: (selectedItems: string[]) => void;
+  actionType: 'delete' | 'active' | 'block' | 'unblock';
+  method: 'DELETE' | 'PUT' | 'POST';
+  inputs?: Input[];
+  message?: string;
 }
 
 interface WithData<T> {
@@ -39,6 +43,7 @@ interface WithEndPoint {
   data?: never;
   endPoint: string;
 }
+
 interface BaseProps<T extends { id: string }> {
   showStatusFilters?: boolean;
   columns: Column<T>[];
@@ -180,7 +185,11 @@ export function CustomTable<T extends { id: string }>({
         )}
         {/* Selection Info Row */}
         {actions.length > 0 && (
-          <Actions actions={actions} selectedIds={selectedIds} />
+          <Actions
+            baseEndPoint={endPoint}
+            actions={actions}
+            selectedIds={selectedIds}
+          />
         )}
         {allData?.data?.length > 0 ? (
           <>
@@ -258,7 +267,7 @@ export function CustomTable<T extends { id: string }>({
                             {column.render ? (
                               column.render(item[column.key], item)
                             ) : column.type === 'date' && item[column.key] ? (
-                              <p className="whitespace-pre-line text-center">
+                              <p className="whitespace-pre-line">
                                 {formatDate(
                                   new Date(item[column.key] as string)
                                 )}

@@ -23,10 +23,9 @@ const columns: Column<Category>[] = [
 const actions: ActionOption[] = [
   {
     label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
   },
 ];
 

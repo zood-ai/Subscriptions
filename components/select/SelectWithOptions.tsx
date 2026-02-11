@@ -18,8 +18,8 @@ interface SelectWithOptionsProps {
   onFocus?: () => void;
   errorText?: string;
   required?: boolean;
-  value?: string | number | null;
-  onChange?: (value: string | number) => void;
+  value?: string | number | string[] | null;
+  onChange?: (value: string | number | string[]) => void;
   onValueChange?: (option: Option | null) => void;
   loading?: boolean;
   className?: string;
@@ -58,7 +58,7 @@ const SelectWithOptions: React.FC<SelectWithOptionsProps> = ({
     value: '',
   };
 
-  const [internalValue, setInternalValue] = useState<string | number | null>(
+  const [internalValue, setInternalValue] = useState<string | number | string[] | null>(
     controlledValue ?? null
   );
 

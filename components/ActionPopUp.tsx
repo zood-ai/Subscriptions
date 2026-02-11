@@ -8,11 +8,13 @@ import Select, { Option } from './Select';
 
 interface InputWithOption {
   type?: never;
+  value?: string;
   options: Option[];
 }
 
 interface InputWithType {
-  type: 'text';
+  type: 'text' | 'array';
+  value?: string | string[];
   options?: never;
 }
 
@@ -21,7 +23,6 @@ export type Input = {
   label: string;
   isHidden?: boolean;
   isRequired?: boolean;
-  value?: string;
 } & (InputWithOption | InputWithType);
 
 type ActionPopUpProps = {
@@ -33,7 +34,7 @@ type ActionPopUpProps = {
   inputs?: Input[];
 };
 
-type FormData = Record<string, string>;
+type FormData = Record<string, string | string[]>;
 
 const ActionPopUp = ({
   endPoint,

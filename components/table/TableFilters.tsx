@@ -64,7 +64,8 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
         {filters.showBusinessType && (
           <Select
             label="Business Type"
-            value={(allFilters?.type as string) ?? ''}
+            value={(allFilters?.businessType as string) ?? ''}
+            itemResponseDataKey="businessType"
             onChange={(value) => handleChnage('businessType', value)}
             endPoint="v1/super-admin/businessTypes"
             labelKey="name"

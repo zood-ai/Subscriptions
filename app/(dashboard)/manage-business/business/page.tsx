@@ -57,11 +57,47 @@ const filters: StatusFiltersTab[] = [
 
 const actions: ActionOption[] = [
   {
-    label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
+    label: 'Block',
+    actionType: 'block',
+    method: 'PUT',
+    inputs: [
+      {
+        key: 'reason',
+        label: 'Reason',
+        value: '',
+        isRequired: true,
+        type: 'text',
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        value: '0',
+        type: 'text',
+        isHidden: true,
+      },
+    ],
+  },
+  {
+    label: 'UnBlock',
+    actionType: 'unblock',
+    method: 'PUT',
+    message: 'Are you sure you want to unblock these?',
+    inputs: [
+      {
+        key: 'reason',
+        label: 'Reason',
+        value: '',
+        type: 'text',
+        isHidden: true,
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        value: '1',
+        type: 'text',
+        isHidden: true,
+      },
+    ],
   },
 ];
 

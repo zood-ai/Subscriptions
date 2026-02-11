@@ -24,8 +24,8 @@ interface SelectWithEndpointProps<T> {
   onFocus?: () => void;
   errorText?: string;
   required?: boolean;
-  value?: string | number | null;
-  onChange?: (value: string | number) => void;
+  value?: string | number | string[] | null;
+  onChange?: (value: string | number | string[]) => void;
   onValueChange?: (option: Option | null) => void;
   className?: string;
   parentClassName?: string;

@@ -6,14 +6,33 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ActionOption } from '../CustomTable';
+import { useState } from 'react';
+import CustomModal from '../layout/CustomModal';
+import ActionPopUp, { Input } from '../ActionPopUp';
 
 const Actions = ({
   selectedIds,
+  baseEndPoint,
   actions,
 }: {
   selectedIds: string[];
+  baseEndPoint: string;
   actions: ActionOption[];
 }) => {
+  const [selectedAction, setSelectedAction] = useState<ActionOption | null>(
+    null
+  );
+  const Inputs: Input[] = [
+    {
+      key: 'ids',
+      label: 'Ids',
+      isHidden: true,
+      isRequired: true,
+      value: selectedIds,
+      type: 'array',
+    },
+    ...(selectedAction?.inputs || []),
+  ];
   const hasSelection = selectedIds.length > 0;
 
   return (
@@ -28,10 +47,10 @@ const Actions = ({
             <ChevronDown className="h-4 w-4" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start">
-            {actions?.map((action) => (
+            {actions?.map((action, idx) => (
               <DropdownMenuItem
-                key={action.label}
-                onClick={() => action.onClick(selectedIds)}
+                key={idx}
+                onClick={() => setSelectedAction(action)}
               >
                 {action.label}
               </DropdownMenuItem>
@@ -44,6 +63,22 @@ const Actions = ({
           Actions
           <ChevronDown className="h-4 w-4" />
         </div>
+      )}
+      {selectedAction !== null && (
+        <CustomModal
+          title={selectedAction.label}
+          btnTrigger={<></>}
+          opened={true}
+          onClose={() => setSelectedAction(null)}
+        >
+          <ActionPopUp
+            message={selectedAction?.message}
+            endPoint={`${baseEndPoint}/bulk-${selectedAction.actionType}`}
+            btnTitle={selectedAction.label}
+            method={selectedAction.method}
+            inputs={Inputs}
+          />
+        </CustomModal>
       )}
     </div>
   );

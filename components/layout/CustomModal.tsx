@@ -7,6 +7,8 @@ import { useModal } from '@/context/ModalContext';
 interface CustomModalProps {
   btnTrigger: React.ReactElement;
   children: React.ReactNode;
+  opened?: boolean;
+  onClose?: () => void;
   title?: string;
   className?: string;
 }
@@ -14,6 +16,8 @@ interface CustomModalProps {
 const CustomModal: React.FC<CustomModalProps> = ({
   btnTrigger,
   children,
+  opened = false,
+  onClose,
   title,
   className,
 }) => {
@@ -24,9 +28,16 @@ const CustomModal: React.FC<CustomModalProps> = ({
   const isOpen = openedModal === id;
 
   useEffect(() => {
+    if (opened) {
+      open(id);
+    }
+  }, [opened, id, open]);
+
+  useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         close();
+        onClose?.();
       }
     };
 
@@ -39,7 +50,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, close]);
+  }, [isOpen, close, onClose]);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     mouseDownPositionRef.current = { x: e.clientX, y: e.clientY };
@@ -58,6 +69,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       close();
+      onClose?.();
     }
 
     mouseDownPositionRef.current = null;
@@ -86,7 +98,10 @@ const CustomModal: React.FC<CustomModalProps> = ({
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
               <button
-                onClick={() => close()}
+                onClick={() => {
+                  close();
+                  onClose?.();
+                }}
                 title="Close"
                 className="text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
               >
