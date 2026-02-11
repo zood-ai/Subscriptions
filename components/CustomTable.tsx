@@ -255,13 +255,17 @@ export function CustomTable<T extends { id: string }>({
                             key={String(column.key)}
                             className="px-4 py-4 text-sm text-foreground"
                           >
-                            {column.render
-                              ? column.render(item[column.key], item)
-                              : column.type === 'date' && item[column.key]
-                                ? formatDate(
-                                    new Date(item[column.key] as string)
-                                  )
-                                : String(item[column.key] ?? '-')}
+                            {column.render ? (
+                              column.render(item[column.key], item)
+                            ) : column.type === 'date' && item[column.key] ? (
+                              <p className="whitespace-pre-line text-center">
+                                {formatDate(
+                                  new Date(item[column.key] as string)
+                                )}
+                              </p>
+                            ) : (
+                              String(item[column.key] ?? '-')
+                            )}
                           </td>
                         ))}
                       </tr>
