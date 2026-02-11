@@ -87,7 +87,7 @@ export function CustomTable<T extends { id: string }>({
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [paginationData, setPaginationData] = useState<MetaData | null>(null);
   const [allFilters, setAllFilters] = useState<
-    Record<string, number | string | boolean>
+    Record<string, number | string | string[] | boolean>
   >({ page: 1, sort: 'desc', [statusFilterKey]: '' });
   const currentPage = allFilters.page as number;
   const { setIsNavigating } = useNavigationContext();

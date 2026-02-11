@@ -11,7 +11,7 @@ export function formatDate(date: Date | string) {
 }
 
 export const ObjectCleaner = (
-  obj: Record<string, number | string | boolean>
+  obj: Record<string, number | string | boolean | string[]>
 ) => {
   return Object.fromEntries(
     Object.entries(obj).filter(

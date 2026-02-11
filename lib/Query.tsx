@@ -2,7 +2,7 @@ import { useQuery, QueryKey } from '@tanstack/react-query';
 import axiosInstance from '@/guards/axiosInstance';
 import { AxiosResponse } from 'axios';
 
-export type QueryFilters = Record<string, number | string | boolean>;
+export type QueryFilters = Record<string, number | string | string[] | boolean>;
 
 interface QueryOptions<R, AxiosResponse> {
   onSuccess?: (data: R) => void;
