@@ -124,7 +124,7 @@ const ActionPopUp = ({
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
         <Button
           type="submit"
-          variant="danger"
+          variant={method === 'DELETE' ? 'danger' : 'primary'}
           disabled={isPending}
           loading={isPending}
           className={`${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}

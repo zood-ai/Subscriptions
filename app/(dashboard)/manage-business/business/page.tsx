@@ -9,7 +9,11 @@ import PageHeader from '@/components/PageHeader';
 import { Badge } from '@/components/ui/badge';
 import { BusinessData } from '@/types/business';
 import Form from './Form';
-import { isBusinessExpired, isBusinessExpiringSoon } from '@/constants/global';
+import {
+  activationCodePeriods,
+  isBusinessExpired,
+  isBusinessExpiringSoon,
+} from '@/constants/global';
 
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
@@ -96,6 +100,20 @@ const actions: ActionOption[] = [
         value: '1',
         type: 'text',
         isHidden: true,
+      },
+    ],
+  },
+  {
+    label: 'Active',
+    actionType: 'active',
+    method: 'PUT',
+    inputs: [
+      {
+        key: 'months',
+        label: 'Subscription period',
+        value: '12',
+        options: activationCodePeriods,
+        isRequired: true,
       },
     ],
   },
