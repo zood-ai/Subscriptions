@@ -186,6 +186,7 @@ export function CustomTable<T extends { id: string }>({
         {/* Selection Info Row */}
         {actions.length > 0 && (
           <Actions
+            invalidateQueryKeys={[endPoint, allFilters]}
             baseEndPoint={endPoint}
             actions={actions}
             selectedIds={selectedIds}

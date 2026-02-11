@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { Input } from './ui/input';
 import Select, { Option } from './Select';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface InputWithOption {
   type?: never;
@@ -32,6 +33,7 @@ type ActionPopUpProps = {
   backUrl?: string;
   message?: string;
   inputs?: Input[];
+  invalidateQueryKeys?: string[];
 };
 
 type FormData = Record<string, string | string[]>;
@@ -43,8 +45,10 @@ const ActionPopUp = ({
   backUrl,
   message,
   inputs = [],
+  invalidateQueryKeys = [],
 }: ActionPopUpProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const defaultValues = inputs.reduce<FormData>((acc, item) => {
     if (item.value !== undefined) {
       acc[item.key] = item.value ?? '';
@@ -69,6 +73,7 @@ const ActionPopUp = ({
     options: {
       onSuccess: () => {
         if (backUrl) router.push(backUrl);
+        queryClient.invalidateQueries({ queryKey: invalidateQueryKeys });
       },
     },
   });

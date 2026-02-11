@@ -14,10 +14,13 @@ const Actions = ({
   selectedIds,
   baseEndPoint,
   actions,
+  invalidateQueryKeys,
 }: {
   selectedIds: string[];
   baseEndPoint: string;
   actions: ActionOption[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  invalidateQueryKeys: any;
 }) => {
   const [selectedAction, setSelectedAction] = useState<ActionOption | null>(
     null
@@ -77,6 +80,7 @@ const Actions = ({
             btnTitle={selectedAction.label}
             method={selectedAction.method}
             inputs={Inputs}
+            invalidateQueryKeys={invalidateQueryKeys}
           />
         </CustomModal>
       )}
