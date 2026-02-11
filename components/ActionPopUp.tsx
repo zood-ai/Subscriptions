@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { Input } from './ui/input';
 import Select, { Option } from './Select';
-import { useQueryClient } from '@tanstack/react-query';
+import { QueryKey, useQueryClient } from '@tanstack/react-query';
 
 interface InputWithOption {
   type?: never;
@@ -33,7 +33,7 @@ type ActionPopUpProps = {
   backUrl?: string;
   message?: string;
   inputs?: Input[];
-  invalidateQueryKeys?: string[];
+  invalidateQueryKeys?: QueryKey;
 };
 
 type FormData = Record<string, string | string[]>;

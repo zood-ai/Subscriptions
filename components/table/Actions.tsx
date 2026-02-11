@@ -9,6 +9,7 @@ import { ActionOption } from '../CustomTable';
 import { useState } from 'react';
 import CustomModal from '../layout/CustomModal';
 import ActionPopUp, { Input } from '../ActionPopUp';
+import { QueryKey } from '@tanstack/react-query';
 
 const Actions = ({
   selectedIds,
@@ -19,8 +20,7 @@ const Actions = ({
   selectedIds: string[];
   baseEndPoint: string;
   actions: ActionOption[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  invalidateQueryKeys: any;
+  invalidateQueryKeys: QueryKey;
 }) => {
   const [selectedAction, setSelectedAction] = useState<ActionOption | null>(
     null
