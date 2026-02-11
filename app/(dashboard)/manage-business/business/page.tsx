@@ -8,7 +8,6 @@ import {
 import PageHeader from '@/components/PageHeader';
 import { Badge } from '@/components/ui/badge';
 import { BusinessData } from '@/types/business';
-import { useRouter } from 'next/navigation';
 import Form from './Form';
 import { isBusinessExpired, isBusinessExpiringSoon } from '@/constants/global';
 
@@ -67,7 +66,6 @@ const actions: ActionOption[] = [
 ];
 
 export default function Businesses() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Business" Form={<Form />} />

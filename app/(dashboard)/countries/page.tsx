@@ -4,7 +4,6 @@ import {
   type Column,
   type ActionOption,
 } from '@/components/CustomTable';
-import { useRouter } from 'next/navigation';
 import { Country } from '@/types/countries';
 import Form from './Form';
 import PageHeader from '@/components/PageHeader';
@@ -35,7 +34,6 @@ const actions: ActionOption[] = [
 ];
 
 export default function CountriesPage() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Country" Form={<Form />} />

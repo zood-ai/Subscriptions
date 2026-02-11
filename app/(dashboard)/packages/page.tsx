@@ -7,7 +7,6 @@ import {
 } from '@/components/CustomTable';
 import PageHeader from '@/components/PageHeader';
 import { PackageData } from '@/types/packages';
-import { useRouter } from 'next/navigation';
 import Form from './Form';
 
 const columns: Column<PackageData>[] = [
@@ -42,7 +41,6 @@ const actions: ActionOption[] = [
 ];
 
 export default function Packages() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Packages" Form={<Form />} />

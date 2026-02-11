@@ -7,7 +7,6 @@ import {
 } from '@/components/CustomTable';
 import PageHeader from '@/components/PageHeader';
 import { BusinessType } from '@/types/business';
-import { useRouter } from 'next/navigation';
 import Form from './Form';
 
 const columns: Column<BusinessType['businessType']>[] = [
@@ -28,7 +27,6 @@ const actions: ActionOption[] = [
 ];
 
 export default function BusinessTypes() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Business Type" Form={<Form />} />
