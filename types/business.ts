@@ -27,6 +27,12 @@ export interface BusinessCustomersData {
   notes: string;
 }
 
+export interface BusinessRolesData {
+  id: string;
+  name: string;
+  users: number;
+}
+
 export interface BusinessData {
   id: string;
   name: string;
