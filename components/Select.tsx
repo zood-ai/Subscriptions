@@ -21,6 +21,7 @@ interface CommonProps {
   isHidden?: boolean;
   isDefault?: boolean;
   optionDefaultLabel?: string;
+  searchKey?: string;
 }
 
 interface WithOptions extends CommonProps {

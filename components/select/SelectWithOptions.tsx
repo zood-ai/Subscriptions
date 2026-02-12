@@ -58,9 +58,9 @@ const SelectWithOptions: React.FC<SelectWithOptionsProps> = ({
     value: '',
   };
 
-  const [internalValue, setInternalValue] = useState<string | number | string[] | null>(
-    controlledValue ?? null
-  );
+  const [internalValue, setInternalValue] = useState<
+    string | number | string[] | null
+  >(controlledValue ?? null);
 
   useEffect(() => {
     if (controlledValue !== undefined) {

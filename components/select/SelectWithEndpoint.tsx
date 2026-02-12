@@ -34,6 +34,7 @@ interface SelectWithEndpointProps<T> {
   isHidden?: boolean;
   isDefault?: boolean;
   optionDefaultLabel?: string;
+  searchKey?: string;
 }
 
 type Additional = {
@@ -66,6 +67,7 @@ const SelectWithEndpoint = <T,>({
   isDefault = false,
   optionDefaultLabel = 'Choose one',
   isHidden = false,
+  searchKey = 'name',
 }: SelectWithEndpointProps<T>) => {
   const optionDefault: Option = useMemo(
     () => ({
@@ -95,7 +97,7 @@ const SelectWithEndpoint = <T,>({
         let url = `${endPoint}${separator}page=${page}`;
 
         if (search) {
-          url += `&search=${encodeURIComponent(search)}`;
+          url += `&${searchKey}=${encodeURIComponent(search)}`;
         }
 
         const res = await axiosInstance(url);
