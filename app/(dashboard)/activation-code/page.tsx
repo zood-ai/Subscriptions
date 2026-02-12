@@ -7,6 +7,7 @@ import {
 } from '@/components/CustomTable';
 import Form from './Form';
 import PageHeader from '@/components/PageHeader';
+import { Badge } from '@/components/ui/badge';
 
 interface ActivationCodeData {
   business_reference: string;
@@ -25,11 +26,10 @@ const columns: Column<ActivationCodeData>[] = [
     key: 'is_used',
     header: 'Is Used',
     render: (value) => (
-      <span
-        className={`${value === 0 ? 'text-red-500' : 'text-green-500'} font-semibold`}
-      >
-        {value === 0 ? 'No' : 'Yes'}
-      </span>
+      <Badge
+        variant={value ? 'success' : 'danger'}
+        label={value ? 'Yes' : 'No'}
+      />
     ),
   },
   { key: 'created_at', header: 'Created At', type: 'date' },
@@ -43,24 +43,9 @@ const filters: StatusFiltersTab[] = [
 const actions: ActionOption[] = [
   {
     label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
-  },
-  {
-    label: 'Active',
-    onClick: (selectedIds) => {
-      console.log('Activing items:', selectedIds);
-      alert(`Activing ${selectedIds.length} items`);
-    },
-  },
-  {
-    label: 'DeActive',
-    onClick: (selectedIds) => {
-      console.log('DeActiveing items:', selectedIds);
-      alert(`DeActiveing ${selectedIds.length} items`);
-    },
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
   },
 ];
 

@@ -40,9 +40,9 @@ const Filters = ({
 }: {
   statusFilters?: StatusFiltersTab[];
   filters?: AllowedFilters;
-  allFilters: Record<string, number | string | boolean>;
+  allFilters: Record<string, number | string | string[] | boolean>;
   setAllFilters: React.Dispatch<
-    React.SetStateAction<Record<string, number | string | boolean>>
+    React.SetStateAction<Record<string, number | string | string[] | boolean>>
   >;
   statusFilterKey: string;
   endPoint?: string;
@@ -60,7 +60,7 @@ const Filters = ({
 
   // Export Mutation
   const { mutateAsync: exportData, isPending: isExporting } = useCustomMutation<
-    Record<string, number | string | boolean>,
+    Record<string, number | string | string[] | boolean>,
     Blob
   >({
     api: exportEndPoint ? exportEndPoint : `${endPoint}/export`,
@@ -253,7 +253,7 @@ const Filters = ({
             <TableFilters
               filters={filters}
               data={allFilters}
-              onSubmit={(data: Record<string, number | string | boolean>) =>
+              onSubmit={(data: Record<string, number | string | string[] | boolean>) =>
                 setAllFilters(data)
               }
             />

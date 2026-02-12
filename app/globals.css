@@ -1,6 +1,9 @@
 @import 'tailwindcss';
-
 @import 'tw-animate-css';
+
+body {
+  font-family: var(--font-main), sans-serif;
+}
 
 :root {
   --card: oklch(1 0 0);

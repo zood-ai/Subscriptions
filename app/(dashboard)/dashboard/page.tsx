@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import AllStats from './components/Stats';
 import BarChar from './components/BarChar';
 import { CustomTable } from '@/components/CustomTable';
-import { useRouter } from 'next/navigation';
 import Select from '@/components/Select';
 import { Input } from '@/components/ui/input';
 import { topInvoicesColumns, topUserColumns } from './columns';
@@ -23,7 +22,6 @@ export default function Dashboard() {
   const [filters, setFilters] = useState<DashboardFilters>({
     status: 'all',
   });
-  const router = useRouter();
 
   const { data: stats, isFetching: statsLoading } =
     useCustomQuery<DashboardStats>({
