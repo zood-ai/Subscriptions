@@ -1,5 +1,4 @@
 export const ALL_PERMISSIONS = [
-  // صلاحيات الفواتير و الشراء
   'orders:read',
   'orders:manage',
   'orders:manage_tags',
@@ -14,37 +13,16 @@ export const ALL_PERMISSIONS = [
   'inventory_items:manage',
   'menu:read',
   'menu:manage',
-
-  // صلاحيات المخزون
-  'dashboard:inventory',
-  'inventory_count:drafts:manage',
-  'inventory_count:closed:manage',
-  'inventory_items:read',
-  'inventory_items:manage',
-  'menu:read',
-  'menu:manage',
-
-  // صلاحيات العملاء
   'customers:read',
   'customers:read_insights',
   'customers:manage',
   'customers:manage_house_account',
   'customers:manage_loyalty',
-
-  // صلاحيات الموردين
   'suppliers:read',
   'suppliers:manage',
-
-  // صلاحيات طرق الدفع
   'settings:manage_payment_methods',
-
-  // صلاحيات المستخدمين
   'users:manage',
-
-  // صلاحيات الفروع
   'branches:manage',
-
-  // صلاحيات الاعدادات
   'settings:manage',
   'settings:manage_taxes_and_groups',
   'settings:manage_charges',
@@ -55,23 +33,16 @@ export const ALL_PERMISSIONS = [
   'settings:manage_online_ordering',
   'settings:manage_price_tags',
   'settings:manage_notifications',
-
-  // صلاحيات عروض الأسعار (Price Quotes)
   'po:drafts:manage',
   'po:posted:manage',
   'po:approved:manage',
   'po:approved:receive',
-
-  // صلاحيات التقارير (Reports)
   'reports:other',
   'reports:inventory_control',
   'reports:inventory_levels',
   'reports:inventory_transactions',
   'reports:sales',
   'reports:cost_adjustment_history',
-
-  /* 
-  // Commented permissions - not used in current implementation
   'delivery-partners:read',
   'delivery-partners:read_insights',
   'delivery-partners:manage',
@@ -138,14 +109,20 @@ export const ALL_PERMISSIONS = [
   'cashier:perform_spot_check',
   'cashier:pay_without_close',
   'cashier:manage_account_setup',
-  */
+  'franchise:read',
+  'franchise:manage',
+  'sales_orders:read',
+  'sales_orders:manage',
+  'announcements:read',
+  'announcements:manage',
+  'requests_from_franchise:read',
+  'requests_from_franchise:manage',
 ];
 
-// Grouped permissions for better UX
+// For Zood Light
 export const PERMISSION_GROUPS = {
   invoices: {
     name: 'Invoices',
-    nameAr: 'الفواتير',
     permissions: [
       'orders:read',
       'orders:manage',
@@ -167,7 +144,6 @@ export const PERMISSION_GROUPS = {
 
   priceQuotes: {
     name: 'Price Quotes',
-    nameAr: 'عرض السعر',
     permissions: [
       'po:drafts:manage',
       'po:posted:manage',
@@ -190,7 +166,6 @@ export const PERMISSION_GROUPS = {
 
   purchasing: {
     name: 'Purchasing',
-    nameAr: 'المشتريات',
     permissions: [
       'purchasing:drafts:manage',
       'purchasing:closed:manage',
@@ -210,7 +185,6 @@ export const PERMISSION_GROUPS = {
 
   inventory: {
     name: 'Inventory',
-    nameAr: 'المخزون',
     permissions: [
       'dashboard:inventory',
       'inventory_count:drafts:manage',
@@ -224,7 +198,6 @@ export const PERMISSION_GROUPS = {
 
   customers: {
     name: 'Customers',
-    nameAr: 'العملاء',
     permissions: [
       'customers:read',
       'customers:read_insights',
@@ -236,13 +209,11 @@ export const PERMISSION_GROUPS = {
 
   suppliers: {
     name: 'Suppliers',
-    nameAr: 'الموردين',
     permissions: ['suppliers:read', 'suppliers:manage'],
   },
 
   reports: {
     name: 'Reports',
-    nameAr: 'التقارير',
     permissions: [
       'reports:other',
       'reports:inventory_control',
@@ -259,25 +230,21 @@ export const PERMISSION_GROUPS = {
 
   paymentMethods: {
     name: 'Payment Methods',
-    nameAr: 'طرق الدفع',
     permissions: ['settings:manage_payment_methods'],
   },
 
   users: {
     name: 'Users',
-    nameAr: 'المستخدمين',
     permissions: ['users:manage'],
   },
 
   branches: {
     name: 'Branches',
-    nameAr: 'الفروع',
     permissions: ['branches:manage'],
   },
 
   settings: {
     name: 'Settings',
-    nameAr: 'الاعدادات',
     permissions: [
       'users:manage',
       'branches:manage',
@@ -291,6 +258,293 @@ export const PERMISSION_GROUPS = {
       'settings:manage_online_ordering',
       'settings:manage_price_tags',
       'settings:manage_notifications',
+    ],
+  },
+};
+
+// For Control - Organized by category
+export const CONTROL_PERMISSION_GROUPS = {
+  order: {
+    name: 'Order Authorities',
+    permissions: [
+      { label: 'Read Orders', value: 'orders:read' },
+      { label: 'Manage Orders', value: 'orders:manage' },
+      { label: 'Manage Orders Tags', value: 'orders:manage_tags' },
+    ],
+  },
+
+  customer: {
+    name: 'Customer Authorities',
+    permissions: [
+      { label: 'Read Customers', value: 'customers:read' },
+      { label: 'Read Customers Insights', value: 'customers:read_insights' },
+      { label: 'Manage Customers', value: 'customers:manage' },
+      {
+        label: 'Manage Customers House Account',
+        value: 'customers:manage_house_account',
+      },
+      { label: 'Manage Customers Loyalty', value: 'customers:manage_loyalty' },
+    ],
+  },
+
+  deliveryPartners: {
+    name: 'Delivery Partners Authorities',
+    permissions: [
+      { label: 'Read Delivery Partners', value: 'delivery-partners:read' },
+      {
+        label: 'Read Delivery Partners Insights',
+        value: 'delivery-partners:read_insights',
+      },
+      { label: 'Manage Delivery Partners', value: 'delivery-partners:manage' },
+      {
+        label: 'Manage Delivery Partners House Account',
+        value: 'delivery-partners:manage_house_account',
+      },
+      {
+        label: 'Manage Delivery Partners Loyalty',
+        value: 'delivery-partners:manage_loyalty',
+      },
+    ],
+  },
+
+  franchising: {
+    name: 'Franchising Authorities',
+    permissions: [
+      { label: 'Read Franchise', value: 'franchise:read' },
+      { label: 'Manage Franchise', value: 'franchise:manage' },
+      { label: 'Read Sales Orders', value: 'sales_orders:read' },
+      { label: 'Manage Sales Orders', value: 'sales_orders:manage' },
+      { label: 'Read Announcements', value: 'announcements:read' },
+      { label: 'Manage Announcements', value: 'announcements:manage' },
+      {
+        label: 'Read Requests From Franchise',
+        value: 'requests_from_franchise:read',
+      },
+      {
+        label: 'Manage Requests From Franchise',
+        value: 'requests_from_franchise:manage',
+      },
+    ],
+  },
+
+  inventory: {
+    name: 'Inventory Authorities',
+    permissions: [
+      { label: 'Read Inventory Items', value: 'inventory_items:read' },
+      { label: 'Manage Inventory Items', value: 'inventory_items:manage' },
+      { label: 'Read Suppliers', value: 'suppliers:read' },
+      { label: 'Manage Suppliers', value: 'suppliers:manage' },
+      { label: 'Create Purchase Orders', value: 'po:drafts:manage' },
+      { label: 'Submit Purchase Orders', value: 'po:posted:manage' },
+      { label: 'Approve Purchase Orders', value: 'po:approved:manage' },
+      { label: 'View Approved Purchase Orders', value: 'po:approved:receive' },
+      { label: 'Create Transfer Orders', value: 'to:drafts:manage' },
+      { label: 'Submit Transfer Orders', value: 'to:approved:manage' },
+      { label: 'Create Transfers', value: 'transfers:drafts:manage' },
+      { label: 'Send Transfers', value: 'transfers:closed:manage' },
+      { label: 'Receive Transfers', value: 'transfers:recieved:manage' },
+      { label: 'Create Purchasing', value: 'purchasing:drafts:manage' },
+      { label: 'Submit Purchasing', value: 'purchasing:closed:manage' },
+      {
+        label: 'Create Purchasing From PO',
+        value: 'purchasing_from_po:drafts:manage',
+      },
+      {
+        label: 'Create Direct Purchasing',
+        value: 'direct_purchasing:drafts:manage',
+      },
+      { label: 'Create Production', value: 'production:drafts:manage' },
+      { label: 'Submit Production', value: 'production:closed:manage' },
+      {
+        label: 'Create Quantity Adjustment',
+        value: 'quantity_adjustment:drafts:manage',
+      },
+      {
+        label: 'Submit Quantity Adjustment',
+        value: 'quantity_adjustment:closed:manage',
+      },
+      {
+        label: 'Create Cost Adjustment',
+        value: 'cost_adjustment:drafts:manage',
+      },
+      {
+        label: 'Submit Cost Adjustment',
+        value: 'cost_adjustment:closed:manage',
+      },
+      {
+        label: 'Create Inventory Count',
+        value: 'inventory_count:drafts:manage',
+      },
+      {
+        label: 'Submit Inventory Count',
+        value: 'inventory_count:closed:manage',
+      },
+      { label: 'Read Order Transactions', value: 'order_transactions:read' },
+      {
+        label: 'Create Inventory Spot Check',
+        value: 'spot_check:drafts:manage',
+      },
+      {
+        label: 'Submit Inventory Spot Check',
+        value: 'spot_check:closed:manage',
+      },
+      {
+        label: 'Read Inventory Count Sheet',
+        value: 'count_sheet:drafts:manage',
+      },
+    ],
+  },
+
+  menu: {
+    name: 'Menu Authorities',
+    permissions: [
+      { label: 'Read Menu', value: 'menu:read' },
+      { label: 'Manage Menu', value: 'menu:manage' },
+    ],
+  },
+
+  other: {
+    name: 'Other Authorities',
+    permissions: [
+      { label: 'Manage Ingredients', value: 'ingredients:manage' },
+      { label: 'Manage Costs', value: 'cost:manage' },
+    ],
+  },
+
+  admin: {
+    name: 'Admin Authorities',
+    permissions: [
+      { label: 'Manage Branches', value: 'branches:manage' },
+      { label: 'Manage Coupons', value: 'coupons:manage' },
+      { label: 'Manage Devices', value: 'devices:manage' },
+      { label: 'Manage Discounts', value: 'discounts:manage' },
+      { label: 'Manage Gift Cards', value: 'gift_cards:manage' },
+      { label: 'Manage Promotions', value: 'promotions:manage' },
+      { label: 'Manage Settings', value: 'settings:manage' },
+      { label: 'Manage Delivery Zones', value: 'delivery_zones:manage' },
+      { label: 'Manage Timed Events', value: 'timed_events:manage' },
+      { label: 'Manage Users', value: 'users:manage' },
+      { label: 'Manage Apps', value: 'apps:manage' },
+      {
+        label: 'Manage Taxes & Tax Groups',
+        value: 'settings:manage_taxes_and_groups',
+      },
+      { label: 'Payment Methods', value: 'settings:manage_payment_methods' },
+      { label: 'Manage Charges', value: 'settings:manage_charges' },
+      { label: 'Manage Tags', value: 'settings:manage_tags' },
+      { label: 'Manage Reasons', value: 'settings:manage_reasons' },
+      { label: 'Manage Kitchen Flows', value: 'settings:manage_kitchen_flows' },
+      { label: 'Manage Reservations', value: 'settings:manage_reservations' },
+      {
+        label: 'Manage Online Ordering',
+        value: 'settings:manage_online_ordering',
+      },
+      { label: 'Manage Price Tags', value: 'settings:manage_price_tags' },
+      { label: 'Manage Notifications', value: 'settings:manage_notifications' },
+    ],
+  },
+
+  reports: {
+    name: 'Reports Authorities',
+    permissions: [
+      {
+        label: 'View Inventory Control Report',
+        value: 'reports:inventory_control',
+      },
+      {
+        label: 'View Inventory Levels Report',
+        value: 'reports:inventory_levels',
+      },
+      {
+        label: 'Inventory Transactions Reports',
+        value: 'reports:inventory_transactions',
+      },
+      { label: 'View Other Reports', value: 'reports:other' },
+      { label: 'View Sales Reports', value: 'reports:sales' },
+      {
+        label: 'View Cost Adjustment History Report',
+        value: 'reports:cost_adjustment_history',
+      },
+    ],
+  },
+
+  dashboard: {
+    name: 'Dashboard Authorities',
+    permissions: [
+      { label: 'Access General Dashboard', value: 'dashboard:general' },
+      { label: 'Access Branches Dashboard', value: 'dashboard:branches' },
+      { label: 'Access Inventory Dashboard', value: 'dashboard:inventory' },
+      { label: 'Access Call Center Dashboard', value: 'dashboard:call_center' },
+    ],
+  },
+
+  marketplace: {
+    name: 'Marketplace Authorities',
+    permissions: [{ label: 'Manage Marketplace', value: 'marketplace:manage' }],
+  },
+
+  cashierApp: {
+    name: 'Cashier App Authorities',
+    permissions: [
+      { label: 'Access Cash Register', value: 'cashier:access_cash_register' },
+      {
+        label: 'Access Devices Management',
+        value: 'cashier:access_device_management',
+      },
+      { label: 'Access Reports', value: 'cashier:access_reports' },
+      { label: 'Act as Driver', value: 'cashier:act_as_driver' },
+      { label: 'Act as Waiter', value: 'cashier:act_as_waiter' },
+      { label: 'Add Open Charge', value: 'cashier:add_open_charge' },
+      {
+        label: 'Add Open Price Product',
+        value: 'cashier:add_open_price_product',
+      },
+      { label: 'Apply Ahead Orders', value: 'cashier:ahead_orders' },
+      { label: 'Apply Predefined Discounts', value: 'cashier:apply_discount' },
+      { label: 'Apply Open Discounts', value: 'cashier:apply_open_discount' },
+      {
+        label: 'Edit Products Sent to Kitchen',
+        value: 'cashier:edit_products_sent_to_kitchen',
+      },
+      { label: 'Join Order', value: 'cashier:join_order' },
+      { label: 'Access Drawer Operations', value: 'cashier:open_cash_drawer' },
+      { label: 'Perform End of Day', value: 'cashier:perform_end_of_day' },
+      { label: 'Print Check', value: 'cashier:print_check' },
+      { label: 'Print Receipt', value: 'cashier:print_receipt' },
+      { label: 'Return Order', value: 'cashier:return_order' },
+      { label: 'Split Order', value: 'cashier:split_order' },
+      { label: 'View Done Orders', value: 'cashier:view_done_orders' },
+      { label: 'Void Orders and Products', value: 'cashier:void' },
+      { label: 'Perform Payment', value: 'cashier:perform_payment' },
+      {
+        label: 'Edit Orders Opened by Other Users',
+        value: 'cashier:edit_other_users_orders',
+      },
+      { label: 'Change Table Owner', value: 'cashier:change_table_owner' },
+      {
+        label: 'Register Users Fingerprint',
+        value: 'cashier:enroll_fingerprints',
+      },
+      {
+        label: 'Send to Kitchen Before Payment',
+        value: 'cashier:send_to_kitchen_before_payment',
+      },
+      { label: 'Kitchen Reprint', value: 'cashier:kitchen_reprint' },
+      { label: 'Edit Tables Layout', value: 'cashier:edit_tables_layout' },
+      {
+        label: 'Close Till/Shift With Active Orders',
+        value: 'cashier:close_till_shift_with_active_orders',
+      },
+      {
+        label: 'Manage Product Availability',
+        value: 'cashier:manage_product_availability',
+      },
+      { label: 'Perform Spot Check', value: 'cashier:perform_spot_check' },
+      {
+        label: 'Pay Orders Without Closing',
+        value: 'cashier:pay_without_close',
+      },
+      { label: 'Account Setup', value: 'cashier:manage_account_setup' },
     ],
   },
 };

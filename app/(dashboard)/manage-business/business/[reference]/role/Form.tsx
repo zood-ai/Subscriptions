@@ -7,7 +7,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
-import { PERMISSION_GROUPS, ALL_PERMISSIONS } from '@/constants/permissions';
+import {
+  PERMISSION_GROUPS,
+  ALL_PERMISSIONS,
+  CONTROL_PERMISSION_GROUPS,
+} from '@/constants/permissions';
+import Select from '@/components/Select';
+import { useState } from 'react';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Role name is required'),
@@ -27,6 +33,11 @@ interface FormState {
   authorities: string[];
 }
 
+const projectOptions = [
+  { label: 'Zood Light', value: 'zoodLightPermissions' },
+  { label: 'Control', value: 'controlPermissions' },
+];
+
 export default function RoleForm({
   id = '',
   isEdit = false,
@@ -37,6 +48,8 @@ export default function RoleForm({
   data?: FormState;
 }) {
   const router = useRouter();
+  const [selectedProject, setSelectedProject] = useState<string>('');
+
   const {
     register,
     handleSubmit,
@@ -104,6 +117,41 @@ export default function RoleForm({
     }
   };
 
+  const handleToggleControlGroup = (groupKey: string, checked: boolean) => {
+    const currentAuthorities = getValues('authorities') || [];
+    const groupPermissions =
+      CONTROL_PERMISSION_GROUPS[
+        groupKey as keyof typeof CONTROL_PERMISSION_GROUPS
+      ].permissions;
+
+    // Extract only the values (strings) from permission objects
+    const permissionValues = groupPermissions.map((p) => p.value);
+
+    if (checked) {
+      const newAuthorities = [
+        ...new Set([...currentAuthorities, ...permissionValues]),
+      ];
+      setValue('authorities', newAuthorities);
+    } else {
+      const newAuthorities = currentAuthorities.filter(
+        (auth) => !permissionValues.includes(auth)
+      );
+      setValue('authorities', newAuthorities);
+    }
+  };
+
+  const handleTogglePermission = (permission: string, checked: boolean) => {
+    const currentAuthorities = getValues('authorities') || [];
+    if (checked) {
+      setValue('authorities', [...currentAuthorities, permission]);
+    } else {
+      setValue(
+        'authorities',
+        currentAuthorities.filter((p) => p !== permission)
+      );
+    }
+  };
+
   const isAllSelected = () => {
     const currentAuthorities = getValues('authorities') || [];
     return (
@@ -122,6 +170,33 @@ export default function RoleForm({
     );
   };
 
+  const isControlGroupSelected = (groupKey: string) => {
+    const currentAuthorities = getValues('authorities') || [];
+    const groupPermissions =
+      CONTROL_PERMISSION_GROUPS[
+        groupKey as keyof typeof CONTROL_PERMISSION_GROUPS
+      ].permissions;
+
+    // Extract only the values (strings) from permission objects
+    const permissionValues = groupPermissions.map((p) => p.value);
+
+    return (
+      permissionValues.length > 0 &&
+      permissionValues.every((perm) => currentAuthorities.includes(perm))
+    );
+  };
+
+  const isPermissionSelected = (permission: string) => {
+    const currentAuthorities = getValues('authorities') || [];
+    return currentAuthorities.includes(permission);
+  };
+
+  const handleProjectChange = (value: string) => {
+    setSelectedProject(value);
+    // Reset permissions when changing project
+    setValue('authorities', []);
+  };
+
   const btnText = isEdit ? 'Update' : 'Create';
 
   return (
@@ -136,6 +211,20 @@ export default function RoleForm({
           required
         />
 
+        {/* Project Selection */}
+        <div className="space-y-2">
+          <Select
+            label="Project"
+            value={selectedProject}
+            onChange={(value) => {
+              handleProjectChange(value as string);
+            }}
+            options={projectOptions}
+            required
+          />
+        </div>
+
+        {/* Permissions Section */}
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
@@ -148,38 +237,133 @@ export default function RoleForm({
             )}
           </div>
 
-          <div className="border rounded-md p-6 bg-white">
-            <div className="flex items-center gap-2 space-x-2 mb-6 pb-4 border-b">
-              <Checkbox
-                checked={isAllSelected()}
-                onCheckedChange={(checked) =>
-                  handleToggleAll(checked as boolean)
-                }
-              />
-              <label className="text-base font-bold leading-none cursor-pointer select-none">
-                Toggle All Permissions
-              </label>
-            </div>
-
-            <div className="space-y-3">
-              {Object.entries(PERMISSION_GROUPS).map(([groupKey, group]) => (
-                <div
-                  key={groupKey}
-                  className="flex items-center space-x-2 gap-2 p-4 rounded bg-gray-50 hover:bg-gray-100 transition-colors"
-                >
-                  <Checkbox
-                    checked={isGroupSelected(groupKey)}
-                    onCheckedChange={(checked) =>
-                      handleToggleGroup(groupKey, checked as boolean)
-                    }
-                  />
-                  <label className="text-sm font-medium leading-none cursor-pointer select-none flex-1">
-                    {group.name}
-                  </label>
+          {!selectedProject ? (
+            // Show message when no project is selected
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 bg-gray-50">
+              <div className="flex flex-col items-center justify-center text-center space-y-3">
+                <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
+                  <svg
+                    className="w-8 h-8 text-blue-600"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
+                  </svg>
                 </div>
-              ))}
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                    Select Project First
+                  </h3>
+                  <p className="text-gray-600 text-sm">
+                    Please select a project from the dropdown above to view
+                    available permissions
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : selectedProject === 'zoodLightPermissions' ? (
+            // Zood Light - Show Permission Groups
+            <div className="border rounded-md p-6 bg-white">
+              <div className="flex items-center gap-2 space-x-2 mb-6 pb-4 border-b">
+                <Checkbox
+                  checked={isAllSelected()}
+                  onCheckedChange={(checked) =>
+                    handleToggleAll(checked as boolean)
+                  }
+                />
+                <label className="text-base font-bold leading-none cursor-pointer select-none">
+                  Toggle All Permissions
+                </label>
+              </div>
+
+              <div className="space-y-3">
+                {Object.entries(PERMISSION_GROUPS).map(([groupKey, group]) => (
+                  <div
+                    key={groupKey}
+                    className="flex items-center space-x-2 gap-2 p-4 rounded bg-gray-50 hover:bg-gray-100 transition-colors"
+                  >
+                    <Checkbox
+                      checked={isGroupSelected(groupKey)}
+                      onCheckedChange={(checked) =>
+                        handleToggleGroup(groupKey, checked as boolean)
+                      }
+                    />
+                    <label className="text-sm font-medium leading-none cursor-pointer select-none flex-1">
+                      {group.name}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : selectedProject === 'controlPermissions' ? (
+            // Control - Show Organized Permission Groups
+            <div className="border rounded-md p-6 bg-white">
+              <div className="flex items-center gap-2 space-x-2 mb-6 pb-4 border-b">
+                <Checkbox
+                  checked={isAllSelected()}
+                  onCheckedChange={(checked) =>
+                    handleToggleAll(checked as boolean)
+                  }
+                />
+                <label className="text-base font-bold leading-none cursor-pointer select-none">
+                  Toggle All
+                </label>
+              </div>
+
+              <div className="space-y-6">
+                {Object.entries(CONTROL_PERMISSION_GROUPS).map(
+                  ([groupKey, group]) => (
+                    <div key={groupKey} className="space-y-3">
+                      {/* Group Header */}
+                      <div className="flex items-center gap-2 pb-2 border-b-2 border-gray-200">
+                        <Checkbox
+                          checked={isControlGroupSelected(groupKey)}
+                          onCheckedChange={(checked) =>
+                            handleToggleControlGroup(
+                              groupKey,
+                              checked as boolean
+                            )
+                          }
+                        />
+                        <h3 className="text-sm font-bold text-gray-900">
+                          {group.name}
+                        </h3>
+                      </div>
+
+                      {/* Permissions Grid */}
+                      <div className="space-y-3">
+                        {group.permissions.map((permission) => (
+                          <div
+                            key={permission.value}
+                            className="flex items-center space-x-2 gap-2 p-2 rounded hover:bg-gray-50 transition-colors"
+                          >
+                            <Checkbox
+                              checked={isPermissionSelected(permission.value)}
+                              onCheckedChange={(checked) =>
+                                handleTogglePermission(
+                                  permission.value,
+                                  checked as boolean
+                                )
+                              }
+                            />
+                            <label className="text-xs font-medium leading-none cursor-pointer select-none flex-1">
+                              {permission.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          ) : null}
         </div>
       </div>
 
