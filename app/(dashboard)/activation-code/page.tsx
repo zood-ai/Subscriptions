@@ -25,12 +25,12 @@ const columns: Column<ActivationCodeData>[] = [
   {
     key: 'is_used',
     header: 'Is Used',
-    render: (value) =>
-      value === 0 ? (
-        <Badge variant="danger" label="No" />
-      ) : (
-        <Badge variant="success" label="Yes" />
-      ),
+    render: (value) => (
+      <Badge
+        variant={value ? 'success' : 'danger'}
+        label={value ? 'Yes' : 'No'}
+      />
+    ),
   },
   { key: 'created_at', header: 'Created At', type: 'date' },
 ];

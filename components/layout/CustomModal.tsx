@@ -5,7 +5,7 @@ import { X } from 'lucide-react';
 import { useModal } from '@/context/ModalContext';
 
 interface CustomModalProps {
-  btnTrigger: React.ReactElement;
+  btnTrigger?: React.ReactElement;
   children: React.ReactNode;
   opened?: boolean;
   onClose?: () => void;
@@ -77,9 +77,11 @@ const CustomModal: React.FC<CustomModalProps> = ({
 
   return (
     <div>
-      <div role="button" onClick={() => open(id)}>
-        {btnTrigger}
-      </div>
+      {btnTrigger && (
+        <div role="button" onClick={() => open(id)}>
+          {btnTrigger}
+        </div>
+      )}
       {isOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 transition-opacity"

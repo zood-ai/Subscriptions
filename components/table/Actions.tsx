@@ -67,10 +67,9 @@ const Actions = ({
           <ChevronDown className="h-4 w-4" />
         </div>
       )}
-      {selectedAction !== null && (
+      {selectedAction && (
         <CustomModal
           title={selectedAction.label}
-          btnTrigger={<></>}
           opened={true}
           onClose={() => setSelectedAction(null)}
         >
