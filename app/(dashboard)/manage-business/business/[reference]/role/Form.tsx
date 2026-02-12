@@ -34,8 +34,8 @@ interface FormState {
 }
 
 const projectOptions = [
-  { label: 'Zood Light', value: 'zoodLightPermissions' },
-  { label: 'Control', value: 'controlPermissions' },
+  { label: 'Zood Light', value: 'zood-light' },
+  { label: 'Control', value: 'control' },
 ];
 
 export default function RoleForm({
@@ -71,9 +71,7 @@ export default function RoleForm({
     FormData,
     CreateResponse
   >({
-    api: isEdit
-      ? `https://api.zood.ai/api/v1/hr/roles/${id}`
-      : 'https://api.zood.ai/api/v1/hr/roles',
+    api: isEdit ? `v1/super-admin/roles/${id}` : 'v1/super-admin/roles',
     method: isEdit ? 'PUT' : 'POST',
     invalidateQueryKeys: isEdit ? ['roles', id] : ['roles'],
     options: {
@@ -124,7 +122,6 @@ export default function RoleForm({
         groupKey as keyof typeof CONTROL_PERMISSION_GROUPS
       ].permissions;
 
-    // Extract only the values (strings) from permission objects
     const permissionValues = groupPermissions.map((p) => p.value);
 
     if (checked) {
@@ -177,7 +174,6 @@ export default function RoleForm({
         groupKey as keyof typeof CONTROL_PERMISSION_GROUPS
       ].permissions;
 
-    // Extract only the values (strings) from permission objects
     const permissionValues = groupPermissions.map((p) => p.value);
 
     return (
@@ -193,7 +189,6 @@ export default function RoleForm({
 
   const handleProjectChange = (value: string) => {
     setSelectedProject(value);
-    // Reset permissions when changing project
     setValue('authorities', []);
   };
 
@@ -211,7 +206,6 @@ export default function RoleForm({
           required
         />
 
-        {/* Project Selection */}
         <div className="space-y-2">
           <Select
             label="Project"
@@ -224,7 +218,6 @@ export default function RoleForm({
           />
         </div>
 
-        {/* Permissions Section */}
         <div className="space-y-4">
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium">
@@ -238,7 +231,6 @@ export default function RoleForm({
           </div>
 
           {!selectedProject ? (
-            // Show message when no project is selected
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-12 bg-gray-50">
               <div className="flex flex-col items-center justify-center text-center space-y-3">
                 <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
@@ -267,8 +259,7 @@ export default function RoleForm({
                 </div>
               </div>
             </div>
-          ) : selectedProject === 'zoodLightPermissions' ? (
-            // Zood Light - Show Permission Groups
+          ) : selectedProject === 'zood-light' ? (
             <div className="border rounded-md p-6 bg-white">
               <div className="flex items-center gap-2 space-x-2 mb-6 pb-4 border-b">
                 <Checkbox
@@ -301,8 +292,7 @@ export default function RoleForm({
                 ))}
               </div>
             </div>
-          ) : selectedProject === 'controlPermissions' ? (
-            // Control - Show Organized Permission Groups
+          ) : selectedProject === 'control' ? (
             <div className="border rounded-md p-6 bg-white">
               <div className="flex items-center gap-2 space-x-2 mb-6 pb-4 border-b">
                 <Checkbox
@@ -320,7 +310,6 @@ export default function RoleForm({
                 {Object.entries(CONTROL_PERMISSION_GROUPS).map(
                   ([groupKey, group]) => (
                     <div key={groupKey} className="space-y-3">
-                      {/* Group Header */}
                       <div className="flex items-center gap-2 pb-2 border-b-2 border-gray-200">
                         <Checkbox
                           checked={isControlGroupSelected(groupKey)}
@@ -336,7 +325,6 @@ export default function RoleForm({
                         </h3>
                       </div>
 
-                      {/* Permissions Grid */}
                       <div className="space-y-3">
                         {group.permissions.map((permission) => (
                           <div
