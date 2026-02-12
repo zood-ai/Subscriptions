@@ -11,8 +11,8 @@ interface CommonProps {
   onFocus?: () => void;
   errorText?: string;
   required?: boolean;
-  value?: string | number | null;
-  onChange?: (value: string | number) => void;
+  value?: string | number | string[] | null;
+  onChange?: (value: string | number | string[]) => void;
   onValueChange?: (option: Option | null) => void;
   className?: string;
   parentClassName?: string;
@@ -21,6 +21,7 @@ interface CommonProps {
   isHidden?: boolean;
   isDefault?: boolean;
   optionDefaultLabel?: string;
+  searchKey?: string;
 }
 
 interface WithOptions extends CommonProps {

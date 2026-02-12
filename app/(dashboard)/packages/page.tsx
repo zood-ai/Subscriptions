@@ -7,7 +7,6 @@ import {
 } from '@/components/CustomTable';
 import PageHeader from '@/components/PageHeader';
 import { PackageData } from '@/types/packages';
-import { useRouter } from 'next/navigation';
 import Form from './Form';
 
 const columns: Column<PackageData>[] = [
@@ -34,15 +33,13 @@ const filters: StatusFiltersTab[] = [
 const actions: ActionOption[] = [
   {
     label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
   },
 ];
 
 export default function Packages() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Packages" Form={<Form />} />

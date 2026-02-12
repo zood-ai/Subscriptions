@@ -5,14 +5,17 @@ import { useRouter } from 'next/navigation';
 import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { Input } from './ui/input';
 import Select, { Option } from './Select';
+import { QueryKey, useQueryClient } from '@tanstack/react-query';
 
 interface InputWithOption {
   type?: never;
+  value?: string;
   options: Option[];
 }
 
 interface InputWithType {
-  type: 'text';
+  type: 'text' | 'array';
+  value?: string | string[];
   options?: never;
 }
 
@@ -21,7 +24,6 @@ export type Input = {
   label: string;
   isHidden?: boolean;
   isRequired?: boolean;
-  value?: string;
 } & (InputWithOption | InputWithType);
 
 type ActionPopUpProps = {
@@ -31,9 +33,10 @@ type ActionPopUpProps = {
   backUrl?: string;
   message?: string;
   inputs?: Input[];
+  invalidateQueryKeys?: QueryKey;
 };
 
-type FormData = Record<string, string>;
+type FormData = Record<string, string | string[]>;
 
 const ActionPopUp = ({
   endPoint,
@@ -42,8 +45,10 @@ const ActionPopUp = ({
   backUrl,
   message,
   inputs = [],
+  invalidateQueryKeys = [],
 }: ActionPopUpProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const defaultValues = inputs.reduce<FormData>((acc, item) => {
     if (item.value !== undefined) {
       acc[item.key] = item.value ?? '';
@@ -68,6 +73,7 @@ const ActionPopUp = ({
     options: {
       onSuccess: () => {
         if (backUrl) router.push(backUrl);
+        queryClient.invalidateQueries({ queryKey: invalidateQueryKeys });
       },
     },
   });
@@ -123,7 +129,7 @@ const ActionPopUp = ({
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
         <Button
           type="submit"
-          variant="danger"
+          variant={method === 'DELETE' ? 'danger' : 'primary'}
           disabled={isPending}
           loading={isPending}
           className={`${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}

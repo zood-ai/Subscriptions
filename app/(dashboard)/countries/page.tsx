@@ -4,7 +4,6 @@ import {
   type Column,
   type ActionOption,
 } from '@/components/CustomTable';
-import { useRouter } from 'next/navigation';
 import { Country } from '@/types/countries';
 import Form from './Form';
 import PageHeader from '@/components/PageHeader';
@@ -27,15 +26,13 @@ const columns: Column<Country>[] = [
 const actions: ActionOption[] = [
   {
     label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
   },
 ];
 
 export default function CountriesPage() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Country" Form={<Form />} />

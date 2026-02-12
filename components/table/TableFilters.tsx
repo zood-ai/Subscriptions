@@ -14,16 +14,21 @@ export interface AllowedFilters {
 
 interface TableFiltersProps {
   filters: AllowedFilters;
-  data: Record<string, number | string | boolean>;
-  onSubmit: (data: Record<string, number | string | boolean>) => void;
+  data: Record<string, number | string | string[] | boolean>;
+  onSubmit: (
+    data: Record<string, number | string | string[] | boolean>
+  ) => void;
 }
 
 const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
   const [allFilters, setAllFilters] = useState<
-    Record<string, number | string | boolean>
+    Record<string, number | string | boolean | string[]>
   >({});
 
-  const handleChnage = (filed: string, value: number | string | boolean) => {
+  const handleChnage = (
+    filed: string,
+    value: number | string | string[] | boolean
+  ) => {
     setAllFilters((prev) => ({
       ...prev,
       [filed]: value,
@@ -64,7 +69,8 @@ const TableFilters = ({ filters = {}, data, onSubmit }: TableFiltersProps) => {
         {filters.showBusinessType && (
           <Select
             label="Business Type"
-            value={(allFilters?.type as string) ?? ''}
+            value={(allFilters?.businessType as string) ?? ''}
+            itemResponseDataKey="businessType"
             onChange={(value) => handleChnage('businessType', value)}
             endPoint="v1/super-admin/businessTypes"
             labelKey="name"

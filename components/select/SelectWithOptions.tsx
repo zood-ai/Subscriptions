@@ -18,8 +18,8 @@ interface SelectWithOptionsProps {
   onFocus?: () => void;
   errorText?: string;
   required?: boolean;
-  value?: string | number | null;
-  onChange?: (value: string | number) => void;
+  value?: string | number | string[] | null;
+  onChange?: (value: string | number | string[]) => void;
   onValueChange?: (option: Option | null) => void;
   loading?: boolean;
   className?: string;
@@ -58,9 +58,9 @@ const SelectWithOptions: React.FC<SelectWithOptionsProps> = ({
     value: '',
   };
 
-  const [internalValue, setInternalValue] = useState<string | number | null>(
-    controlledValue ?? null
-  );
+  const [internalValue, setInternalValue] = useState<
+    string | number | string[] | null
+  >(controlledValue ?? null);
 
   useEffect(() => {
     if (controlledValue !== undefined) {
@@ -98,11 +98,7 @@ const SelectWithOptions: React.FC<SelectWithOptionsProps> = ({
     >
       {!isHidden && label && (
         <div className="flex items-center mb-2">
-          <Label
-            className={`text-sm font-medium text-gray-700 ${labelClassName}`}
-          >
-            {label}
-          </Label>
+          <Label className={`${labelClassName}`}>{label}</Label>
           {required && <span className="text-red-500 ml-1">*</span>}
         </div>
       )}

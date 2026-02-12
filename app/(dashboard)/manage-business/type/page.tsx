@@ -7,7 +7,6 @@ import {
 } from '@/components/CustomTable';
 import PageHeader from '@/components/PageHeader';
 import { BusinessType } from '@/types/business';
-import { useRouter } from 'next/navigation';
 import Form from './Form';
 
 const columns: Column<BusinessType['businessType']>[] = [
@@ -20,15 +19,13 @@ const filters: StatusFiltersTab[] = [{ label: 'Deleted', value: 'true' }];
 const actions: ActionOption[] = [
   {
     label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
   },
 ];
 
 export default function BusinessTypes() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Business Type" Form={<Form />} />

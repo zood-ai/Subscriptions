@@ -8,9 +8,12 @@ import {
 import PageHeader from '@/components/PageHeader';
 import { Badge } from '@/components/ui/badge';
 import { BusinessData } from '@/types/business';
-import { useRouter } from 'next/navigation';
 import Form from './Form';
-import { isBusinessExpired, isBusinessExpiringSoon } from '@/constants/global';
+import {
+  activationCodePeriods,
+  isBusinessExpired,
+  isBusinessExpiringSoon,
+} from '@/constants/global';
 
 const columns: Column<BusinessData>[] = [
   { key: 'name', header: 'Name' },
@@ -59,15 +62,70 @@ const filters: StatusFiltersTab[] = [
 const actions: ActionOption[] = [
   {
     label: 'Delete',
-    onClick: (selectedIds) => {
-      console.log('Deleting items:', selectedIds);
-      alert(`Deleting ${selectedIds.length} items`);
-    },
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
+  },
+  {
+    label: 'Active',
+    actionType: 'active',
+    method: 'PUT',
+    inputs: [
+      {
+        key: 'months',
+        label: 'Subscription period',
+        value: '12',
+        options: activationCodePeriods,
+        isRequired: true,
+      },
+    ],
+  },
+  {
+    label: 'Block',
+    actionType: 'block',
+    method: 'PUT',
+    inputs: [
+      {
+        key: 'reason',
+        label: 'Reason',
+        value: '',
+        isRequired: true,
+        type: 'text',
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        value: '0',
+        type: 'text',
+        isHidden: true,
+      },
+    ],
+  },
+  {
+    label: 'UnBlock',
+    actionType: 'unblock',
+    method: 'PUT',
+    message: 'Are you sure you want to unblock these?',
+    inputs: [
+      {
+        key: 'reason',
+        label: 'Reason',
+        value: '',
+        type: 'text',
+        isHidden: true,
+      },
+      {
+        key: 'active',
+        label: 'Active',
+        value: '1',
+        type: 'text',
+        isHidden: true,
+      },
+    ],
   },
 ];
 
 export default function Businesses() {
-  const router = useRouter();
   return (
     <>
       <PageHeader title="Business" Form={<Form />} />

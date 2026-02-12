@@ -45,6 +45,11 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     { title: 'Owner email', value: data?.business.owner_email },
     { title: 'Created at', value: formatDate(data?.business.created_at ?? '') },
     { title: 'End at', value: formatDate(data?.business.end_at ?? '') },
+    {
+      title: 'Block reason',
+      value: data?.business.reason,
+      isHidden: !!data?.business.active,
+    },
   ];
 
   const tables = [
