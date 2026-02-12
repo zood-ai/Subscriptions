@@ -2,18 +2,18 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import Select from '@/components/Select';
 import { useRouter } from 'next/navigation';
-import { deviceTypes } from '@/constants/global';
+import { Checkbox } from '@/components/ui/checkbox';
+import { PERMISSION_GROUPS, ALL_PERMISSIONS } from '@/constants/permissions';
 
 const formSchema = z.object({
-  type: z.string().optional(),
-  name: z.string().min(1, 'Name is required'),
-  reference: z.string().min(1, 'Reference is required'),
-  branch: z.string().min(1, 'Branch is required'),
+  name: z.string().min(1, 'Role name is required'),
+  authorities: z
+    .array(z.string())
+    .min(1, 'Please select at least one permission'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -23,22 +23,18 @@ interface CreateResponse {
 }
 
 interface FormState {
-  type?: string;
   name: string;
-  reference: string;
-  branch: string;
+  authorities: string[];
 }
 
-export default function Form({
+export default function RoleForm({
   id = '',
   isEdit = false,
   data,
-  reference,
 }: {
   id?: string;
   isEdit?: boolean;
   data?: FormState;
-  reference: string;
 }) {
   const router = useRouter();
   const {
@@ -46,13 +42,13 @@ export default function Form({
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
+    getValues,
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: data?.type || '',
       name: data?.name || '',
-      reference: data?.reference || '',
-      branch: data?.branch || '',
+      authorities: data?.authorities || [],
     },
   });
 
@@ -63,16 +59,16 @@ export default function Form({
     CreateResponse
   >({
     api: isEdit
-      ? `v1/super-admin/business/${reference}/devices/${id}`
-      : `v1/super-admin/business/${reference}/devices`,
+      ? `https://api.zood.ai/api/v1/hr/roles/${id}`
+      : 'https://api.zood.ai/api/v1/hr/roles',
     method: isEdit ? 'PUT' : 'POST',
-    invalidateQueryKeys: isEdit ? ['devices', reference, id] : [],
+    invalidateQueryKeys: isEdit ? ['roles', id] : ['roles'],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
-          router.push(
-            `/manage-business/business/${reference}/device/${data.id}`
-          );
+          router.push(`/roles/${data.id}`);
+        } else {
+          router.push('/roles');
         }
       },
     },
@@ -82,60 +78,111 @@ export default function Form({
     mutate(data);
   };
 
+  const handleToggleAll = (checked: boolean) => {
+    if (checked) {
+      setValue('authorities', [...ALL_PERMISSIONS]);
+    } else {
+      setValue('authorities', []);
+    }
+  };
+
+  const handleToggleGroup = (groupKey: string, checked: boolean) => {
+    const currentAuthorities = getValues('authorities') || [];
+    const groupPermissions =
+      PERMISSION_GROUPS[groupKey as keyof typeof PERMISSION_GROUPS].permissions;
+
+    if (checked) {
+      const newAuthorities = [
+        ...new Set([...currentAuthorities, ...groupPermissions]),
+      ];
+      setValue('authorities', newAuthorities);
+    } else {
+      const newAuthorities = currentAuthorities.filter(
+        (auth) => !groupPermissions.includes(auth)
+      );
+      setValue('authorities', newAuthorities);
+    }
+  };
+
+  const isAllSelected = () => {
+    const currentAuthorities = getValues('authorities') || [];
+    return (
+      currentAuthorities.length > 0 &&
+      ALL_PERMISSIONS.every((perm) => currentAuthorities.includes(perm))
+    );
+  };
+
+  const isGroupSelected = (groupKey: string) => {
+    const currentAuthorities = getValues('authorities') || [];
+    const groupPermissions =
+      PERMISSION_GROUPS[groupKey as keyof typeof PERMISSION_GROUPS].permissions;
+    return (
+      groupPermissions.length > 0 &&
+      groupPermissions.every((perm) => currentAuthorities.includes(perm))
+    );
+  };
+
   const btnText = isEdit ? 'Update' : 'Create';
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
-        <Controller
-          name="type"
-          control={control}
-          render={({ field }) => (
-            <Select
-              label="Type"
-              errorText={errors?.type?.message}
-              value={String(field.value)}
-              onChange={(value) => field.onChange(value)}
-              options={deviceTypes}
-            />
-          )}
-        />
-
         <Input
           type="text"
-          Label="Name"
+          Label="Role Name"
           error={errors?.name?.message}
           value={formValues.name}
           {...register('name')}
           required
         />
 
-        <Input
-          type="text"
-          Label="Reference"
-          error={errors?.reference?.message}
-          value={formValues.reference}
-          {...register('reference')}
-          required
-        />
+        <div className="space-y-4">
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium">
+              Permissions <span className="text-red-500">*</span>
+            </label>
+            {errors?.authorities?.message && (
+              <p className="text-red-600 text-sm">
+                {errors.authorities.message}
+              </p>
+            )}
+          </div>
 
-        <Controller
-          name="branch"
-          control={control}
-          render={({ field }) => (
-            <Select
-              label="Branch"
-              required
-              errorText={errors?.branch?.message}
-              value={String(field.value)}
-              onChange={(value) => field.onChange(value)}
-              endPoint={`v1/super-admin/business/${reference}/branches`}
-              labelKey="name"
-              valueKey="id"
-            />
-          )}
-        />
+          <div className="border rounded-md p-6 bg-white">
+            <div className="flex items-center gap-2 space-x-2 mb-6 pb-4 border-b">
+              <Checkbox
+                checked={isAllSelected()}
+                onCheckedChange={(checked) =>
+                  handleToggleAll(checked as boolean)
+                }
+              />
+              <label className="text-base font-bold leading-none cursor-pointer select-none">
+                Toggle All Permissions
+              </label>
+            </div>
+
+            <div className="space-y-3">
+              {Object.entries(PERMISSION_GROUPS).map(([groupKey, group]) => (
+                <div
+                  key={groupKey}
+                  className="flex items-center space-x-2 gap-2 p-4 rounded bg-gray-50 hover:bg-gray-100 transition-colors"
+                >
+                  <Checkbox
+                    checked={isGroupSelected(groupKey)}
+                    onCheckedChange={(checked) =>
+                      handleToggleGroup(groupKey, checked as boolean)
+                    }
+                  />
+                  <label className="text-sm font-medium leading-none cursor-pointer select-none flex-1">
+                    {group.name}
+                  </label>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
+
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
         <Button
           type="submit"

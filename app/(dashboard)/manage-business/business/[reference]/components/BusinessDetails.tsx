@@ -67,7 +67,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       title: 'Roles',
       endPoint: `v1/super-admin/business/${reference}/roles`,
       columns: rolesColumns,
-      form: <RoleForm reference={reference} />,
+      form: <RoleForm />,
     },
     {
       type: 'supplier',
