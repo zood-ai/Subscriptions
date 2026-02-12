@@ -1,18 +1,19 @@
 import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
+import { IBM_Plex_Sans_Arabic, Geist_Mono } from 'next/font/google';
 import { QueryClient } from '@tanstack/react-query';
 import './globals.css';
 import { ReactQueryProvider } from './ReactQueryProvider';
 import { Toaster } from 'react-hot-toast';
 import { NavigationProvider, NavigationProgress } from 'next-progressbar-link';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+const mainFont = IBM_Plex_Sans_Arabic({
+  variable: '--font-main',
+  subsets: ['arabic', 'latin'],
+  weight: ['200', '300', '400', '500', '600', '700'],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+  variable: '--font-mono',
   subsets: ['latin'],
 });
 
@@ -38,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${mainFont.variable} ${geistMono.variable} antialiased`}
       >
         <NavigationProvider>
           <NavigationProgress color="#7272F6" />

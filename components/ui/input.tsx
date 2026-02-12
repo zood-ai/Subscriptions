@@ -2,6 +2,7 @@
 import { useState, forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Eye, EyeClosed } from 'lucide-react';
+import { Label as LabelComponent } from '@/components/ui/label';
 
 interface InputProps extends React.ComponentProps<'input'> {
   error?: string;
@@ -39,21 +40,21 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={cn('relative w-full', parentClassName)}>
         {!isHidden && Label && (
-          <label
+          <LabelComponent
             htmlFor={props.id}
             className={cn(
-              'absolute left-[25px] text-[13px] pointer-events-none transition-all duration-300',
+              'absolute left-[25px] transition-all duration-300',
               animateLabel
                 ? value
-                  ? 'top-0 text-[11px] text-primary z-1 bg-white px-1 font-extrabold '
-                  : 'top-[23px] text-gray-400 z-1 font-medium'
+                  ? 'top-0 text-[13px] text-primary z-1 bg-white px-1 font-extrabold '
+                  : 'top-[23px] text-gray-700 z-1 font-medium'
                 : 'static',
               labelClassName
             )}
           >
             {Label}
             {required && <span className="text-red-500 pl-1">*</span>}
-          </label>
+          </LabelComponent>
         )}
         <div className="relative">
           <input
@@ -63,7 +64,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             value={value}
             onChange={onChange}
-            placeholder={animateLabel ? '' : props.placeholder ?? Label ?? ''}
+            placeholder={animateLabel ? '' : (props.placeholder ?? Label ?? '')}
             className={cn(
               'mt-2 border bg-white border-gray-200 rounded-full h-[50px] w-full px-[25px] py-[10px] text-[13px] outline-none placeholder:text-muted-foreground',
               'hover:border-primary focus:border-primary focus:ring-1 focus:ring-primary/50 duration-300',

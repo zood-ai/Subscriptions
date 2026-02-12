@@ -61,6 +61,20 @@ const filters: StatusFiltersTab[] = [
 
 const actions: ActionOption[] = [
   {
+    label: 'Active',
+    actionType: 'active',
+    method: 'PUT',
+    inputs: [
+      {
+        key: 'months',
+        label: 'Subscription period',
+        value: '12',
+        options: activationCodePeriods,
+        isRequired: true,
+      },
+    ],
+  },
+  {
     label: 'Block',
     actionType: 'block',
     method: 'PUT',
@@ -100,20 +114,6 @@ const actions: ActionOption[] = [
         value: '1',
         type: 'text',
         isHidden: true,
-      },
-    ],
-  },
-  {
-    label: 'Active',
-    actionType: 'active',
-    method: 'PUT',
-    inputs: [
-      {
-        key: 'months',
-        label: 'Subscription period',
-        value: '12',
-        options: activationCodePeriods,
-        isRequired: true,
       },
     ],
   },

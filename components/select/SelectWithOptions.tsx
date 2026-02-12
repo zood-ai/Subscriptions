@@ -98,11 +98,7 @@ const SelectWithOptions: React.FC<SelectWithOptionsProps> = ({
     >
       {!isHidden && label && (
         <div className="flex items-center mb-2">
-          <Label
-            className={`text-sm font-medium text-gray-700 ${labelClassName}`}
-          >
-            {label}
-          </Label>
+          <Label className={`${labelClassName}`}>{label}</Label>
           {required && <span className="text-red-500 ml-1">*</span>}
         </div>
       )}
