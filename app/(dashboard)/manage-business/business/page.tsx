@@ -61,6 +61,12 @@ const filters: StatusFiltersTab[] = [
 
 const actions: ActionOption[] = [
   {
+    label: 'Delete',
+    actionType: 'delete',
+    method: 'DELETE',
+    message: 'Are you sure you want to delete these?',
+  },
+  {
     label: 'Active',
     actionType: 'active',
     method: 'PUT',
