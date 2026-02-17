@@ -208,7 +208,7 @@ export default function Form({
                 field.onChange(value);
               }}
               onValueChange={(value) => {
-                setValue('project', value?.item?.project);
+                setValue('project', value?.item?.project ?? '');
               }}
               endPoint="v1/super-admin/packages"
               labelKey="name"
