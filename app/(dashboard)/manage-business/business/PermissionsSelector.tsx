@@ -16,6 +16,8 @@ interface PermissionsSelectorProps {
   projectValue?: string;
   onProjectChange?: (project: string) => void;
   projectError?: string;
+  projectPlaceholder?: string;
+  projectDisabled?: boolean;
   projectRequired?: boolean;
 }
 
@@ -26,6 +28,8 @@ export default function PermissionsSelector({
   projectValue,
   onProjectChange,
   projectError,
+  projectPlaceholder = 'Select option',
+  projectDisabled = false,
   projectRequired = false,
 }: PermissionsSelectorProps) {
   const [internalProject, setInternalProject] = useState('');
@@ -105,8 +109,10 @@ export default function PermissionsSelector({
           value={selectedProject}
           onChange={(val) => handleProjectChange(val as string)}
           options={AllProjects}
+          placeholder={projectPlaceholder}
           errorText={projectError}
           required={projectRequired}
+          disabled={projectDisabled}
         />
       </div>
 

@@ -85,6 +85,7 @@ export default function Form({
     handleSubmit,
     formState: { errors },
     control,
+    setValue,
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -199,11 +200,16 @@ export default function Form({
           name="package_id"
           control={control}
           render={({ field }) => (
-            <Select<{ id: string; name: string }>
+            <Select<{ id: string; name: string; project: string }>
               label="Package"
               errorText={errors?.package_id?.message}
               value={String(field.value)}
-              onChange={(value) => field.onChange(value)}
+              onChange={(value) => {
+                field.onChange(value);
+              }}
+              onValueChange={(value) => {
+                setValue('project', value?.item?.project);
+              }}
               endPoint="v1/super-admin/packages"
               labelKey="name"
               valueKey="id"
@@ -250,8 +256,9 @@ export default function Form({
                     projectField.onChange(val);
                     authField.onChange([]);
                   }}
+                  projectPlaceholder="Select package first"
                   projectError={errors?.project?.message}
-                  projectRequired
+                  projectDisabled={true}
                 />
               )}
             />

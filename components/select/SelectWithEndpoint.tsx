@@ -148,7 +148,7 @@ const SelectWithEndpoint = <T,>({
   const handleChange = (opt: Option | null) => {
     setSelectedOption(opt);
     const newValue = opt?.value === '' || !opt ? null : opt.value;
-    onValueChange?.(opt);
+    onValueChange?.(opt as Option<T> | null);
     onChange?.(newValue || '');
   };
 
