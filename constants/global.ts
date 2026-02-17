@@ -119,6 +119,12 @@ export const activationCodePeriods = [
   },
 ];
 
+export const AllProjects = [
+  { label: 'Zood Light', value: 'zood-light' },
+  { label: 'Control', value: 'control' },
+  { label: 'Accountant', value: 'accountant' },
+];
+
 export const timeOptions = Array.from({ length: 24 }, (_, i) => ({
   label: `${i.toString().padStart(2, '0')}:00`,
   value: `${i.toString().padStart(2, '0')}:00`,

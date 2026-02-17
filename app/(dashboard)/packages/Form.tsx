@@ -8,10 +8,11 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Textarea } from '@/components/ui/textarea';
+import { AllProjects } from '@/constants/global';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
-  discreption: z.string().min(1, 'Discreption is required'),
+  discreption: z.string().optional(),
   discount: z
     .number()
     .min(0, 'Discount is required')
@@ -91,11 +92,6 @@ export default function Form({
     };
   });
 
-  const Projects = [
-    { label: 'Zood Light', value: 'zood-light' },
-    { label: 'Accountant', value: 'accountant' },
-  ];
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
@@ -113,7 +109,6 @@ export default function Form({
           error={errors?.discreption?.message}
           value={formValues.discreption}
           {...register('discreption')}
-          required
         />
 
         <Input
@@ -163,7 +158,7 @@ export default function Form({
               errorText={errors?.project?.message}
               value={String(formValues.project)}
               onChange={(value) => field.onChange(value)}
-              options={Projects}
+              options={AllProjects}
               required
             />
           )}

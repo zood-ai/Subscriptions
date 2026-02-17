@@ -7,11 +7,7 @@ import {
   CONTROL_PERMISSION_GROUPS,
 } from '@/constants/permissions';
 import { useState } from 'react';
-
-const projectOptions = [
-  { label: 'Zood Light', value: 'zood-light' },
-  { label: 'Control', value: 'control' },
-];
+import { AllProjects } from '@/constants/global';
 
 interface PermissionsSelectorProps {
   value: string[];
@@ -108,7 +104,7 @@ export default function PermissionsSelector({
           label="Project"
           value={selectedProject}
           onChange={(val) => handleProjectChange(val as string)}
-          options={projectOptions}
+          options={AllProjects}
           errorText={projectError}
           required={projectRequired}
         />

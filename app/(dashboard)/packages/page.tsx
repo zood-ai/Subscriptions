@@ -8,10 +8,17 @@ import {
 import PageHeader from '@/components/PageHeader';
 import { PackageData } from '@/types/packages';
 import Form from './Form';
+import { AllProjects } from '@/constants/global';
 
 const columns: Column<PackageData>[] = [
   { key: 'name', header: 'Name' },
-  { key: 'project', header: 'Project' },
+  {
+    key: 'project',
+    header: 'Project',
+    render: (value) => (
+      <div>{AllProjects.find((el) => el.value === value)?.label}</div>
+    ),
+  },
   {
     key: 'duration',
     header: 'Duration',
@@ -25,10 +32,7 @@ const columns: Column<PackageData>[] = [
   { key: 'created_at', header: 'Created at', type: 'date' },
 ];
 
-const filters: StatusFiltersTab[] = [
-  { label: 'Zood Light', value: 'zood-light' },
-  { label: 'Accountant', value: 'accountant' },
-];
+const filters: StatusFiltersTab[] = AllProjects;
 
 const actions: ActionOption[] = [
   {
