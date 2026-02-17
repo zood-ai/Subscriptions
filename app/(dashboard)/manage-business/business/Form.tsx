@@ -8,6 +8,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Country } from '@/types/countries';
+import PermissionsSelector from './PermissionsSelector';
 
 const baseSchema = {
   name: z.string().min(1, 'Name is required'),
@@ -17,6 +18,10 @@ const baseSchema = {
   package_id: z.string().min(1, 'Package is required'),
   business_type_id: z.string().min(1, 'Business type is required'),
   business_location_id: z.string().min(1, 'Country is required'),
+  project: z.string().min(1, 'Project is required'),
+  permissions: z
+    .array(z.string())
+    .min(1, 'Please select at least one permission'),
 };
 
 const createSchema = z.object({
@@ -58,6 +63,8 @@ interface FormState {
   business_name: string;
   business_type_id: string;
   business_location_id: string;
+  project?: string;
+  permissions?: string[];
 }
 
 export default function Form({
@@ -89,6 +96,8 @@ export default function Form({
       package_id: data?.package_id ?? '',
       business_type_id: data?.business_type_id ?? '',
       business_location_id: data?.business_location_id ?? '',
+      project: data?.project ?? '',
+      permissions: data?.permissions ?? [],
     },
   });
 
@@ -120,7 +129,6 @@ export default function Form({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
-        {/* Full Name */}
         <Input
           type="text"
           Label="Owner Full Name"
@@ -130,7 +138,6 @@ export default function Form({
           required
         />
 
-        {/* Email */}
         <Input
           type="email"
           Label="Email"
@@ -140,7 +147,6 @@ export default function Form({
           required
         />
 
-        {/* Phone */}
         <Input
           type="text"
           Label="Phone"
@@ -150,7 +156,6 @@ export default function Form({
           required
         />
 
-        {/* Password */}
         <Input
           Label="Password"
           type="password"
@@ -160,10 +165,8 @@ export default function Form({
           required={!isEdit}
         />
 
-        {/* Divider */}
-        <div className="border-t border-gray-200"></div>
+        <div className="border-t border-gray-200" />
 
-        {/* Business Name */}
         <Input
           type="text"
           Label="Business Name"
@@ -173,15 +176,11 @@ export default function Form({
           required
         />
 
-        {/* Business Type */}
         <Controller
           name="business_type_id"
           control={control}
           render={({ field }) => (
-            <Select<{
-              id: string;
-              name: string;
-            }>
+            <Select<{ id: string; name: string }>
               label="Business Type"
               placeholder="Select business type"
               errorText={errors?.business_type_id?.message}
@@ -196,15 +195,11 @@ export default function Form({
           )}
         />
 
-        {/* Packages */}
         <Controller
           name="package_id"
           control={control}
           render={({ field }) => (
-            <Select<{
-              id: string;
-              name: string;
-            }>
+            <Select<{ id: string; name: string }>
               label="Package"
               errorText={errors?.package_id?.message}
               value={String(field.value)}
@@ -217,7 +212,6 @@ export default function Form({
           )}
         />
 
-        {/* Country */}
         <Controller
           name="business_location_id"
           control={control}
@@ -237,9 +231,34 @@ export default function Form({
           )}
         />
 
-        {/* Divider */}
-        <div className="border-t border-gray-200"></div>
+        <div className="border-t border-gray-200" />
+
+        <Controller
+          name="permissions"
+          control={control}
+          render={({ field: authField }) => (
+            <Controller
+              name="project"
+              control={control}
+              render={({ field: projectField }) => (
+                <PermissionsSelector
+                  value={authField.value}
+                  onChange={authField.onChange}
+                  error={errors?.permissions?.message}
+                  projectValue={projectField.value}
+                  onProjectChange={(val: string) => {
+                    projectField.onChange(val);
+                    authField.onChange([]);
+                  }}
+                  projectError={errors?.project?.message}
+                  projectRequired
+                />
+              )}
+            />
+          )}
+        />
       </div>
+
       <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
         <Button
           type="submit"

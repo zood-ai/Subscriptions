@@ -109,14 +109,14 @@ export const ALL_PERMISSIONS = [
   'cashier:perform_spot_check',
   'cashier:pay_without_close',
   'cashier:manage_account_setup',
-  'franchise:read',
-  'franchise:manage',
-  'sales_orders:read',
-  'sales_orders:manage',
-  'announcements:read',
-  'announcements:manage',
-  'requests_from_franchise:read',
-  'requests_from_franchise:manage',
+  // 'franchise:read',
+  // 'franchise:manage',
+  // 'sales_orders:read',
+  // 'sales_orders:manage',
+  // 'announcements:read',
+  // 'announcements:manage',
+  // 'requests_from_franchise:read',
+  // 'requests_from_franchise:manage',
 ];
 
 // For Zood Light
@@ -307,25 +307,25 @@ export const CONTROL_PERMISSION_GROUPS = {
     ],
   },
 
-  franchising: {
-    name: 'Franchising Authorities',
-    permissions: [
-      { label: 'Read Franchise', value: 'franchise:read' },
-      { label: 'Manage Franchise', value: 'franchise:manage' },
-      { label: 'Read Sales Orders', value: 'sales_orders:read' },
-      { label: 'Manage Sales Orders', value: 'sales_orders:manage' },
-      { label: 'Read Announcements', value: 'announcements:read' },
-      { label: 'Manage Announcements', value: 'announcements:manage' },
-      {
-        label: 'Read Requests From Franchise',
-        value: 'requests_from_franchise:read',
-      },
-      {
-        label: 'Manage Requests From Franchise',
-        value: 'requests_from_franchise:manage',
-      },
-    ],
-  },
+  // franchising: {
+  //   name: 'Franchising Authorities',
+  //   permissions: [
+  //     { label: 'Read Franchise', value: 'franchise:read' },
+  //     { label: 'Manage Franchise', value: 'franchise:manage' },
+  //     { label: 'Read Sales Orders', value: 'sales_orders:read' },
+  //     { label: 'Manage Sales Orders', value: 'sales_orders:manage' },
+  //     { label: 'Read Announcements', value: 'announcements:read' },
+  //     { label: 'Manage Announcements', value: 'announcements:manage' },
+  //     {
+  //       label: 'Read Requests From Franchise',
+  //       value: 'requests_from_franchise:read',
+  //     },
+  //     {
+  //       label: 'Manage Requests From Franchise',
+  //       value: 'requests_from_franchise:manage',
+  //     },
+  //   ],
+  // },
 
   inventory: {
     name: 'Inventory Authorities',
