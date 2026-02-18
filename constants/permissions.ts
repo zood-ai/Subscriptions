@@ -178,22 +178,24 @@ export const ZOOD_LIGHT_PERMISSIONS = [
 ];
 
 export const ZOOD_LIGHT_PERMISSIONS_GROUPS = {
+  dashboard: {
+    name: 'Dashboard',
+    permissions: ['dashboard:inventory'],
+  },
+
   invoices: {
     name: 'Invoices',
     permissions: [
       'orders:read',
       'orders:manage',
       'orders:manage_tags',
-      'dashboard:inventory',
       'inventory_count:drafts:manage',
       'inventory_count:closed:manage',
       'inventory_items:read',
       'inventory_items:manage',
       'menu:read',
-      'menu:manage',
       'customers:read',
       'customers:read_insights',
-      'customers:manage',
       'customers:manage_house_account',
       'customers:manage_loyalty',
     ],
@@ -206,16 +208,13 @@ export const ZOOD_LIGHT_PERMISSIONS_GROUPS = {
       'po:posted:manage',
       'po:approved:manage',
       'po:approved:receive',
-      'dashboard:inventory',
       'inventory_count:drafts:manage',
       'inventory_count:closed:manage',
       'inventory_items:read',
       'inventory_items:manage',
       'menu:read',
-      'menu:manage',
       'customers:read',
       'customers:read_insights',
-      'customers:manage',
       'customers:manage_house_account',
       'customers:manage_loyalty',
     ],
@@ -229,21 +228,17 @@ export const ZOOD_LIGHT_PERMISSIONS_GROUPS = {
       'purchasing_from_po:drafts:manage',
       'direct_purchasing:drafts:manage',
       'suppliers:read',
-      'suppliers:manage',
-      'dashboard:inventory',
       'inventory_count:drafts:manage',
       'inventory_count:closed:manage',
       'inventory_items:read',
       'inventory_items:manage',
       'menu:read',
-      'menu:manage',
     ],
   },
 
   inventory: {
     name: 'Inventory',
     permissions: [
-      'dashboard:inventory',
       'inventory_count:drafts:manage',
       'inventory_count:closed:manage',
       'inventory_items:read',
@@ -303,8 +298,6 @@ export const ZOOD_LIGHT_PERMISSIONS_GROUPS = {
   settings: {
     name: 'Settings',
     permissions: [
-      'users:manage',
-      'branches:manage',
       'settings:manage',
       'settings:manage_taxes_and_groups',
       'settings:manage_charges',
