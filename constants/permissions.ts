@@ -1,4 +1,4 @@
-export const ALL_PERMISSIONS = [
+export const CONTROL_PERMISSIONS = [
   'orders:read',
   'orders:manage',
   'orders:manage_tags',
@@ -119,8 +119,65 @@ export const ALL_PERMISSIONS = [
   // 'requests_from_franchise:manage',
 ];
 
-// For Zood Light
-export const PERMISSION_GROUPS = {
+export const ZOOD_LIGHT_PERMISSIONS = [
+  'orders:read',
+  'orders:manage',
+  'orders:manage_tags',
+
+  'dashboard:inventory',
+  'inventory_count:drafts:manage',
+  'inventory_count:closed:manage',
+  'inventory_items:read',
+  'inventory_items:manage',
+
+  'menu:read',
+  'menu:manage',
+
+  'customers:read',
+  'customers:read_insights',
+  'customers:manage',
+  'customers:manage_house_account',
+  'customers:manage_loyalty',
+
+  'po:drafts:manage',
+  'po:posted:manage',
+  'po:approved:manage',
+  'po:approved:receive',
+
+  'purchasing:drafts:manage',
+  'purchasing:closed:manage',
+  'purchasing_from_po:drafts:manage',
+  'direct_purchasing:drafts:manage',
+
+  'suppliers:read',
+  'suppliers:manage',
+
+  'reports:other',
+  'reports:inventory_control',
+  'reports:inventory_levels',
+  'reports:inventory_transactions',
+  'reports:sales',
+  'reports:cost_adjustment_history',
+
+  'settings:manage_payment_methods',
+
+  'users:manage',
+
+  'branches:manage',
+
+  'settings:manage',
+  'settings:manage_taxes_and_groups',
+  'settings:manage_charges',
+  'settings:manage_tags',
+  'settings:manage_reasons',
+  'settings:manage_kitchen_flows',
+  'settings:manage_reservations',
+  'settings:manage_online_ordering',
+  'settings:manage_price_tags',
+  'settings:manage_notifications',
+];
+
+export const ZOOD_LIGHT_PERMISSIONS_GROUPS = {
   invoices: {
     name: 'Invoices',
     permissions: [
@@ -262,8 +319,7 @@ export const PERMISSION_GROUPS = {
   },
 };
 
-// For Control - Organized by category
-export const CONTROL_PERMISSION_GROUPS = {
+export const CONTROL_PERMISSIONS_GROUPS = {
   order: {
     name: 'Order Authorities',
     permissions: [
