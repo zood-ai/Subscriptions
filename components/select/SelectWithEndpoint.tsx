@@ -26,7 +26,7 @@ interface SelectWithEndpointProps<T> {
   required?: boolean;
   value?: string | number | string[] | null;
   onChange?: (value: string | number | string[]) => void;
-  onValueChange?: (option: Option | null) => void;
+  onValueChange?: (option: Option<T> | null) => void;
   className?: string;
   parentClassName?: string;
   labelClassName?: string;
