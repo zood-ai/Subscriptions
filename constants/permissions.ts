@@ -286,7 +286,7 @@ export const ZOOD_LIGHT_PERMISSIONS_GROUPS = {
   },
 
   users: {
-    name: 'Users',
+    name: 'Users & Permissions',
     permissions: ['users:manage'],
   },
 
