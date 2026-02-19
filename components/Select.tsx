@@ -1,9 +1,13 @@
 import SelectWithOptions from './select/SelectWithOptions';
 import SelectWithEndpoint from './select/SelectWithEndpoint';
 import type { StylesConfig, CSSObjectWithLabel } from 'react-select';
-export type Option = { label: string; value: string | number; item?: unknown };
+export type Option<T = unknown> = {
+  label: string;
+  value: string | number;
+  item?: T;
+};
 
-interface CommonProps {
+interface CommonProps<T = unknown> {
   placeholder?: string;
   label?: string;
   name?: string;
@@ -13,7 +17,7 @@ interface CommonProps {
   required?: boolean;
   value?: string | number | string[] | null;
   onChange?: (value: string | number | string[]) => void;
-  onValueChange?: (option: Option | null) => void;
+  onValueChange?: (option: Option<T> | null) => void;
   className?: string;
   parentClassName?: string;
   labelClassName?: string;
@@ -33,7 +37,7 @@ interface WithOptions extends CommonProps {
   pageSize?: never;
 }
 
-interface WithEndPoint<T> extends CommonProps {
+interface WithEndPoint<T> extends CommonProps<T> {
   options?: never;
   endPoint: string;
   labelKey: keyof T;

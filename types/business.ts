@@ -27,10 +27,19 @@ export interface BusinessCustomersData {
   notes: string;
 }
 
+export interface BusinessRolesData {
+  id: string;
+  name: string;
+  users: number;
+}
+
 export interface BusinessData {
   id: string;
   name: string;
   country_iso_code: string;
+  permissions: string;
+  permissionsGroupKeys: string[];
+  project: string;
   owner_email: string;
   owner_name: string;
   owner_id: string;

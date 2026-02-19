@@ -11,6 +11,7 @@ import {
   devicesColumns,
   suppliersColumns,
   usersColumns,
+  rolesColumns,
 } from './columns';
 import PageHeader from '@/components/PageHeader';
 import ActiveForm from './ActiveForm';
@@ -19,6 +20,7 @@ import SupplierForm from '../supplier/Form';
 import CustomerForm from '../customer/Form';
 import UserForm from '../user/Form';
 import DeviceForm from '../device/Form';
+import RoleForm from '../role/Form';
 import { formatDate } from '@/lib/utils';
 import Form from '../../Form';
 import {
@@ -59,6 +61,13 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
       endPoint: `v1/super-admin/business/${reference}/branches`,
       columns: branchesColumns,
       form: <BranchForm reference={reference} />,
+    },
+    {
+      type: 'roles',
+      title: 'Roles',
+      endPoint: `v1/super-admin/business/${reference}/roles`,
+      columns: rolesColumns,
+      form: <RoleForm />,
     },
     {
       type: 'supplier',
@@ -113,9 +122,12 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     phone: data?.business?.phone ?? '',
     password: '',
     business_name: data?.business?.name ?? '',
-    package_id: JSON.parse(data?.business?.details ?? '{}').package_id,
+    package_id: JSON.parse(data?.business?.details ?? '{}').package_id ?? '',
     business_type_id: data?.business?.type ?? '',
     business_location_id: data?.business?.location ?? '',
+    permissions: JSON.parse(data?.business?.permissions ?? '{}') ?? [],
+    permissionsGroupKeys: data?.business?.permissionsGroupKeys ?? [],
+    project: JSON.parse(data?.business?.details ?? '{}').project ?? '',
   };
 
   return (

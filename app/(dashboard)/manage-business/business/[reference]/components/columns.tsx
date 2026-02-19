@@ -5,6 +5,7 @@ import {
   BusinessSuppliersData,
   BusinessUsersData,
   BusinessBranchesData,
+  BusinessRolesData,
 } from '@/types/business';
 
 const suppliersColumns: Column<BusinessSuppliersData>[] = [
@@ -43,10 +44,16 @@ const branchesColumns: Column<BusinessBranchesData>[] = [
   { key: 'created_at', header: 'Created At', type: 'date' },
 ];
 
+const rolesColumns: Column<BusinessRolesData>[] = [
+  { key: 'name', header: 'Name' },
+  { key: 'users', header: 'Users count' },
+];
+
 export {
   suppliersColumns,
   devicesColumns,
   usersColumns,
   customersColumns,
   branchesColumns,
+  rolesColumns,
 };

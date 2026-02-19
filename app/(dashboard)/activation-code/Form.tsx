@@ -7,6 +7,7 @@ import { Controller, useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { activationCodePeriods } from '@/constants/global';
+import FormSubmitButton from '@/components/FormSubmitButton';
 
 const formSchema = z.object({
   code: z.string().min(1, 'Code is required'),
@@ -67,18 +68,7 @@ export default function Form() {
           )}
         />
       </div>
-      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4 border-t border-gray-200">
-        <Button
-          type="submit"
-          disabled={isPending}
-          className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
-        >
-          {isPending ? 'Applying...' : 'Apply'}
-        </Button>
-        {error && (
-          <p className="text-red-600 font-bold">{error.data?.message}</p>
-        )}
-      </div>
+      <FormSubmitButton isPending={isPending} btnText="Apply" error={error} />
     </form>
   );
 }

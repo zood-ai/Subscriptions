@@ -1,17 +1,18 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useRouter } from 'next/navigation';
-import Select from '@/components/Select';
+import PermissionsSelector from '../../PermissionsSelector';
 import FormSubmitButton from '@/components/FormSubmitButton';
 
 const formSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  category_id: z.string().min(1, 'Business Category is required'),
+  name: z.string().min(1, 'Role name is required'),
+  authorities: z
+    .array(z.string())
+    .min(1, 'Please select at least one permission'),
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -20,16 +21,22 @@ interface CreateResponse {
   id: string;
 }
 
-export default function Form({
+interface FormState {
+  name: string;
+  authorities: string[];
+}
+
+export default function RoleForm({
   id = '',
   isEdit = false,
   data,
 }: {
   id?: string;
   isEdit?: boolean;
-  data?: FormData;
+  data?: FormState;
 }) {
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -38,8 +45,8 @@ export default function Form({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || '',
-      category_id: data?.category_id ?? '',
+      name: data?.name ?? '',
+      authorities: data?.authorities || [],
     },
   });
 
@@ -49,19 +56,20 @@ export default function Form({
     FormData,
     CreateResponse
   >({
-    api: isEdit
-      ? `v1/super-admin/businessTypes/${id}`
-      : 'v1/super-admin/businessTypes',
+    api: isEdit ? `v1/super-admin/roles/${id}` : 'v1/super-admin/roles',
     method: isEdit ? 'PUT' : 'POST',
-    invalidateQueryKeys: isEdit ? ['businessTypes', id] : [],
+    invalidateQueryKeys: isEdit ? ['roles', id] : ['roles'],
     options: {
       onSuccess: (data) => {
         if (!isEdit) {
-          router.push(`/manage-business/type/${data.id}`);
+          router.push(`/roles/${data.id}`);
+        } else {
+          router.push('/roles');
         }
       },
     },
   });
+
   const onSubmit = (data: FormData) => {
     mutate(data);
   };
@@ -71,7 +79,7 @@ export default function Form({
       <div className="space-y-6">
         <Input
           type="text"
-          Label="Name"
+          Label="Role Name"
           error={errors?.name?.message}
           value={formValues.name}
           {...register('name')}
@@ -79,26 +87,18 @@ export default function Form({
         />
 
         <Controller
-          name="category_id"
+          name="authorities"
           control={control}
           render={({ field }) => (
-            <Select<{
-              id: string;
-              name: string;
-            }>
-              label="Category"
-              placeholder="Select category"
-              errorText={errors?.category_id?.message}
-              value={String(field.value)}
-              onChange={(value) => field.onChange(value)}
-              endPoint="v1/super-admin/categories"
-              labelKey="name"
-              valueKey="id"
-              required
+            <PermissionsSelector
+              value={field.value}
+              onChange={field.onChange}
+              error={errors?.authorities?.message}
             />
           )}
         />
       </div>
+
       <FormSubmitButton
         isPending={isPending}
         btnText={isEdit ? 'Update' : 'Create'}
