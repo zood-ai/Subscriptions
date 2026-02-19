@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Country } from '@/types/countries';
 import PermissionsSelector from './PermissionsSelector';
+import FormSubmitButton from '@/components/FormSubmitButton';
 
 const baseSchema = {
   name: z.string().min(1, 'Name is required'),
@@ -266,18 +267,7 @@ export default function Form({
         />
       </div>
 
-      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
-        <Button
-          type="submit"
-          disabled={isPending}
-          className="bg-primary hover:bg-primary/80 text-white rounded-full px-8"
-        >
-          {isPending ? 'Applying...' : 'Apply'}
-        </Button>
-        {error && (
-          <p className="text-red-600 font-bold">{error.data?.message}</p>
-        )}
-      </div>
+      <FormSubmitButton isPending={isPending} btnText={'Apply'} error={error} />
     </form>
   );
 }
