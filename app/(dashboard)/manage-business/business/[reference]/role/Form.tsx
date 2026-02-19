@@ -1,6 +1,5 @@
 'use client';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import useCustomMutation from '@/lib/Mutation';
 import { useForm, useWatch, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -75,8 +74,6 @@ export default function RoleForm({
     mutate(data);
   };
 
-  const btnText = isEdit ? 'Update' : 'Create';
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
@@ -102,7 +99,11 @@ export default function RoleForm({
         />
       </div>
 
-      <FormSubmitButton isPending={isPending} btnText={btnText} error={error} />
+      <FormSubmitButton
+        isPending={isPending}
+        btnText={isEdit ? 'Update' : 'Create'}
+        error={error}
+      />
     </form>
   );
 }

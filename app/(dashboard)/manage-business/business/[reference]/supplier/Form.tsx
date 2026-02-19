@@ -87,8 +87,6 @@ export default function Form({
     mutate(data);
   };
 
-  const btnText = isEdit ? 'Update' : 'Create';
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <div className="space-y-6">
@@ -142,7 +140,11 @@ export default function Form({
         />
       </div>
 
-      <FormSubmitButton isPending={isPending} btnText={btnText} error={error} />
+      <FormSubmitButton
+        isPending={isPending}
+        btnText={isEdit ? 'Update' : 'Create'}
+        error={error}
+      />
     </form>
   );
 }
