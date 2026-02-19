@@ -23,6 +23,7 @@ const baseSchema = {
   permissions: z
     .array(z.string())
     .min(1, 'Please select at least one permission'),
+  permissionsGroupKeys: z.array(z.string()),
 };
 
 const createSchema = z.object({
@@ -66,6 +67,7 @@ interface FormState {
   business_location_id: string;
   project?: string;
   permissions?: string[];
+  permissionsGroupKeys?: string[];
 }
 
 export default function Form({
@@ -100,6 +102,7 @@ export default function Form({
       business_location_id: data?.business_location_id ?? '',
       project: data?.project ?? '',
       permissions: data?.permissions ?? [],
+      permissionsGroupKeys: data?.permissionsGroupKeys ?? [],
     },
   });
 
@@ -121,6 +124,11 @@ export default function Form({
         }
       },
     },
+  });
+
+  console.log({
+    groups: formValues.permissionsGroupKeys,
+    permission: formValues.permissions,
   });
 
   const onSubmit = (data: FormData) => {
@@ -210,6 +218,8 @@ export default function Form({
               }}
               onValueChange={(value) => {
                 setValue('project', value?.item?.project ?? '');
+                setValue('permissions', []);
+                setValue('permissionsGroupKeys', []);
               }}
               endPoint="v1/super-admin/packages"
               labelKey="name"
@@ -241,22 +251,19 @@ export default function Form({
         <div className="border-t border-gray-200" />
 
         <Controller
-          name="permissions"
+          name="permissionsGroupKeys"
           control={control}
-          render={({ field: authField }) => (
+          render={({ field: permissionsGroupKeysField }) => (
             <Controller
-              name="project"
+              name="permissions"
               control={control}
-              render={({ field: projectField }) => (
+              render={({ field: permissionsField }) => (
                 <PermissionsSelector
-                  value={authField.value}
-                  onChange={authField.onChange}
+                  value={permissionsField.value}
+                  onChange={permissionsField.onChange}
+                  onChangeGroupKeys={permissionsGroupKeysField.onChange}
                   error={errors?.permissions?.message}
-                  projectValue={projectField.value}
-                  onProjectChange={(val: string) => {
-                    projectField.onChange(val);
-                    authField.onChange([]);
-                  }}
+                  projectValue={formValues.project}
                   projectPlaceholder="Select package first"
                   projectError={errors?.project?.message}
                   projectDisabled={true}

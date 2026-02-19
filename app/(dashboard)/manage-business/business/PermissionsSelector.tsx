@@ -3,16 +3,16 @@ import { Checkbox } from '@/components/ui/checkbox';
 import Select from '@/components/Select';
 import {
   ZOOD_LIGHT_PERMISSIONS_GROUPS,
-  CONTROL_PERMISSIONS,
-  ZOOD_LIGHT_PERMISSIONS,
   CONTROL_PERMISSIONS_GROUPS,
 } from '@/constants/permissions';
 import { useMemo, useState } from 'react';
 import { AllProjects } from '@/constants/global';
 
 interface PermissionsSelectorProps {
-  value: string[];
-  onChange: (permissions: string[]) => void;
+  value: string[]; // permissions[] من البرا
+  groupKeys?: string[]; // group keys من البرا (لو اتحفظوا قبل كده)
+  onChange: (permissions: string[]) => void; // بيرجع permissions[]
+  onChangeGroupKeys?: (groupKeys: string[]) => void; // بيرجع group keys
   error?: string;
   projectValue?: string;
   onProjectChange?: (project: string) => void;
@@ -22,9 +22,66 @@ interface PermissionsSelectorProps {
   projectRequired?: boolean;
 }
 
+// ─── helpers ─────────────────────────────────────────────────────────────────
+
+/** group keys + project → flat unique permissions */
+export function flattenPermissions(
+  groupKeys: string[],
+  project: string
+): string[] {
+  const all: string[] = [];
+  if (project === 'zood-light') {
+    for (const key of groupKeys) {
+      const group =
+        ZOOD_LIGHT_PERMISSIONS_GROUPS[
+          key as keyof typeof ZOOD_LIGHT_PERMISSIONS_GROUPS
+        ];
+      if (group) all.push(...group.permissions);
+    }
+  } else if (project === 'control') {
+    for (const key of groupKeys) {
+      const group =
+        CONTROL_PERMISSIONS_GROUPS[
+          key as keyof typeof CONTROL_PERMISSIONS_GROUPS
+        ];
+      if (group) all.push(...group.permissions.map((p) => p.value));
+    }
+  }
+  return [...new Set(all)];
+}
+
+/** permissions[] → group keys اللي كل صلاحياتها موجودة */
+function permissionsToGroupKeys(
+  permissions: string[],
+  project: string
+): string[] {
+  if (project === 'zood-light') {
+    return Object.entries(ZOOD_LIGHT_PERMISSIONS_GROUPS)
+      .filter(
+        ([, g]) =>
+          g.permissions.length > 0 &&
+          g.permissions.every((p) => permissions.includes(p))
+      )
+      .map(([key]) => key);
+  }
+  if (project === 'control') {
+    return Object.entries(CONTROL_PERMISSIONS_GROUPS)
+      .filter(([, g]) => {
+        const vals = g.permissions.map((p) => p.value);
+        return vals.length > 0 && vals.every((p) => permissions.includes(p));
+      })
+      .map(([key]) => key);
+  }
+  return [];
+}
+
+// ─── Component ───────────────────────────────────────────────────────────────
+
 export default function PermissionsSelector({
   value,
+  groupKeys,
   onChange,
+  onChangeGroupKeys,
   error,
   projectValue,
   onProjectChange,
@@ -37,18 +94,30 @@ export default function PermissionsSelector({
   const isControlled = projectValue !== undefined;
   const selectedProject = isControlled ? projectValue : internalProject;
 
-  const internalAllPermissions = useMemo(() => {
-    if (selectedProject === 'zood-light') {
-      return ZOOD_LIGHT_PERMISSIONS;
-    } else if (selectedProject === 'control') {
-      return CONTROL_PERMISSIONS;
-    } else {
-      return [];
-    }
+  const selectedGroupKeys = useMemo(() => {
+    // لو groupKeys جاية من البرا ومش فاضية → استخدمها على طول
+    if (groupKeys && groupKeys.length > 0) return groupKeys;
+    // لو فاضية → اشتق الgroups من الpermissions
+    return permissionsToGroupKeys(value, selectedProject);
+  }, [groupKeys, value, selectedProject]);
+
+  const allGroupKeys = useMemo(() => {
+    if (selectedProject === 'zood-light')
+      return Object.keys(ZOOD_LIGHT_PERMISSIONS_GROUPS);
+    if (selectedProject === 'control')
+      return Object.keys(CONTROL_PERMISSIONS_GROUPS);
+    return [];
   }, [selectedProject]);
+
+  /** emit both: flat permissions + group keys */
+  const emit = (newGroupKeys: string[]) => {
+    onChange(flattenPermissions(newGroupKeys, selectedProject));
+    onChangeGroupKeys?.(newGroupKeys);
+  };
 
   const handleProjectChange = (project: string) => {
     onChange([]);
+    onChangeGroupKeys?.([]);
     if (isControlled) {
       onProjectChange?.(project);
     } else {
@@ -57,64 +126,19 @@ export default function PermissionsSelector({
   };
 
   const handleToggleAll = (checked: boolean) => {
-    onChange(checked ? [...internalAllPermissions] : []);
+    emit(checked ? [...allGroupKeys] : []);
   };
 
   const handleToggleGroup = (groupKey: string, checked: boolean) => {
-    const groupPermissions =
-      ZOOD_LIGHT_PERMISSIONS_GROUPS[
-        groupKey as keyof typeof ZOOD_LIGHT_PERMISSIONS_GROUPS
-      ].permissions;
-    if (checked) {
-      onChange([...new Set([...value, ...groupPermissions])]);
-    } else {
-      onChange(value.filter((auth) => !groupPermissions.includes(auth)));
-    }
-  };
-
-  const handleToggleControlGroup = (groupKey: string, checked: boolean) => {
-    const permissionValues = CONTROL_PERMISSIONS_GROUPS[
-      groupKey as keyof typeof CONTROL_PERMISSIONS_GROUPS
-    ].permissions.map((p) => p.value);
-    if (checked) {
-      onChange([...new Set([...value, ...permissionValues])]);
-    } else {
-      onChange(value.filter((auth) => !permissionValues.includes(auth)));
-    }
-  };
-
-  const handleTogglePermission = (permission: string, checked: boolean) => {
-    if (checked) {
-      onChange([...value, permission]);
-    } else {
-      onChange(value.filter((p) => p !== permission));
-    }
+    const newGroupKeys = checked
+      ? [...selectedGroupKeys, groupKey]
+      : selectedGroupKeys.filter((k) => k !== groupKey);
+    emit(newGroupKeys);
   };
 
   const isAllSelected =
-    value.length > 0 &&
-    internalAllPermissions.every((perm) => value.includes(perm));
-
-  const isGroupSelected = (groupKey: string) => {
-    const groupPermissions =
-      ZOOD_LIGHT_PERMISSIONS_GROUPS[
-        groupKey as keyof typeof ZOOD_LIGHT_PERMISSIONS_GROUPS
-      ].permissions;
-    return (
-      groupPermissions.length > 0 &&
-      groupPermissions.every((perm) => value.includes(perm))
-    );
-  };
-
-  const isControlGroupSelected = (groupKey: string) => {
-    const permissionValues = CONTROL_PERMISSIONS_GROUPS[
-      groupKey as keyof typeof CONTROL_PERMISSIONS_GROUPS
-    ].permissions.map((p) => p.value);
-    return (
-      permissionValues.length > 0 &&
-      permissionValues.every((perm) => value.includes(perm))
-    );
-  };
+    allGroupKeys.length > 0 &&
+    allGroupKeys.every((k) => selectedGroupKeys.includes(k));
 
   return (
     <div className="space-y-4">
@@ -189,7 +213,7 @@ export default function PermissionsSelector({
                   className="flex items-center space-x-2 gap-2 p-4 rounded bg-gray-50 hover:bg-gray-100 transition-colors"
                 >
                   <Checkbox
-                    checked={isGroupSelected(groupKey)}
+                    checked={selectedGroupKeys.includes(groupKey)}
                     onCheckedChange={(checked) =>
                       handleToggleGroup(groupKey, checked as boolean)
                     }
@@ -219,12 +243,12 @@ export default function PermissionsSelector({
           <div className="space-y-6">
             {Object.entries(CONTROL_PERMISSIONS_GROUPS).map(
               ([groupKey, group]) => (
-                <div key={groupKey} className="space-y-3">
+                <div key={groupKey} className="space-y-2">
                   <div className="flex items-center gap-2 pb-2 border-b-2 border-gray-200">
                     <Checkbox
-                      checked={isControlGroupSelected(groupKey)}
+                      checked={selectedGroupKeys.includes(groupKey)}
                       onCheckedChange={(checked) =>
-                        handleToggleControlGroup(groupKey, checked as boolean)
+                        handleToggleGroup(groupKey, checked as boolean)
                       }
                     />
                     <h3 className="text-sm font-bold text-gray-900">
@@ -232,25 +256,14 @@ export default function PermissionsSelector({
                     </h3>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="pl-7 flex flex-wrap gap-1">
                     {group.permissions.map((permission) => (
-                      <div
+                      <span
                         key={permission.value}
-                        className="flex items-center space-x-2 gap-2 p-2 rounded hover:bg-gray-50 transition-colors"
+                        className="text-xs text-gray-400 bg-gray-100 rounded px-2 py-0.5"
                       >
-                        <Checkbox
-                          checked={value.includes(permission.value)}
-                          onCheckedChange={(checked) =>
-                            handleTogglePermission(
-                              permission.value,
-                              checked as boolean
-                            )
-                          }
-                        />
-                        <label className="text-xs font-medium leading-none cursor-pointer select-none flex-1">
-                          {permission.label}
-                        </label>
-                      </div>
+                        {permission.label}
+                      </span>
                     ))}
                   </div>
                 </div>

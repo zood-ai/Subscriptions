@@ -38,6 +38,7 @@ export interface BusinessData {
   name: string;
   country_iso_code: string;
   permissions: string;
+  permissionsGroupKeys: string[];
   project: string;
   owner_email: string;
   owner_name: string;

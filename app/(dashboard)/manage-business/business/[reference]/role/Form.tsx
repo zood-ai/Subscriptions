@@ -46,7 +46,7 @@ export default function RoleForm({
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: data?.name || '',
+      name: data?.name ?? '',
       authorities: data?.authorities || [],
     },
   });

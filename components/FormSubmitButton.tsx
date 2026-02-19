@@ -27,7 +27,7 @@ const FormSubmitButton = ({
         variant={buttonVariant}
         className={cn('px-8', buttonClassName)}
       >
-        {isPending ? `${btnText}ing...` : btnText}
+        {isPending ? `Loading...` : btnText}
       </Button>
       {error && <p className="text-red-600 font-bold">{error.data?.message}</p>}
     </div>

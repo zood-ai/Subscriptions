@@ -24,7 +24,6 @@ import RoleForm from '../role/Form';
 import { formatDate } from '@/lib/utils';
 import Form from '../../Form';
 import {
-  AllProjects,
   isBusinessActive,
   isBusinessExpired,
   isBusinessExpiringSoon,
@@ -127,6 +126,7 @@ const BusinessDetails = ({ reference }: { reference: string }) => {
     business_type_id: data?.business?.type ?? '',
     business_location_id: data?.business?.location ?? '',
     permissions: JSON.parse(data?.business?.permissions ?? '{}') ?? [],
+    permissionsGroupKeys: data?.business?.permissionsGroupKeys ?? [],
     project: JSON.parse(data?.business?.details ?? '{}').project ?? '',
   };
 
