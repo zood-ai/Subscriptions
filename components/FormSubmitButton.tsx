@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from './ui/button';
+import { Button, buttonVariantsTypes } from './ui/button';
 import { AxiosResponse } from 'axios';
 import { cn } from '@/lib/utils';
 
@@ -15,7 +15,7 @@ const FormSubmitButton = ({
   btnText: string;
   error: AxiosResponse | null;
   buttonType?: 'submit' | 'button' | 'reset';
-  buttonVariant?: 'primary' | 'secondary' | 'danger';
+  buttonVariant?: buttonVariantsTypes;
   buttonClassName?: string;
 }) => {
   return (
