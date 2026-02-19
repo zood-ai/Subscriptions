@@ -9,10 +9,10 @@ import { useMemo, useState } from 'react';
 import { AllProjects } from '@/constants/global';
 
 interface PermissionsSelectorProps {
-  value: string[]; // permissions[] من البرا
-  groupKeys?: string[]; // group keys من البرا (لو اتحفظوا قبل كده)
-  onChange: (permissions: string[]) => void; // بيرجع permissions[]
-  onChangeGroupKeys?: (groupKeys: string[]) => void; // بيرجع group keys
+  value: string[];
+  groupKeys?: string[];
+  onChange: (permissions: string[]) => void;
+  onChangeGroupKeys?: (groupKeys: string[]) => void;
   error?: string;
   projectValue?: string;
   onProjectChange?: (project: string) => void;
@@ -22,9 +22,6 @@ interface PermissionsSelectorProps {
   projectRequired?: boolean;
 }
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
-
-/** group keys + project → flat unique permissions */
 export function flattenPermissions(
   groupKeys: string[],
   project: string
@@ -50,7 +47,6 @@ export function flattenPermissions(
   return [...new Set(all)];
 }
 
-/** permissions[] → group keys اللي كل صلاحياتها موجودة */
 function permissionsToGroupKeys(
   permissions: string[],
   project: string
@@ -75,8 +71,6 @@ function permissionsToGroupKeys(
   return [];
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
-
 export default function PermissionsSelector({
   value,
   groupKeys,
@@ -95,9 +89,7 @@ export default function PermissionsSelector({
   const selectedProject = isControlled ? projectValue : internalProject;
 
   const selectedGroupKeys = useMemo(() => {
-    // لو groupKeys جاية من البرا ومش فاضية → استخدمها على طول
     if (groupKeys && groupKeys.length > 0) return groupKeys;
-    // لو فاضية → اشتق الgroups من الpermissions
     return permissionsToGroupKeys(value, selectedProject);
   }, [groupKeys, value, selectedProject]);
 
@@ -109,7 +101,6 @@ export default function PermissionsSelector({
     return [];
   }, [selectedProject]);
 
-  /** emit both: flat permissions + group keys */
   const emit = (newGroupKeys: string[]) => {
     onChange(flattenPermissions(newGroupKeys, selectedProject));
     onChangeGroupKeys?.(newGroupKeys);
@@ -201,7 +192,7 @@ export default function PermissionsSelector({
               onCheckedChange={(checked) => handleToggleAll(checked as boolean)}
             />
             <label className="text-base font-bold leading-none cursor-pointer select-none">
-              Toggle All Permissions
+              Toggle All
             </label>
           </div>
 

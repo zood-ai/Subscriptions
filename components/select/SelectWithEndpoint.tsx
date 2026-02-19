@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate';
 import { components } from 'react-select';
 import { Label } from '@/components/ui/label';
@@ -88,62 +88,63 @@ const SelectWithEndpoint = <T,>({
   });
 
   // Load options with pagination and search
-  const loadOptions: LoadOptions<Option, any, Additional> = useCallback(
-    async (search, _, additional) => {
-      try {
-        setPaginationLoading(true);
-        const page = additional?.page || 1;
-        const separator = endPoint.includes('?') ? '&' : '?';
-        let url = `${endPoint}${separator}page=${page}`;
+  const loadOptions: LoadOptions<Option, any, Additional> = async (
+    search,
+    _,
+    additional
+  ) => {
+    try {
+      setPaginationLoading(true);
+      const page = additional?.page || 1;
+      const separator = endPoint.includes('?') ? '&' : '?';
+      let url = `${endPoint}${separator}page=${page}`;
 
-        if (search) {
-          url += `&${searchKey}=${encodeURIComponent(search)}`;
-        }
-
-        const res = await axiosInstance(url);
-        const responseData = res.data;
-
-        const items: T[] = responseData.data || [];
-
-        const options: Option[] = items.map((item: T) => ({
-          value: String(item[valueKey]),
-          label: String(item[labelKey]),
-          item,
-        }));
-
-        const finalOptions =
-          isDefault && page === 1 && !search
-            ? [optionDefault, ...options]
-            : options;
-
-        const hasMore =
-          responseData.current_page && responseData.last_page
-            ? responseData.current_page < responseData.last_page
-            : false;
-
-        return {
-          options: finalOptions,
-          hasMore,
-          additional: {
-            page: page + 1,
-          },
-        };
-      } catch (error) {
-        console.error('Error loading options:', error);
-        setPaginationLoading(false);
-        return {
-          options: [],
-          hasMore: false,
-          additional: {
-            page: 1,
-          },
-        };
-      } finally {
-        setPaginationLoading(false);
+      if (search) {
+        url += `&${searchKey}=${encodeURIComponent(search)}`;
       }
-    },
-    [endPoint, labelKey, valueKey, isDefault, optionDefault]
-  );
+
+      const res = await axiosInstance(url);
+      const responseData = res.data;
+
+      const items: T[] = responseData.data || [];
+
+      const options: Option[] = items.map((item: T) => ({
+        value: String(item[valueKey]),
+        label: String(item[labelKey]),
+        item,
+      }));
+
+      const finalOptions =
+        isDefault && page === 1 && !search
+          ? [optionDefault, ...options]
+          : options;
+
+      const hasMore =
+        responseData.current_page && responseData.last_page
+          ? responseData.current_page < responseData.last_page
+          : false;
+
+      return {
+        options: finalOptions,
+        hasMore,
+        additional: {
+          page: page + 1,
+        },
+      };
+    } catch (error) {
+      console.error('Error loading options:', error);
+      setPaginationLoading(false);
+      return {
+        options: [],
+        hasMore: false,
+        additional: {
+          page: 1,
+        },
+      };
+    } finally {
+      setPaginationLoading(false);
+    }
+  };
 
   const handleChange = (opt: Option | null) => {
     setSelectedOption(opt);
@@ -184,6 +185,7 @@ const SelectWithEndpoint = <T,>({
       )}
 
       <AsyncPaginate
+        defaultOptions
         value={selectedOption}
         loadOptions={loadOptions}
         onChange={handleChange}
