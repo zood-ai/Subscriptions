@@ -124,12 +124,7 @@ export default function Form({
       },
     },
   });
-
-  console.log({
-    groups: formValues.permissionsGroupKeys,
-    permission: formValues.permissions,
-  });
-
+  
   const onSubmit = (data: FormData) => {
     if (isEdit && !data.password) delete data.password;
     mutate(data);
@@ -259,6 +254,7 @@ export default function Form({
               render={({ field: permissionsField }) => (
                 <PermissionsSelector
                   value={permissionsField.value}
+                  groupKeys={permissionsGroupKeysField.value}
                   onChange={permissionsField.onChange}
                   onChangeGroupKeys={permissionsGroupKeysField.onChange}
                   error={errors?.permissions?.message}
