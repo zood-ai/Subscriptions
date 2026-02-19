@@ -6,6 +6,7 @@ import { Controller, DefaultValues, useForm, useWatch } from 'react-hook-form';
 import { Input } from './ui/input';
 import Select, { Option } from './Select';
 import { QueryKey, useQueryClient } from '@tanstack/react-query';
+import FormSubmitButton from './FormSubmitButton';
 
 interface InputWithOption {
   type?: never;
@@ -126,20 +127,14 @@ const ActionPopUp = ({
           );
         })}
       </div>
-      <div className="flex items-center flex-row-reverse mt-3 relative justify-between gap-3 pt-4">
-        <Button
-          type="submit"
-          variant={method === 'DELETE' ? 'danger' : 'primary'}
-          disabled={isPending}
-          loading={isPending}
-          className={`${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-        >
-          {isPending ? btnTitle + 'ing...' : btnTitle}
-        </Button>
-        {error && (
-          <p className="text-red-600 font-bold">{error.data?.message}</p>
-        )}
-      </div>
+      <FormSubmitButton
+        buttonType="submit"
+        buttonVariant={method === 'DELETE' ? 'danger' : 'primary'}
+        buttonClassName={`${isPending ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+        isPending={isPending}
+        btnText={btnTitle}
+        error={error}
+      />
     </form>
   );
 };

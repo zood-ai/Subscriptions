@@ -43,7 +43,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <LabelComponent
             htmlFor={props.id}
             className={cn(
-              'absolute left-[25px] transition-all duration-300',
+              'absolute left-[25px] transition-all duration-300 gap-0',
               animateLabel
                 ? value
                   ? 'top-0 text-[13px] text-primary z-1 bg-white px-1 font-extrabold '

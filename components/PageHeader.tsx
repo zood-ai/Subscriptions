@@ -34,12 +34,7 @@ const PageHeader: React.FC<Props> = ({
   badges = [],
 }) => {
   return (
-    <div
-      className={cn(
-        'flex flex-wrap justify-between items-center gap-4 py-3.75 mainPaddingX bg-white',
-        className
-      )}
-    >
+    <div className={cn('py-3.75 mainPaddingX bg-white', className)}>
       <div>
         {backUrl && (
           <Link
@@ -50,6 +45,8 @@ const PageHeader: React.FC<Props> = ({
             Back
           </Link>
         )}
+      </div>
+      <div className="flex flex-wrap justify-between items-center gap-2">
         <div className="flex gap-x-4 gap-y-2 flex-wrap items-center">
           <h1 className="text-gray-500 text-[24px] font-normal">{title}</h1>
           <div className="flex gap-2">
@@ -65,76 +62,76 @@ const PageHeader: React.FC<Props> = ({
             )}
           </div>
         </div>
-      </div>
-      <div className="flex gap-2">
-        {/* in Edit Only */}
-        {isEdit && (
-          <>
-            {blockEndPoint && (
-              <CustomModal
-                title={isBlocked ? 'Unblock' : 'Block'}
-                btnTrigger={
-                  <Button variant="secondary">
-                    {isBlocked ? 'Unblock' : 'Block'}
-                  </Button>
-                }
-              >
-                <ActionPopUp
-                  endPoint={blockEndPoint}
-                  method="POST"
-                  message={
-                    isBlocked
-                      ? 'Are you sure you want to Unblock this business?'
-                      : ''
+        <div className="flex gap-2 flex-wrap justify-end flex-grow">
+          {/* in Edit Only */}
+          {isEdit && (
+            <>
+              {blockEndPoint && (
+                <CustomModal
+                  title={isBlocked ? 'Unblock' : 'Block'}
+                  btnTrigger={
+                    <Button variant="secondary">
+                      {isBlocked ? 'Unblock' : 'Block'}
+                    </Button>
                   }
-                  inputs={isBlockedInputs(isBlocked)}
-                  btnTitle={isBlocked ? 'Unblock' : 'Block'}
-                  backUrl={backUrl}
-                />
-              </CustomModal>
-            )}
-            {businessActiveForm && (
-              <CustomModal
-                title="Active"
-                btnTrigger={<Button variant="secondary">Active</Button>}
-              >
-                {businessActiveForm}
-              </CustomModal>
-            )}
-            {deleteEndPoint && (
-              <CustomModal
-                title="Delete"
-                btnTrigger={
-                  <Button variant="danger">
-                    <Trash2 />
-                    Delete
-                  </Button>
-                }
-              >
-                <ActionPopUp
-                  message="Are you sure you want to delete this?"
-                  endPoint={deleteEndPoint}
-                  btnTitle="Delete"
-                  method="DELETE"
-                  backUrl={backUrl}
-                />
-              </CustomModal>
-            )}
-          </>
-        )}
+                >
+                  <ActionPopUp
+                    endPoint={blockEndPoint}
+                    method="POST"
+                    message={
+                      isBlocked
+                        ? 'Are you sure you want to Unblock this business?'
+                        : ''
+                    }
+                    inputs={isBlockedInputs(isBlocked)}
+                    btnTitle={isBlocked ? 'Unblock' : 'Block'}
+                    backUrl={backUrl}
+                  />
+                </CustomModal>
+              )}
+              {businessActiveForm && (
+                <CustomModal
+                  title="Active"
+                  btnTrigger={<Button variant="secondary">Active</Button>}
+                >
+                  {businessActiveForm}
+                </CustomModal>
+              )}
+              {deleteEndPoint && (
+                <CustomModal
+                  title="Delete"
+                  btnTrigger={
+                    <Button variant="danger">
+                      <Trash2 />
+                      Delete
+                    </Button>
+                  }
+                >
+                  <ActionPopUp
+                    message="Are you sure you want to delete this?"
+                    endPoint={deleteEndPoint}
+                    btnTitle="Delete"
+                    method="DELETE"
+                    backUrl={backUrl}
+                  />
+                </CustomModal>
+              )}
+            </>
+          )}
 
-        {/* in Create only */}
-        {!isEdit && <></>}
+          {/* in Create only */}
+          {!isEdit && <></>}
 
-        {/* Both */}
-        {Form && (
-          <CustomModal
-            title={isEdit ? 'Update' : 'Create'}
-            btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
-          >
-            {Form}
-          </CustomModal>
-        )}
+          {/* Both */}
+          {Form && (
+            <CustomModal
+              title={isEdit ? 'Update' : 'Create'}
+              btnTrigger={<Button>{isEdit ? 'Update' : 'Create'}</Button>}
+            >
+              {Form}
+            </CustomModal>
+          )}
+        </div>
       </div>
     </div>
   );

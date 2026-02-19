@@ -34,14 +34,12 @@ const TableSkeleton: React.FC<TableSkeletonProps> = ({
         {/* Filter Tabs Skeleton */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <div className="flex items-center gap-2">
-            {[...Array(3)].map((_, i) => (
+            {[...Array(2)].map((_, i) => (
               <Skeleton key={i} className="h-8 w-20 rounded-full" />
             ))}
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <Skeleton className="h-8 w-25 rounded-full" />
-            <Skeleton className="h-8 w-20 rounded-full" />
-            <Skeleton className="h-8 w-20 rounded-full" />
             <Skeleton className="h-8 w-20 rounded-full" />
           </div>
         </div>
